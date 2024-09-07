@@ -2,6 +2,7 @@ package com.smk627751.zcart
 
 import android.app.Activity
 import android.content.Context
+import android.content.IntentFilter
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,13 @@ import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.registerReceiver
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.net.MediaType
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import com.smk627751.zcart.Repository.Repository
+import com.smk627751.zcart.receiver.InternetStateChangeReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +28,10 @@ import java.text.SimpleDateFormat
 import java.util.UUID
 
 object Utility {
+    fun registerInternetReceiver(context: Context)
+    {
+        context.registerReceiver(InternetStateChangeReceiver(), IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+    }
     fun generateOrderId(): String {
         return UUID.randomUUID().toString()
     }

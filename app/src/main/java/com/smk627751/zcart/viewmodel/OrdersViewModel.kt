@@ -13,8 +13,8 @@ class OrdersViewModel : ViewModel() {
     init {
         getOrders()
     }
-    fun getOrders() {
-        Repository.getOrders("all"){
+    fun getOrders(query: String = "all") {
+        Repository.getOrders(query){
             _options.value = it
         }
     }

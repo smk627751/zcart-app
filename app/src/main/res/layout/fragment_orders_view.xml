@@ -8,7 +8,8 @@
     tools:context=".fragments.OrdersViewFragment">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@id/scroll_view">
         <com.google.android.material.appbar.MaterialToolbar
@@ -18,6 +19,53 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="Orders"
             app:menu="@menu/search"/>
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/category_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:scrimVisibleHeightTrigger="0dp"
+            android:visibility="gone">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/filter_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="none">
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:scrollbars="none">
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/category_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        app:singleLine="true"
+                        app:singleSelection="true">
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.Material3.Chip.Filter.Elevated"
+                            android:text="Order placed"/>
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.Material3.Chip.Filter.Elevated"
+                            android:text="Order shipped"/>
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.Material3.Chip.Filter.Elevated"
+                            android:text="Out for delivery"/>
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.Material3.Chip.Filter.Elevated"
+                            android:text="Delivered"/>
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"

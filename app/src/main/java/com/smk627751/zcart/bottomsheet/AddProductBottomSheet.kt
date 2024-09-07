@@ -185,17 +185,17 @@ class AddProductBottomSheet(context: Context, val product: Product? = null, priv
     }
     private fun validate() : Boolean
     {
-        if (productName.text.isEmpty())
+        if (productName.text.isEmpty() || productName.text.toString().isBlank())
         {
             productName.error = "Enter product name"
             return false
         }
-        if (productPrice.text.isEmpty())
+        if (productPrice.text.isEmpty() || productPrice.text.toString().isBlank())
         {
             productPrice.error = "Enter product price"
             return false
         }
-        if (productDescription.text.isEmpty())
+        if (productDescription.text.isEmpty() || productDescription.text.toString().isBlank())
         {
             productDescription.error = "Enter product description"
             return false

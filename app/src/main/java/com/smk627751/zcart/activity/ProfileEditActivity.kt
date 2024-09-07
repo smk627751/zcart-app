@@ -58,6 +58,7 @@ class ProfileEditActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        Utility.registerInternetReceiver(this)
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 

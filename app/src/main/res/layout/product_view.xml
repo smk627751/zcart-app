@@ -20,7 +20,7 @@
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:hint="Search"
+                android:hint="Search..."
                 app:menu="@menu/filter_menu"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap" />

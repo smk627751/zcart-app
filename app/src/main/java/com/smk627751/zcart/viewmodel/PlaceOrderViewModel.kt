@@ -16,6 +16,14 @@ class PlaceOrderViewModel : ViewModel() {
     fun setProducts(products: Array<Product>) {
         _products.value = products
     }
+    fun validate(name : String, address : String, phone : String) : Boolean
+    {
+        return name.isNotEmpty()
+                && address.isNotEmpty()
+                && phone.isNotEmpty()
+                && phone.length == 10
+                && phone.all { it.isDigit() }
+    }
     fun placeOrder(itemCount : Int, quantities : Int, totalPrice : String, username: String, deliveryAddress: String,phone : String, callBack: () -> Unit) {
         if (products.value != null)
         {

@@ -44,7 +44,7 @@ class SignInActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        registerReceiver(InternetStateChangeReceiver(), IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[SignInViewModel::class.java]
         viewModel.setSession(this){
                 goToHome()

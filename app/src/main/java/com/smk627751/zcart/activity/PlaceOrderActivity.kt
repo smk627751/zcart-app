@@ -46,6 +46,7 @@ class PlaceOrderActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[PlaceOrderViewModel::class.java]
         viewModel.setProducts(intent.getSerializableExtra("products") as Array<Product>)
         viewModel.products.observe(this) {products ->

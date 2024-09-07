@@ -2,19 +2,17 @@ package com.smk627751.zcart.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.SearchView.OnQueryTextListener
-import android.widget.Toolbar
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.smk627751.zcart.R
 import com.smk627751.zcart.adapter.OrdersAdapter
@@ -24,6 +22,7 @@ import com.smk627751.zcart.viewmodel.OrdersViewModel
 class OrdersViewFragment : Fragment() {
     lateinit var viewModel: OrdersViewModel
     lateinit var toolbar: MaterialToolbar
+    lateinit var category: CollapsingToolbarLayout
     lateinit var searchView : SearchView
     lateinit var ordersView : RecyclerView
     lateinit var noOrdersView : LinearLayout
@@ -36,19 +35,32 @@ class OrdersViewFragment : Fragment() {
         viewModel = ViewModelProvider(this)[OrdersViewModel::class.java]
 
         toolbar = view.findViewById(R.id.toolbar)
+        category = view.findViewById(R.id.category_list)
         ordersView = view.findViewById(R.id.orders_view)
         noOrdersView = view.findViewById(R.id.no_orders_found_view)
         searchView = toolbar.menu.findItem(R.id.search).actionView as SearchView
+        searchView.setBackgroundResource(R.drawable.edit_text_bg)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query.isNullOrEmpty()) viewModel.getOrders()
+                else viewModel.getOrders(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) viewModel.getOrders()
+                else viewModel.getOrders(newText)
                 return true
             }
 
         })
+        toolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.filter)
+            {
+                category.isVisible = !category.isVisible
+            }
+            true
+        }
         viewModel.options.observe(viewLifecycleOwner) { options ->
             setAdapter(options)
         }

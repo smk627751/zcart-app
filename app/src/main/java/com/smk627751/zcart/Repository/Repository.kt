@@ -514,6 +514,7 @@ object Repository {
                 val query = db.collection("orders")
                     .whereArrayContains("vendorIds", currentUserId)
                     .orderBy("timestamp",Query.Direction.DESCENDING)
+                    .whereEqualTo("id", searchQuery)
                 val options = FirestoreRecyclerOptions.Builder<Order>()
                     .setQuery(query, Order::class.java)
                     .build()
@@ -575,28 +576,15 @@ object Repository {
                             else -> null
                         }
                         notification?.let {
-//                            when(doc.type)
-//                            {
-//                                DocumentChange.Type.ADDED -> notifications.add(it)
-//                                DocumentChange.Type.MODIFIED -> notifications.find {
-//                                    it.id == notification.id
-//                                }?.let {
-//                                    notifications[notifications.indexOf(it)] = notification
-//                                }
-//                                DocumentChange.Type.REMOVED -> notifications.remove(it)
-//                            }
-                           if (doc.type == DocumentChange.Type.ADDED)
-                           {
-                               notifications.add(0,it)
-                           }
-                            if (doc.type == DocumentChange.Type.MODIFIED)
+                            when(doc.type)
                             {
-                                notifications.find {
+                                DocumentChange.Type.ADDED -> notifications.add(0,it)
+                                DocumentChange.Type.MODIFIED -> notifications.find {
                                     it.id == notification.id
                                 }?.let {
                                     notifications[notifications.indexOf(it)] = notification
-
                                 }
+                                DocumentChange.Type.REMOVED -> notifications.remove(it)
                             }
                         }
                     }

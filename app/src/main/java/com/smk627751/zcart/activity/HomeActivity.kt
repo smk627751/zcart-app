@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.smk627751.zcart.R
+import com.smk627751.zcart.Utility
 import com.smk627751.zcart.bottomsheet.AddProductBottomSheet
 import com.smk627751.zcart.dto.Notification
 import com.smk627751.zcart.fragments.CartViewFragment
@@ -57,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
 
         fragmentContainer = findViewById(R.id.fragment_container)
 
-        registerReceiver(InternetStateChangeReceiver(), IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         viewModel.setLandscape(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         when(val view: View = findViewById(R.id.navigation)){

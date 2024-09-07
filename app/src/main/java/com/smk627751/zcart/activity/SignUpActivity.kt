@@ -55,6 +55,7 @@ class SignUpActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[SignUpViewModel::class.java]
         parent = findViewById(R.id.main)
         name = findViewById(R.id.name)
