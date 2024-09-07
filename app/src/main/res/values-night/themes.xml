@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ZCart" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">#ffffff</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="android:navigationBarColor">#211F25</item>
+    </style>
+</resources>

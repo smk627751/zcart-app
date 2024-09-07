@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#FF808080</color>
+    <color name="bottom_navigation_color">#F3EDF7</color>
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondaryTextColor">#757575</color>
+    <color name="buttonTextColor">#FFFFFF</color>
+    <color name="buttonBackgroundColor">#6200EE</color>
+    <color name="BackgroundColor">#E8EFF2</color>
+    <color name="ShimmerColor">?attr/colorSurfaceVariant</color>
+    <color name="DescriptionColor">#E9F6FB</color>
+</resources>

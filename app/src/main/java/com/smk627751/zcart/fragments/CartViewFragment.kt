@@ -1,0 +1,89 @@
+package com.smk627751.zcart.fragments
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.smk627751.zcart.activity.PlaceOrderActivity
+import com.smk627751.zcart.R
+import com.smk627751.zcart.adapter.CartAdapter
+import com.smk627751.zcart.dto.Product
+import com.smk627751.zcart.viewmodel.CartViewModel
+
+class CartViewFragment : Fragment() {
+    lateinit var viewModel: CartViewModel
+    lateinit var fragmentContainer : FrameLayout
+    lateinit var cartItemsView : RecyclerView
+    lateinit var noProductView : LinearLayout
+    lateinit var myOrders : Button
+    lateinit var buyNowButton : Button
+    var adapter: CartAdapter = CartAdapter(listOf()){
+        cartItem -> viewModel.removeFromCart(cartItem)
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.cart_view, container, false)
+        viewModel = ViewModelProvider(this)[CartViewModel::class.java]
+        fragmentContainer = view.findViewById(R.id.fragment_container)
+        cartItemsView = view.findViewById(R.id.cart_items_view)
+        noProductView = view.findViewById(R.id.no_product_found_view)
+        myOrders = view.findViewById(R.id.my_orders)
+        cartItemsView.layoutManager = LinearLayoutManager(context)
+        buyNowButton = view.findViewById(R.id.buy_now_button)
+
+        myOrders.visibility = View.VISIBLE
+        myOrders.setOnClickListener {
+            fragmentContainer.visibility = View.VISIBLE
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.fragment_container, OrdersViewFragment())
+                addToBackStack(null)
+                commit()
+            }
+        }
+
+        viewModel.cartItems.observe(viewLifecycleOwner) {cartItems ->
+            setAdapter(cartItems)
+            buyNowButton.isEnabled = cartItems.isNotEmpty()
+        }
+
+        buyNowButton.setOnClickListener {
+            Intent(context, PlaceOrderActivity::class.java)
+                .also {
+                    it.putExtra("products", adapter.cartItems.toTypedArray())
+                    startActivity(it)
+                }
+        }
+        return view
+    }
+    private fun setAdapter(cartItems : List<Product>)
+    {
+        adapter = CartAdapter(cartItems){ cartItem ->
+            viewModel.removeFromCart(cartItem)
+        }
+        cartItemsView.adapter = adapter
+        updateViewVisibility()
+    }
+    private fun updateViewVisibility() {
+        if (adapter.itemCount == 0) {
+            noProductView.visibility = View.VISIBLE
+            cartItemsView.visibility = View.GONE
+        } else {
+            noProductView.visibility = View.GONE
+            cartItemsView.visibility = View.VISIBLE
+        }
+    }
+}

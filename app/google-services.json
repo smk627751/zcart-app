@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "387581532540",
+    "project_id": "zcart-7e6fc",
+    "storage_bucket": "zcart-7e6fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387581532540:android:0e604b03a7ee1233622cf9",
+        "android_client_info": {
+          "package_name": "com.smk627751.zcart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVC-SXskhvHwGmYnQP4VzU9cPtW1kcZSo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
