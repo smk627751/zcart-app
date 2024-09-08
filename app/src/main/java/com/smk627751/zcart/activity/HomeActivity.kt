@@ -1,21 +1,12 @@
 package com.smk627751.zcart.activity
 
-import android.Manifest
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.ext.SdkExtensions
-import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,11 +24,8 @@ import com.smk627751.zcart.fragments.NotificationViewFragment
 import com.smk627751.zcart.fragments.OrdersViewFragment
 import com.smk627751.zcart.fragments.ProductViewFragment
 import com.smk627751.zcart.fragments.ProfileViewFragment
-import com.smk627751.zcart.receiver.InternetStateChangeReceiver
 import com.smk627751.zcart.viewmodel.HomeViewModel
 import com.yalantis.ucrop.UCrop
-import java.io.File
-import java.util.UUID
 
 class HomeActivity : AppCompatActivity() {
     lateinit var fragmentContainer: FragmentContainerView
@@ -206,7 +194,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showAddProductBottomSheet() {
-        bottomSheet = AddProductBottomSheet(this@HomeActivity)
+        bottomSheet = AddProductBottomSheet()
         bottomSheet.show(supportFragmentManager, "Add Product").also {
 
         }

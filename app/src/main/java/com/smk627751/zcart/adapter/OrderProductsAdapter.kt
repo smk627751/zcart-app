@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
         val price : TextView = itemView.findViewById(R.id.product_price)
         val increaseQuantity : Button = itemView.findViewById(R.id.increase_quantity)
         val decreaseQuantity : Button = itemView.findViewById(R.id.decrease_quantity)
-        val quantity : EditText = itemView.findViewById(R.id.quantity)
+        val quantity : TextView = itemView.findViewById(R.id.quantity)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,7 +53,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
                 return@setOnClickListener
             }
             q++
-            holder.quantity.setText(q.toString())
+            holder.quantity.text = q.toString()
             quantities[product.id] = q
             updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
         }
@@ -63,7 +62,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
             if (q > 1) {
                 q--
             }
-            holder.quantity.setText(q.toString())
+            holder.quantity.text = q.toString()
             quantities[product.id] = q
             updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
         }
@@ -71,7 +70,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
             val quantity = text.toString().toIntOrNull()
             if (quantity!= null && quantity > 10)
             {
-                holder.quantity.setText(10.toString())
+                holder.quantity.text = 10.toString()
                 return@addTextChangedListener
             }
             if (quantity != null && quantity > 0) {
@@ -79,7 +78,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
                 updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
             }
             else {
-                holder.quantity.setText(1.toString())
+                holder.quantity.text = 1.toString()
                 quantities[product.id] = 1
                 updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
             }

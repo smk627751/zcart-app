@@ -3,26 +3,21 @@ package com.smk627751.zcart.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
-import android.util.Patterns
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.RadioGroup
-import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.NestedScrollingParent
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
 import com.hbb20.CountryCodePicker
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
@@ -32,19 +27,20 @@ import com.smk627751.zcart.viewmodel.SignUpViewModel
 class SignUpActivity : AppCompatActivity() {
     lateinit var viewModel: SignUpViewModel
     lateinit var parent: ScrollView
+    lateinit var nameLayout : TextInputLayout
     lateinit var name : EditText
+    lateinit var emailLayout : TextInputLayout
     lateinit var email : EditText
     lateinit var ccp : CountryCodePicker
+    lateinit var phoneLayout : TextInputLayout
     lateinit var phone : EditText
-    lateinit var toggleButton1 : ImageButton
+    lateinit var passwordLayout : TextInputLayout
     lateinit var password : EditText
-    lateinit var toggleButton2 : ImageButton
+    lateinit var confirmPasswordLayout : TextInputLayout
     lateinit var confirmPassword : EditText
     lateinit var radioGroup: RadioGroup
     lateinit var signUp : Button
     lateinit var progress : ProgressBar
-    var isPasswordVisible = false
-    var isConfirmPasswordVisible = false
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,73 +54,54 @@ class SignUpActivity : AppCompatActivity() {
         Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[SignUpViewModel::class.java]
         parent = findViewById(R.id.main)
+        nameLayout = findViewById(R.id.name_layout)
         name = findViewById(R.id.name)
+        emailLayout = findViewById(R.id.email_layout)
         email = findViewById(R.id.email)
         ccp = findViewById(R.id.ccp)
+        phoneLayout = findViewById(R.id.phone_layout)
         phone = findViewById(R.id.phone)
-        toggleButton1 = findViewById(R.id.toggle_button1)
+        passwordLayout = findViewById(R.id.password_layout)
         password = findViewById(R.id.password)
-        toggleButton2 = findViewById(R.id.toggle_button2)
+        confirmPasswordLayout = findViewById(R.id.confirm_password_layout)
         confirmPassword = findViewById(R.id.confirm_password)
         radioGroup = findViewById(R.id.radio_group)
         signUp = findViewById(R.id.sign_up_button)
         progress = findViewById(R.id.progress)
 
         parent.setOnTouchListener { _, _ ->
+            name.clearFocus()
+            email.clearFocus()
+            password.clearFocus()
+            confirmPassword.clearFocus()
+            phone.clearFocus()
             Utility.hideSoftKeyboard(this)
             false
         }
 
         viewModel.nameError.observe(this) {
-            name.error = it
+            nameLayout.error = it
         }
 
         viewModel.emailError.observe(this) {
-            email.error = it
+            emailLayout.error = it
         }
 
         viewModel.phoneError.observe(this) {
-            phone.error = it
+            phoneLayout.error = it
         }
 
         viewModel.passwordError.observe(this) {
-            password.error = it
+            passwordLayout.error = it
         }
 
         viewModel.confirmPasswordError.observe(this) {
-            confirmPassword.error = it
+            confirmPasswordLayout.error = it
         }
 
         viewModel.accountTypeError.observe(this) {
             if (it != null) {
                 Utility.makeToast(this, it)
-            }
-        }
-        toggleButton1.setOnClickListener {
-            if (isPasswordVisible)
-            {
-                password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                toggleButton1.setImageResource(R.drawable.baseline_visibility_24)
-                isPasswordVisible = false
-            }
-            else
-            {
-                password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                toggleButton1.setImageResource(R.drawable.baseline_visibility_off_24)
-                isPasswordVisible = true
-            }
-        }
-        toggleButton2.setOnClickListener {
-            if (isConfirmPasswordVisible)
-            {
-                confirmPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                toggleButton2.setImageResource(R.drawable.baseline_visibility_24)
-                isConfirmPasswordVisible = false
-            }
-            else{
-                confirmPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                toggleButton2.setImageResource(R.drawable.baseline_visibility_off_24)
-                isConfirmPasswordVisible = true
             }
         }
         var accountType : String = ""

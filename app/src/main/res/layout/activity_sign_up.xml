@@ -25,35 +25,31 @@
                 android:text="Create an account"
                 style="?attr/textAppearanceHeadlineMedium"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:text="Name"
-                style="?attr/textAppearanceTitleMedium" />
-
-            <EditText
-                android:id="@+id/name"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_bg"
-                android:inputType="text"
-                android:padding="15dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email Address"
                 android:layout_marginVertical="8dp"
-                style="?attr/textAppearanceTitleMedium"/>
+                android:hint="Name">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/email"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_bg"
-                android:inputType="textEmailAddress"
-                android:padding="15dp" />
+                android:layout_marginVertical="8dp"
+                android:hint="Email">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,90 +73,74 @@
                     app:ccp_showPhoneCode="true"
                     android:padding="2dp"/>
 
-                <EditText
-                    android:id="@+id/phone"
+<!--                <EditText-->
+<!--                    android:id="@+id/phone"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/edit_text_bg"-->
+<!--                    android:inputType="number"-->
+<!--                    android:maxLength="10"-->
+<!--                    android:padding="15dp" />-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phone_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
                     android:layout_weight="3"
-                    android:background="@drawable/edit_text_bg"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:padding="15dp" />
+                    android:hint="Phone">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:maxLength="10"/>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Password"
-                android:layout_marginVertical="8dp"
-                style="?attr/textAppearanceTitleMedium" />
-
-            <RelativeLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <EditText
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                app:endIconMode="password_toggle"
+                android:hint="Password">
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text_bg"
                     android:inputType="textPassword"
-                    android:layout_centerVertical="true"
-                    android:padding="15dp" />
-                <ImageButton
-                    android:id="@+id/toggle_button1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="32dp"
-                    android:src="@drawable/baseline_visibility_24"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Toggle Password Visibility" />
-            </RelativeLayout>
+                    android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confirm_password_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                android:text="Confirm Password"
-                style="?attr/textAppearanceTitleMedium" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <EditText
+                app:endIconMode="password_toggle"
+                android:hint="Confirm Password">
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirm_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text_bg"
                     android:inputType="textPassword"
-                    android:layout_centerVertical="true"
-                    android:padding="15dp" />
-                <ImageButton
-                    android:id="@+id/toggle_button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="32dp"
-                    android:src="@drawable/baseline_visibility_24"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Toggle Password Visibility" />
-            </RelativeLayout>
+                    android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
             <RadioGroup
                 android:id="@+id/radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center">
-                <RadioButton
+                <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/customer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Customer"
                     android:layout_margin="10dp"
                     android:textSize="15sp"/>
-                <RadioButton
+                <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/vendor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

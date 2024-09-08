@@ -51,7 +51,12 @@ class SignUpViewModel : ViewModel() {
         }
 
         // Email validation
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty()|| email.isBlank())
+        {
+            emailError.value = "Enter your email"
+            isValid = false
+        }
+        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailError.value = "Invalid email address"
             isValid = false
         } else {
@@ -59,7 +64,11 @@ class SignUpViewModel : ViewModel() {
         }
 
         // Phone validation
-        if (phone.length != 10) {
+        if (phone.isEmpty() || phone.isBlank()) {
+            phoneError.value = "Enter your phone number"
+            isValid = false
+        }
+        else if (phone.length != 10) {
             phoneError.value = "Invalid phone number"
             isValid = false
         } else {
@@ -68,7 +77,11 @@ class SignUpViewModel : ViewModel() {
 
         // Password validation
         val passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[$@&!#%]).{8,}$"
-        if (!Pattern.matches(passwordPattern, password)) {
+        if (password.isEmpty() || password.isBlank()) {
+            passwordError.value = "Enter your password"
+            isValid = false
+        }
+        else if (!Pattern.matches(passwordPattern, password)) {
             passwordError.value = "Password must contain at least 1 uppercase, 1 lowercase, 1 number, 1 special character, and be at least 8 characters long"
             isValid = false
         } else {

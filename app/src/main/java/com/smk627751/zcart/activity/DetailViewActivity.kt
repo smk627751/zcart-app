@@ -1,27 +1,19 @@
 package com.smk627751.zcart.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
-import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.ext.SdkExtensions
-import android.provider.MediaStore
 import android.transition.TransitionInflater
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.PopupMenu
 import android.widget.RatingBar
 import android.widget.RelativeLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -32,11 +24,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.facebook.shimmer.R.attr.duration
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.adapter.ReviewsAdapter
@@ -49,6 +40,7 @@ import java.util.UUID
 
 class DetailViewActivity : AppCompatActivity() {
     lateinit var viewModel: DetailViewModel
+    lateinit var parent : ViewGroup
     lateinit var toolbar: MaterialToolbar
     lateinit var detailView: NestedScrollView
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
@@ -58,11 +50,11 @@ class DetailViewActivity : AppCompatActivity() {
     lateinit var price : TextView
     lateinit var description : TextView
     lateinit var consolidated_rating : TextView
-    lateinit var fivestar : View
-    lateinit var fourstar : View
-    lateinit var threestar : View
-    lateinit var twostar : View
-    lateinit var onestar : View
+    lateinit var fivestar : LinearProgressIndicator
+    lateinit var fourstar : LinearProgressIndicator
+    lateinit var threestar : LinearProgressIndicator
+    lateinit var twostar : LinearProgressIndicator
+    lateinit var onestar : LinearProgressIndicator
     lateinit var image : ImageView
     lateinit var ratingLayout : LinearLayout
     lateinit var ratingBar : RatingBar
@@ -72,6 +64,7 @@ class DetailViewActivity : AppCompatActivity() {
     lateinit var sendButton : Button
     lateinit var reviewSection : RecyclerView
     var adapter: ReviewsAdapter? = null
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -86,6 +79,7 @@ class DetailViewActivity : AppCompatActivity() {
         intent.getSerializableExtra("product")?.let { viewModel.setProduct(it as Product)}
         intent.getStringExtra("product_id")?.let { viewModel.setProduct(it) }
 
+        parent = findViewById(R.id.main)
         toolbar = findViewById(R.id.toolbar)
         detailView = findViewById(R.id.details_view)
         shimmerFrameLayout = findViewById(R.id.shimmer_layout)
@@ -133,7 +127,10 @@ class DetailViewActivity : AppCompatActivity() {
             setUpratingBars(viewModel.getIndividualRating())
             setUpMenu(false)
         }
-
+        parent.setOnTouchListener {_,_ ->
+            Utility.hideSoftKeyboard(this)
+            false
+        }
         val review = viewModel.currentUserReview()
         if (review != null)
         {
@@ -176,24 +173,11 @@ class DetailViewActivity : AppCompatActivity() {
     }
 
     private fun setUpratingBars(individualRating: MutableMap<Int, Float>){
-        Log.d("rating", "setUpratingBars: $individualRating")
-        val maxBarWidthDp = if (resources.configuration.orientation == ORIENTATION_PORTRAIT) 120 else 150
-
-        // Convert dp to pixels
-        val displayMetrics = resources.displayMetrics
-        val maxBarWidthPx = (maxBarWidthDp * displayMetrics.density).toInt()
-
-        fivestar.layoutParams.width = ((individualRating[5]!! * maxBarWidthPx).toInt())
-        fourstar.layoutParams.width = ((individualRating[4]!! * maxBarWidthPx).toInt())
-        threestar.layoutParams.width = ((individualRating[3]!! * maxBarWidthPx).toInt())
-        twostar.layoutParams.width = ((individualRating[2]!! * maxBarWidthPx).toInt())
-        onestar.layoutParams.width = ((individualRating[1]!! * maxBarWidthPx).toInt())
-
-        fivestar.requestLayout()
-        fourstar.requestLayout()
-        threestar.requestLayout()
-        twostar.requestLayout()
-        onestar.requestLayout()
+        fivestar.progress = ((individualRating[5]!! * 100).toInt())
+        fourstar.progress = ((individualRating[4]!! * 100).toInt())
+        threestar.progress = ((individualRating[3]!! * 100).toInt())
+        twostar.progress = ((individualRating[2]!! * 100).toInt())
+        onestar.progress = ((individualRating[1]!! * 100).toInt())
     }
 
     private fun setUpView()
@@ -231,7 +215,7 @@ class DetailViewActivity : AppCompatActivity() {
         }
     }
     private fun showBottomSheet() {
-        bottomSheet = AddProductBottomSheet(this,viewModel.product.value!!,"edit")
+        bottomSheet = AddProductBottomSheet(viewModel.product.value!!, "edit")
         bottomSheet.show(supportFragmentManager, "Add Product")
     }
     private fun showAlertDialog()

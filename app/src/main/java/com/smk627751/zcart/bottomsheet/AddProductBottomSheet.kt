@@ -3,7 +3,6 @@ package com.smk627751.zcart.bottomsheet
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -45,7 +44,7 @@ import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.util.UUID
 
-class AddProductBottomSheet(context: Context, val product: Product? = null, private val mode: String = "add") : BottomSheetDialogFragment() {
+class AddProductBottomSheet(val product: Product? = null, private val mode: String = "add") : BottomSheetDialogFragment() {
     lateinit var imageView: ImageView
     lateinit var parent : ViewGroup
     private lateinit var productName: EditText
@@ -63,6 +62,7 @@ class AddProductBottomSheet(context: Context, val product: Product? = null, priv
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.setCanceledOnTouchOutside(false)
+        isCancelable = false
         return dialog
     }
     @SuppressLint("ClickableViewAccessibility")
@@ -331,5 +331,10 @@ class AddProductBottomSheet(context: Context, val product: Product? = null, priv
             imageView.setImageURI(resultUri)
             imageView.tag = resultUri
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        dismiss()
     }
 }

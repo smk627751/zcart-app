@@ -1,9 +1,11 @@
 package com.smk627751.zcart.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -14,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.smk627751.zcart.R
 import com.smk627751.zcart.adapter.OrdersAdapter
 import com.smk627751.zcart.dto.Order
@@ -23,6 +27,7 @@ class OrdersViewFragment : Fragment() {
     lateinit var viewModel: OrdersViewModel
     lateinit var toolbar: MaterialToolbar
     lateinit var category: CollapsingToolbarLayout
+    lateinit var categoryView : ChipGroup
     lateinit var searchView : SearchView
     lateinit var ordersView : RecyclerView
     lateinit var noOrdersView : LinearLayout
@@ -36,10 +41,12 @@ class OrdersViewFragment : Fragment() {
 
         toolbar = view.findViewById(R.id.toolbar)
         category = view.findViewById(R.id.category_list)
+        categoryView = view.findViewById(R.id.category_view)
         ordersView = view.findViewById(R.id.orders_view)
         noOrdersView = view.findViewById(R.id.no_orders_found_view)
         searchView = toolbar.menu.findItem(R.id.search).actionView as SearchView
         searchView.setBackgroundResource(R.drawable.edit_text_bg)
+        noOrdersView.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.isNullOrEmpty()) viewModel.getOrders()
@@ -60,6 +67,14 @@ class OrdersViewFragment : Fragment() {
                 category.isVisible = !category.isVisible
             }
             true
+        }
+        categoryView.setOnCheckedStateChangeListener { group, checkedIds ->
+            Log.i("uuid", "Checked ids: $checkedIds")
+            if (checkedIds.isEmpty()) viewModel.getOrders()
+            else checkedIds.map { (group.getChildAt(it-1) as Chip).text }.forEach {
+                Log.i("uuid", "Chip text: $it")
+                viewModel.getOrders(it.toString())
+            }
         }
         viewModel.options.observe(viewLifecycleOwner) { options ->
             setAdapter(options)

@@ -510,6 +510,16 @@ object Repository {
                     }
                 }
             }
+            "Order placed","Order shipped","Out for delivery","Order delivered","Order cancelled" ->{
+                val query = db.collection("orders")
+                    .whereArrayContains("vendorIds", currentUserId)
+                    .orderBy("timestamp",Query.Direction.DESCENDING)
+                    .whereEqualTo("status", searchQuery)
+                val options = FirestoreRecyclerOptions.Builder<Order>()
+                    .setQuery(query, Order::class.java)
+                    .build()
+                callBack(options)
+            }
             else -> {
                 val query = db.collection("orders")
                     .whereArrayContains("vendorIds", currentUserId)

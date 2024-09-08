@@ -43,13 +43,12 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Button.IconButton"
                 app:icon="@drawable/baseline_remove_circle_24"/>
-            <EditText
+            <TextView
                 android:id="@+id/quantity"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:inputType="numberDecimal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="1"
-                android:maxLength="2"/>
+                style="?attr/textAppearanceTitleLarge"/>
             <Button
                 android:id="@+id/increase_quantity"
                 android:layout_width="wrap_content"

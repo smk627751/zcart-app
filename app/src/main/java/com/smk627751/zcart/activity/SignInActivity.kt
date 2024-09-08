@@ -18,6 +18,7 @@ import androidx.core.view.NestedScrollingParent
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputLayout
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.receiver.InternetStateChangeReceiver
@@ -27,13 +28,13 @@ import com.smk627751.zcart.viewmodel.SignInViewModel
 class SignInActivity : AppCompatActivity() {
     lateinit var viewModel: SignInViewModel
     lateinit var parent: RelativeLayout
+    lateinit var emailLayout : TextInputLayout
     lateinit var email : EditText
+    lateinit var passwordLayout : TextInputLayout
     lateinit var password : EditText
-    lateinit var toggleButton : ImageButton
     lateinit var forgotPassword : Button
     lateinit var signIn : Button
     lateinit var progress : ProgressBar
-    var isPasswordVisible : Boolean = false
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,37 +51,26 @@ class SignInActivity : AppCompatActivity() {
                 goToHome()
         }
         parent = findViewById(R.id.main)
+        emailLayout = findViewById(R.id.email_layout)
         email = findViewById(R.id.email)
+        passwordLayout = findViewById(R.id.password_layout)
         password = findViewById(R.id.password)
-        toggleButton = findViewById(R.id.toggle_button)
         forgotPassword = findViewById(R.id.forgot_password)
         signIn = findViewById(R.id.sign_in_button)
         progress = findViewById(R.id.progress)
 
         parent.setOnTouchListener { _, _ ->
+            email.clearFocus()
+            password.clearFocus()
             Utility.hideSoftKeyboard(this)
             false
         }
-        toggleButton.setOnClickListener {
-            if (isPasswordVisible)
-            {
-                password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                toggleButton.setImageResource(R.drawable.baseline_visibility_24)
-                isPasswordVisible = false
-            }
-            else
-            {
-                password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                toggleButton.setImageResource(R.drawable.baseline_visibility_off_24)
-                isPasswordVisible = true
-            }
-        }
         forgotPassword.setOnClickListener {
             forgotPassword.isEnabled = false
-            if (email.text.isEmpty())
+            if (email.text.isEmpty() || email.text.isBlank())
             {
                 forgotPassword.isEnabled = true
-                email.error = "Email is required"
+                emailLayout.error = "Email is required"
                 return@setOnClickListener
             }
             viewModel.forgotPassword(email.text.toString()){
@@ -92,6 +82,8 @@ class SignInActivity : AppCompatActivity() {
             if (email.text.isEmpty() || password.text.isEmpty())
                 return@setOnClickListener
             setProgress(true)
+            emailLayout.error = null
+            passwordLayout.error = null
             viewModel.signIn(email.text.toString(),password.text.toString(),
                 {
                     setProgress(false)
@@ -99,7 +91,7 @@ class SignInActivity : AppCompatActivity() {
                 },
                 {
                     setProgress(false)
-                    Utility.makeToast(this, it.message.toString())
+                    passwordLayout.error = it.message
                 }
             )
         }
