@@ -87,6 +87,10 @@ class ProfileViewModel : ViewModel() {
         }
         return isValid
     }
+    fun resetPassword(email : String, callBack: () -> Unit)
+    {
+        Repository.forgotPassword(email,callBack)
+    }
     /**Function to logout*/
     fun logout(callBack: () -> Unit) {
         Repository.logout().also {

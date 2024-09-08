@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
@@ -81,6 +82,7 @@ class ProductViewFragment : Fragment() {
         else StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.itemAnimator = DefaultItemAnimator()
 
+        noProductView.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         shimmerFrameLayout.startShimmerAnimation()
         setupCategoryList()
         setupSearchView()

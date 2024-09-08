@@ -122,6 +122,13 @@ tools:context=".fragments.ProfileViewFragment">
                     android:background="@drawable/edit_text_bg"
                     android:padding="16dp"
                     android:backgroundTint="?attr/colorSurfaceVariant"/>
+                <Button
+                    android:id="@+id/reset_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:text="Reset Password"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

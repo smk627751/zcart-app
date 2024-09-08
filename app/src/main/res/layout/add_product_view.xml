@@ -28,7 +28,7 @@
                 android:id="@+id/product_image"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
-                android:src="@drawable/baseline_image_24"
+                android:src="@drawable/outline_image_24"
                 android:scaleType="fitCenter"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"

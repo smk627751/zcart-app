@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smk627751.zcart.R
+import com.smk627751.zcart.Utility
 import com.smk627751.zcart.activity.ProfileEditActivity
 import com.smk627751.zcart.activity.SignInActivity
 import com.smk627751.zcart.adapter.ProductViewAdapter
@@ -35,6 +37,7 @@ class ProfileViewFragment : Fragment() {
     lateinit var zipcode : TextView
     lateinit var phone : TextView
     lateinit var user: User
+    lateinit var resetPassword : Button
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,7 +59,7 @@ class ProfileViewFragment : Fragment() {
         productList = view.findViewById(R.id.product_list)
         address = view.findViewById(R.id.profile_address_field)
         zipcode = view.findViewById(R.id.profile_zipcode_field)
-
+        resetPassword = view.findViewById(R.id.reset_password)
         toolbar.setOnMenuItemClickListener {
             when(it.itemId)
             {
@@ -70,8 +73,12 @@ class ProfileViewFragment : Fragment() {
                     showAlertDialog()
                     true
                 }
-
                 else -> false
+            }
+        }
+        resetPassword.setOnClickListener {
+            viewModel.resetPassword(user.email) {
+                context?.let { it1 -> Utility.makeToast(it1,"Password reset link sent to your email") }
             }
         }
         viewModel.user.observe(viewLifecycleOwner) {user ->

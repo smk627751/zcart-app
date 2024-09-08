@@ -26,6 +26,7 @@ import com.hbb20.CountryCodePicker
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.Utility.hideSoftKeyboard
+import com.smk627751.zcart.bottomsheet.ImageOptionDialogFragment
 import com.smk627751.zcart.bottomsheet.OTPBottomSheet
 import com.smk627751.zcart.dto.Customer
 import com.smk627751.zcart.dto.User
@@ -83,13 +84,25 @@ class ProfileEditActivity : AppCompatActivity() {
         }
         // Set click listener for image view
         imageView.setOnClickListener {
-            val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(
-                    Build.VERSION_CODES.R) >= 2) {
-                Intent(MediaStore.ACTION_PICK_IMAGES)
-            }
-            else Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, 1)
+            ImageOptionDialogFragment.newInstance{option ->
+                when(option)
+                {
+                    "gallery" -> {
+                        val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(
+                                Build.VERSION_CODES.R) >= 2) {
+                            Intent(MediaStore.ACTION_PICK_IMAGES)
+                        }
+                        else Intent(Intent.ACTION_PICK)
+                        intent.type = "image/*"
+                        startActivityForResult(intent, 1)
+                    }
+                    "delete" -> {
+                        imageView.setImageResource(R.drawable.baseline_person_24)
+                        imageView.tag = null
+                        user.image = ""
+                    }
+                }
+            }.show(supportFragmentManager, "image")
         }
 
         // Observe user data
@@ -110,8 +123,6 @@ class ProfileEditActivity : AppCompatActivity() {
         }
         // Set click listener for save button
         saveButton.setOnClickListener {
-            Log.e("phone", "${ccp.selectedCountryCodeWithPlus}${phone.text}")
-            Log.e("prev", prevPhone)
             if (!viewModel.validate(nameField.text.toString(), address.text.toString(), zipcode.text.toString(), phone.text.toString()))
             {
                 return@setOnClickListener
