@@ -74,7 +74,7 @@ class DetailViewActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        Utility.registerInternetReceiver(this)
+//        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
         intent.getSerializableExtra("product")?.let { viewModel.setProduct(it as Product)}
         intent.getStringExtra("product_id")?.let { viewModel.setProduct(it) }

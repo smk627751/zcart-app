@@ -4,6 +4,6 @@
     <item android:id="@+id/filter_menu"
         android:title="filter"
         android:icon="@drawable/baseline_filter_list_24"
-        android:iconTint="?attr/colorOnSurfaceVariant"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         app:showAsAction="always"/>
 </menu>

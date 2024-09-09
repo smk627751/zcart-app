@@ -46,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
 
         fragmentContainer = findViewById(R.id.fragment_container)
 
-        Utility.registerInternetReceiver(this)
+//        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         viewModel.setLandscape(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         when(val view: View = findViewById(R.id.navigation)){
@@ -88,12 +88,23 @@ class HomeActivity : AppCompatActivity() {
         } else {
             viewModel.setLandscape(false)
         }
+        if (newConfig.isNightModeActive)
+        {
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+        }
+        else
+        {
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.bottom_navigation_color)
+        }
     }
     private fun setUpNavigation(isVendor: Boolean, isLandscape: Boolean) {
-        if (!isLandscape)
+        if (resources.configuration.isNightModeActive)
         {
-            val navBarColor = ContextCompat.getColor(this, R.color.bottom_navigation_color)
-            window.navigationBarColor = navBarColor
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+        }
+        else
+        {
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.bottom_navigation_color)
         }
         val view = if (isLandscape) navigationRailView else bottomNavigationView
         if (isVendor)

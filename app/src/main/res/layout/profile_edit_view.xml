@@ -30,10 +30,13 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginVertical="16dp"
+                android:padding="8dp"
                 android:layout_gravity="center"
-                android:src="@drawable/baseline_person_24"
                 android:background="?attr/colorSurfaceVariant"
-                app:shapeAppearanceOverlay="@style/circleImageView"/>
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:strokeColor="?attr/colorAccent"
+                app:strokeWidth="1dp"
+                android:elevation="1dp"/>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,6 +117,7 @@
                 android:background="@drawable/round"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/white"
+                android:layout_margin="16dp"
                 android:padding="2dp"
                 android:visibility="gone"/>
         </LinearLayout>

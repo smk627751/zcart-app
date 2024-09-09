@@ -1,9 +1,12 @@
 package com.smk627751.zcart.activity
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.ext.SdkExtensions
 import android.provider.MediaStore
 import android.util.Log
@@ -16,6 +19,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +38,11 @@ import com.smk627751.zcart.dto.Vendor
 import com.smk627751.zcart.viewmodel.ProfileViewModel
 import com.yalantis.ucrop.UCrop
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 class ProfileEditActivity : AppCompatActivity() {
@@ -59,7 +68,7 @@ class ProfileEditActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        Utility.registerInternetReceiver(this)
+//        Utility.registerInternetReceiver(this)
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
@@ -87,6 +96,11 @@ class ProfileEditActivity : AppCompatActivity() {
             ImageOptionDialogFragment.newInstance{option ->
                 when(option)
                 {
+                    "camera" -> {
+                        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
+                            startActivityForResult(it, 2)
+                        }
+                    }
                     "gallery" -> {
                         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(
                                 Build.VERSION_CODES.R) >= 2) {
@@ -207,6 +221,31 @@ class ProfileEditActivity : AppCompatActivity() {
         phone.text = user.phone.replace(ccp.selectedCountryCodeWithPlus, "")
         prevPhone = user.phone
     }
+    private fun saveBitmapToFile(bitmap: Bitmap): Uri {
+        // Create a file name with a timestamp
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        // Create the file to store the image
+        val imageFile = File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        )
+
+        // Save the bitmap to the file
+        try {
+            val outputStream = FileOutputStream(imageFile)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        // Return the URI for the file
+        return Uri.fromFile(imageFile)
+    }
     // Function to handle result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -217,9 +256,20 @@ class ProfileEditActivity : AppCompatActivity() {
                 .withMaxResultSize(500, 500)
                 .start(this)
         }
+        if (requestCode == 2 && resultCode == RESULT_OK)
+        {
+            val bitmap : Bitmap = data?.extras?.get("data") as Bitmap
+            val imageUri = saveBitmapToFile(bitmap)
+            UCrop.of(imageUri, Uri.fromFile(File(cacheDir, "${UUID.randomUUID()}_cropped.jpg")))
+                .withAspectRatio(1f, 1f)
+                .withMaxResultSize(500, 500)
+                .start(this)
+        }
         if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             UCrop.getOutput(data!!).also {
-                imageView.setImageURI(it)
+                imageView.setImageURI(it).also {
+                    imageView.requestLayout()
+                }
                 imageView.tag = it
             }
         }

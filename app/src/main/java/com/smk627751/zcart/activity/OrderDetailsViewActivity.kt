@@ -53,7 +53,7 @@ class OrderDetailsViewActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        Utility.registerInternetReceiver(this)
+//        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[OrderDetailViewModel::class.java]
         intent.getSerializableExtra("order")?.let { viewModel.setOrder(it as Order)}
         intent.getStringExtra("order_id")?.let { viewModel.setOrder(it) }

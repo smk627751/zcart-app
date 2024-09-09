@@ -5,9 +5,11 @@
         android:id="@+id/menu_edit"
         android:title="Edit"
         android:icon="@drawable/baseline_edit_24"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         app:showAsAction="always" />
     <item android:id="@+id/menu_logout"
         android:title="Logout"
         android:icon="@drawable/baseline_logout_24"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         app:showAsAction="always" />
 </menu>

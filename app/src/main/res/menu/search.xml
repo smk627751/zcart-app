@@ -5,10 +5,12 @@
         android:id="@+id/search"
         android:title="Search"
         android:icon="@drawable/baseline_search_24"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
     <item android:id="@+id/filter"
         android:title="Filter"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         android:icon="@drawable/baseline_filter_list_24"
         app:showAsAction="always"/>
 </menu>

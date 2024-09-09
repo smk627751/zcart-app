@@ -155,105 +155,61 @@
                             android:layout_weight="1"
                             android:columnCount="2">
                             <include layout="@layout/five_star_layout" />
-                            <RelativeLayout
-                                android:id="@+id/five_star_layout"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center">
-                                <View
-                                    android:layout_marginStart="10dp"
-                                    android:layout_width="150dp"
-                                    android:layout_height="10dp"
-                                    app:cardCornerRadius="5dp"
-                                    android:background="@drawable/edit_text_bg"/>
-                                <View
-                                    android:id="@+id/five_star_bar"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="150dp"
-                                    android:layout_height="10dp"
-                                    android:backgroundTint="@color/black"
-                                    android:background="@drawable/edit_text_bg"/>
-                            </RelativeLayout>
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/five_star_bar"
+                                android:layout_width="150dp"
+                                android:layout_height="10dp"
+                                app:trackThickness="10dp"
+                                app:trackCornerRadius="10dp"
+                                android:layout_gravity="center"
+                                android:progress="80"
+                                android:indeterminate="false"/>
                             <include layout="@layout/four_star_layout" />
                             <RelativeLayout
                                 android:id="@+id/four_star_layout"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center">
-                                <View
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="150dp"
-                                    android:layout_height="10dp"
-                                    app:cardCornerRadius="5dp"
-                                    android:background="@drawable/edit_text_bg"/>
-                                <View
+                                <com.google.android.material.progressindicator.LinearProgressIndicator
                                     android:id="@+id/four_star_bar"
-                                    android:layout_marginStart="8dp"
                                     android:layout_width="150dp"
                                     android:layout_height="10dp"
-                                    android:backgroundTint="@color/black"
-                                    android:background="@drawable/edit_text_bg"/>
+                                    app:trackThickness="10dp"
+                                    app:trackCornerRadius="10dp"
+                                    android:layout_gravity="center"
+                                    android:progress="80"
+                                    android:indeterminate="false"/>
                             </RelativeLayout>
                             <include layout="@layout/third_star_layout" />
-                            <RelativeLayout
-                                android:id="@+id/three_star_layout"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center">
-                                <View
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="150dp"
-                                    android:layout_height="10dp"
-                                    app:cardCornerRadius="5dp"
-                                    android:background="@drawable/edit_text_bg"/>
-                                <View
-                                    android:id="@+id/three_star_bar"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="120dp"
-                                    android:layout_height="10dp"
-                                    android:backgroundTint="@color/black"
-                                    android:background="@drawable/edit_text_bg"/>
-                            </RelativeLayout>
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/three_star_bar"
+                                android:layout_width="150dp"
+                                android:layout_height="10dp"
+                                app:trackThickness="10dp"
+                                app:trackCornerRadius="10dp"
+                                android:layout_gravity="center"
+                                android:progress="80"
+                                android:indeterminate="false"/>
                             <include layout="@layout/two_star_layout" />
-                            <RelativeLayout
-                                android:id="@+id/two_star_layout"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center">
-                                <View
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="150dp"
-                                    android:layout_height="10dp"
-                                    android:background="@drawable/edit_text_bg"/>
-                                <View
-                                    android:id="@+id/two_star_bar"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="50dp"
-                                    android:layout_height="10dp"
-                                    android:backgroundTint="@color/black"
-                                    android:background="@drawable/edit_text_bg"/>
-                            </RelativeLayout>
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/two_star_bar"
+                                android:layout_width="150dp"
+                                android:layout_height="10dp"
+                                app:trackThickness="10dp"
+                                app:trackCornerRadius="10dp"
+                                android:layout_gravity="center"
+                                android:progress="80"
+                                android:indeterminate="false"/>
                             <include layout="@layout/one_star_layout" />
-                            <RelativeLayout
-                                android:id="@+id/one_star_layout"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center">
-                                <View
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="150dp"
-                                    android:layout_height="10dp"
-                                    android:background="@drawable/edit_text_bg"/>
-                                <View
-                                    android:id="@+id/one_star_bar"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_width="150dp"
-                                    android:layout_height="10dp"
-                                    android:backgroundTint="@color/black"
-                                    android:background="@drawable/edit_text_bg"/>
-                            </RelativeLayout>
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/one_star_bar"
+                                android:layout_width="150dp"
+                                android:layout_height="10dp"
+                                app:trackThickness="10dp"
+                                app:trackCornerRadius="10dp"
+                                android:layout_gravity="center"
+                                android:progress="80"
+                                android:indeterminate="false"/>
                         </GridLayout>
                     </LinearLayout>
                     <RatingBar

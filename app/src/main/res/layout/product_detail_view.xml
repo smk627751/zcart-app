@@ -27,7 +27,7 @@
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:navigationIcon="@drawable/baseline_arrow_back_24"
-            app:navigationIconTint="@color/black" />
+            app:navigationIconTint="?attr/colorAccent" />
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.core.widget.NestedScrollView
         android:id="@+id/details_view"

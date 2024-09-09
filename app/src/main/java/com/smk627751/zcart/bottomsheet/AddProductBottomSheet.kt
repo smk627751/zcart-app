@@ -84,11 +84,15 @@ class AddProductBottomSheet(val product: Product? = null, private val mode: Stri
         closeBtn = view.findViewById(R.id.close_button)!!
 
         closeBtn.setOnClickListener {
-            context?.let { it1 ->
-                Utility.showAlertDialog(it1,"Are you sure you want to close?"){
-                    dismiss()
+            if (validate())
+            {
+                context?.let { it1 ->
+                    Utility.showAlertDialog(it1,"Are you sure you want to close?"){
+                        dismiss()
+                    }
                 }
             }
+            else dismiss()
         }
         imageView.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(
@@ -159,8 +163,13 @@ class AddProductBottomSheet(val product: Product? = null, private val mode: Stri
         }
         addProductBtn.setOnClickListener {
             if (!validate()) return@setOnClickListener
+            if (imageView.tag == null)
+            {
+                context?.let { Utility.makeToast(it,"Please select an image") }
+                return@setOnClickListener
+            }
             val productId = product?.id ?: UUID.randomUUID().toString()
-            val imageUri = if(imageView.tag != null) imageView.tag as Uri else null
+            val imageUri = imageView.tag as Uri
             setProgress(true)
             Repository.uploadImage("${Repository.IMAGE_PATH}/${productId}.jpg", imageUri){ imageUrl ->
                 addProduct(mode,productId,imageUrl) { msg ->
@@ -327,9 +336,9 @@ class AddProductBottomSheet(val product: Product? = null, private val mode: Stri
         }
         if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             val resultUri = UCrop.getOutput(data!!)
-
             imageView.setImageURI(resultUri)
             imageView.tag = resultUri
+            imageView.requestLayout()
         }
     }
 

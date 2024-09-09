@@ -118,8 +118,7 @@
                 android:padding="15dp"
                 android:text="Add Product"
                 android:textStyle="bold"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/black"/>
+                style="@style/Widget.Material3.Button"/>
             <ProgressBar
                 android:id="@+id/progress"
                 android:layout_width="wrap_content"

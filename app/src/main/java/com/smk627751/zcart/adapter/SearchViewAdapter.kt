@@ -3,6 +3,7 @@ package com.smk627751.zcart.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.smk627751.zcart.R
@@ -11,6 +12,7 @@ class SearchViewAdapter(val callback: (Map.Entry<String, String>) -> Unit) : Rec
     private var searchList: Map<String, String> = emptyMap()
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val text = view.findViewById<TextView>(R.id.search_text)
+        val image = view.findViewById<ImageView>(R.id.product_image)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

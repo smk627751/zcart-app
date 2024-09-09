@@ -17,6 +17,10 @@ class ImageOptionDialogFragment(val callBack: (option : String) -> Unit) : Botto
         savedInstanceState: Bundle?
     ): View {
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_image_option, container, false)
+        view.findViewById<View>(R.id.capture_image).setOnClickListener {
+            callBack("camera")
+            dismiss()
+        }
         view.findViewById<View>(R.id.choose_image).setOnClickListener {
             callBack("gallery")
             dismiss()
