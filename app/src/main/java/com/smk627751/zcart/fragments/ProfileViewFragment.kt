@@ -25,7 +25,7 @@ import com.smk627751.zcart.dto.User
 import com.smk627751.zcart.viewmodel.ProfileViewModel
 
 class ProfileViewFragment : Fragment() {
-    lateinit var viewModel: ProfileViewModel
+    lateinit var viewModel : ProfileViewModel
     lateinit var parent : ViewGroup
     lateinit var toolbar: MaterialToolbar
     lateinit var imageView : ImageView
@@ -47,7 +47,6 @@ class ProfileViewFragment : Fragment() {
         val view = inflater.inflate(R.layout.profile_view, container, false)
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-
         // Initialize views
         parent = view.findViewById(R.id.main)
         toolbar = view.findViewById(R.id.toolbar)

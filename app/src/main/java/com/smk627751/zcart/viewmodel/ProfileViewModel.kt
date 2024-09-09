@@ -27,6 +27,12 @@ class ProfileViewModel : ViewModel() {
         checkIfVendor()
         getUserData()
     }
+    fun setUserData(user: User) {
+        _user.value = user
+    }
+    fun isOwnProfile(email: String) : Boolean {
+        return email == Repository.user?.email
+    }
     fun getMyProducts() : FirestoreRecyclerOptions<Product> {
         return Repository.listenProducts("","myProducts")
     }

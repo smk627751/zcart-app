@@ -1,6 +1,8 @@
 package com.smk627751.zcart.dto
 
-abstract class User()
+import java.io.Serializable
+
+abstract class User() : Serializable
 {
     lateinit var image : String
     lateinit var name : String

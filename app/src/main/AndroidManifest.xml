@@ -17,16 +17,18 @@
         android:theme="@style/Theme.ZCart"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ProfileViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ProfileEditActivity"
             android:exported="false" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-<!--        <activity-->
-<!--            android:name=".activity.OTPActivity"-->
-<!--            android:exported="false"-->
-<!--            android:launchMode="singleTask" />-->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- <activity -->
+        <!-- android:name=".activity.OTPActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:launchMode="singleTask" /> -->
         <activity
             android:name=".activity.OrderDetailsViewActivity"
             android:exported="false"

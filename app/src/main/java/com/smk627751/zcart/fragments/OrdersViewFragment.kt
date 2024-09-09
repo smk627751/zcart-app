@@ -25,6 +25,7 @@ import com.smk627751.zcart.viewmodel.OrdersViewModel
 
 class OrdersViewFragment : Fragment() {
     lateinit var viewModel: OrdersViewModel
+    val orderStatus = arrayOf("Order placed", "Order shipped", "Out for delivery", "Order delivered")
     lateinit var toolbar: MaterialToolbar
     lateinit var category: CollapsingToolbarLayout
     lateinit var categoryView : ChipGroup
@@ -68,13 +69,16 @@ class OrdersViewFragment : Fragment() {
             }
             true
         }
-        categoryView.setOnCheckedStateChangeListener { group, checkedIds ->
-            Log.i("uuid", "Checked ids: $checkedIds")
-            if (checkedIds.isEmpty()) viewModel.getOrders()
-            else checkedIds.map { (group.getChildAt(it-1) as Chip).text }.forEach {
-                Log.i("uuid", "Chip text: $it")
-                viewModel.getOrders(it.toString())
+        var index = 0
+        orderStatus.forEach { status ->
+            val view = layoutInflater.inflate(R.layout.filter_chip, categoryView, false) as Chip
+            view.id = index++
+            view.text = status
+            view.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) viewModel.getOrders(status)
+                else viewModel.getOrders()
             }
+            categoryView.addView(view)
         }
         viewModel.options.observe(viewLifecycleOwner) { options ->
             setAdapter(options)

@@ -60,18 +60,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp" />
         </com.google.android.material.search.SearchView>
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_layout"
-            android:layout_below="@id/category_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <include
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                layout="@layout/product_view_placeholder"/>
-        </com.facebook.shimmer.ShimmerFrameLayout>
         <ViewSwitcher
         android:id="@+id/view_switcher"
         android:layout_below="@id/category_list"
@@ -103,4 +91,16 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp"/>
     </ViewSwitcher>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_below="@id/category_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            layout="@layout/product_view_placeholder"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

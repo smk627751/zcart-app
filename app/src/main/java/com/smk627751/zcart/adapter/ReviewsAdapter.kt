@@ -1,5 +1,6 @@
 package com.smk627751.zcart.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import com.smk627751.zcart.R
 import com.smk627751.zcart.dto.Review
 import com.smk627751.zcart.Repository.Repository
 import com.smk627751.zcart.Utility
+import com.smk627751.zcart.activity.ProfileViewActivity
+import com.smk627751.zcart.dto.User
 import com.smk627751.zcart.viewmodel.DetailViewModel
 
 class ReviewsAdapter(private val reviews: Map<String,Review>, private val viewModel: DetailViewModel) : RecyclerView.Adapter<ReviewsAdapter.ViewHolder>() {
@@ -38,19 +41,25 @@ class ReviewsAdapter(private val reviews: Map<String,Review>, private val viewMo
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val review = reviews.values.elementAt(position)
-        viewModel.getUser(review.userId){
-            if (it != null) {
-                holder.username.text = if(it.name == Repository.user?.name) "You" else it.name
-                if (review.isEdited)
-                {
+        viewModel.getUser(review.userId) { user ->
+            if (user != null) {
+                holder.username.text = if(user.name == Repository.user?.name) "You" else user.name
+                if (review.isEdited) {
                     holder.username.text = "${holder.username.text} (Edited)"
                 }
                 Glide.with(holder.itemView)
-                    .load(it.image)
+                    .load(user.image)
                     .transform(CircleCrop())
                     .error(R.drawable.baseline_person_24)
                     .into(holder.logo)
                 holder.date.text = Utility.formatTime(review.timestamp)
+
+                holder.logo.setOnClickListener { v ->
+                    Intent(v.context, ProfileViewActivity::class.java).also { intent ->
+                        intent.putExtra("user",user)
+                        v.context.startActivity(intent)
+                    }
+                }
             }
         }
         holder.ratings.removeAllViews()
