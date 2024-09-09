@@ -12,18 +12,14 @@ class SearchViewAdapter(val callback: (Map.Entry<String, String>) -> Unit) : Rec
     private var searchList: Map<String, String> = emptyMap()
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val text = view.findViewById<TextView>(R.id.search_text)
-        val image = view.findViewById<ImageView>(R.id.product_image)
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.search_item_layout, parent, false)
         return ViewHolder(view)
     }
-
     override fun getItemCount(): Int {
        return searchList.size
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = searchList.entries.elementAt(position)
         holder.text.text = item.key

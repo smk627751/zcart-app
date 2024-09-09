@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="8dp"
     android:gravity="center_vertical">
@@ -10,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
         android:src="@drawable/baseline_search_24"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:foregroundTint="?attr/colorAccent"/>
     <TextView
         android:id="@+id/search_text"
         android:layout_width="0dp"
@@ -19,11 +21,4 @@
         android:text="Hello World!"
         style="?attr/textAppearanceSubtitle1"
         android:layout_margin="5dp"/>
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/product_image"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_weight="0.5"
-        android:src="@drawable/outline_image_24"
-        android:visibility="gone"/>
 </LinearLayout>

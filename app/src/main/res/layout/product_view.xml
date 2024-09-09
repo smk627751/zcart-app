@@ -88,12 +88,14 @@
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/outline_shopping_bag_24"/>
+                    android:src="@drawable/outline_shopping_bag_24"
+                    app:iconTint="?attr/colorAccent"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No product found"
-                    android:textSize="16sp"/>
+                    style="?attr/textAppearanceBody1"
+                    app:iconTint="?attr/colorOnSurface"/>
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"

@@ -93,7 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No Orders placed"
-                    android:textSize="16sp"/>
+                    style="?attr/textAppearanceBody1"
+                    app:iconTint="?attr/colorAccent"/>
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/orders_view"
