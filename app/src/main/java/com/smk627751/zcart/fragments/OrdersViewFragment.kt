@@ -1,7 +1,6 @@
 package com.smk627751.zcart.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,6 +61,12 @@ class OrdersViewFragment : Fragment() {
             }
 
         })
+        viewModel.isVendor.observe(viewLifecycleOwner) {
+            if (!it)
+            {
+                toolbar.menu.clear()
+            }
+        }
         toolbar.setOnMenuItemClickListener {
             if (it.itemId == R.id.filter)
             {

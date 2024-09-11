@@ -94,13 +94,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Don't have an account?"
-            style="?attr/textAppearanceBody2"/>
+            style="?attr/textAppearanceSubtitle1"/>
         <TextView
             android:id="@+id/sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Up"
             android:layout_marginStart="2dp"
-            style="?attr/textAppearanceSubtitle2"/>
+            style="?attr/textAppearanceTitleMedium"/>
     </LinearLayout>
 </RelativeLayout>

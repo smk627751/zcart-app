@@ -10,6 +10,7 @@ import com.smk627751.zcart.Repository.Repository
 import com.smk627751.zcart.dto.Customer
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.dto.User
+import com.smk627751.zcart.dto.Vendor
 import java.util.regex.Pattern
 
 class ProfileViewModel : ViewModel() {
@@ -26,6 +27,9 @@ class ProfileViewModel : ViewModel() {
     init {
         checkIfVendor()
         getUserData()
+    }
+    fun vendorHasProducts() : Boolean {
+        return user.value is Vendor && (user.value as Vendor).products.isNotEmpty()
     }
     fun setUserData(user: User) {
         _user.value = user
@@ -83,13 +87,25 @@ class ProfileViewModel : ViewModel() {
         }
         else {
             zipcodeError.value = null
-            // Phone validation
-            if (phone.length != 10) {
-                phoneError.value = "Invalid phone number"
-                isValid = false
-            } else {
-                phoneError.value = null
-            }
+        }
+        // Phone validation
+        if (phone.isEmpty() || phone.isBlank()) {
+            phoneError.value = "Enter your phone number"
+            isValid = false
+        }
+        else if (!phone.matches(Regex("\\d+"))) {
+            phoneError.value = "Phone number must contain only digits"
+            isValid = false
+        }
+        if (phone.startsWith("0")) {
+            phoneError.value = "Phone number cannot start with 0"
+            isValid = false
+        }
+        else if (phone.length != 10) {
+            phoneError.value = "Invalid phone number"
+            isValid = false
+        } else {
+            phoneError.value = null
         }
         return isValid
     }

@@ -81,11 +81,18 @@ class ProfileViewFragment : Fragment() {
             }
         }
         viewModel.user.observe(viewLifecycleOwner) {user ->
-            setUpProfile(user)
+            if (user == null)
+            {
+                Intent(context, SignInActivity::class.java).also {
+                    startActivity(it)
+                    activity?.finish()
+                }
+            }
+            else setUpProfile(user)
         }
         // Observe isVendor
         viewModel.isVendor.observe(viewLifecycleOwner) { isVendor ->
-            if (isVendor)
+            if (isVendor && viewModel.vendorHasProducts())
             {
                 setUpCatalog()
             }

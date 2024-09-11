@@ -55,7 +55,6 @@ class PlaceOrderViewModel : ViewModel() {
             }
         }
     }
-
     fun getUsername(): String {
         return Repository.user?.name ?: ""
     }

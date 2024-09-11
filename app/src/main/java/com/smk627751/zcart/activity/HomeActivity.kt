@@ -1,5 +1,6 @@
 package com.smk627751.zcart.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -16,9 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.smk627751.zcart.R
+import com.smk627751.zcart.Repository.Repository
 import com.smk627751.zcart.Utility
-import com.smk627751.zcart.bottomsheet.AddProductBottomSheet
 import com.smk627751.zcart.dto.Notification
+import com.smk627751.zcart.dto.Product
+import com.smk627751.zcart.dto.Review
 import com.smk627751.zcart.fragments.CartViewFragment
 import com.smk627751.zcart.fragments.NotificationViewFragment
 import com.smk627751.zcart.fragments.OrdersViewFragment
@@ -26,12 +30,12 @@ import com.smk627751.zcart.fragments.ProductViewFragment
 import com.smk627751.zcart.fragments.ProfileViewFragment
 import com.smk627751.zcart.viewmodel.HomeViewModel
 import com.yalantis.ucrop.UCrop
+import java.util.UUID
 
 class HomeActivity : AppCompatActivity() {
     lateinit var fragmentContainer: FragmentContainerView
     var bottomNavigationView: BottomNavigationView? = null
     var navigationRailView: NavigationRailView? = null
-    lateinit var bottomSheet: AddProductBottomSheet
     private lateinit var viewModel: HomeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +49,26 @@ class HomeActivity : AppCompatActivity() {
         }
 
         fragmentContainer = findViewById(R.id.fragment_container)
-
+        for (i in 0 until 50) {
+//            Repository.addProductToDb(
+//                Product(
+//                    "$i",
+//                    "",
+//                    "",
+//                    "Dummy",
+//                    60000,
+//                    "",
+//                    mutableListOf<String>(),
+//                    mutableMapOf<String, Review>()
+//                )
+//            ){}
+//            Repository.db.collection("products").document(i.toString()).delete()
+//            Repository.db.collection("products").whereEqualTo("name","Dummy").get().addOnCompleteListener {
+//                it.result.documents.forEach {
+//                    it.reference.delete()
+//                }
+//            }
+        }
 //        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         viewModel.setLandscape(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -127,7 +150,12 @@ class HomeActivity : AppCompatActivity() {
                     }
 
                     viewModel.addId -> {
-                        showAddProductBottomSheet()
+//                        showAddProductBottomSheet()
+                       Intent(this,AddProductActivity::class.java).apply {
+                            putExtra("mode","add")
+                            startActivity(this)
+                           overridePendingTransition(R.anim.slide_up,R.anim.fade_in)
+                        }
                         false
                     }
 
@@ -204,13 +232,6 @@ class HomeActivity : AppCompatActivity() {
         menu?.add(Menu.NONE, id, Menu.NONE, title)?.setIcon(iconRes)
     }
 
-    private fun showAddProductBottomSheet() {
-        bottomSheet = AddProductBottomSheet()
-        bottomSheet.show(supportFragmentManager, "Add Product").also {
-
-        }
-    }
-
     private fun setFragment(fragment: Fragment) {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment != null && currentFragment::class == fragment::class)
@@ -235,20 +256,6 @@ class HomeActivity : AppCompatActivity() {
         }
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
-        }
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == 1 && resultCode == RESULT_OK) {
-//            UCrop.of(data?.data!!, Uri.fromFile(File(cacheDir, "${UUID.randomUUID()}_cropped.jpg")))
-//                .withAspectRatio(1f, 1f)
-//                .withMaxResultSize(500, 500)
-//                .start(this)
-//        }
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            val resultUri = UCrop.getOutput(data!!)
-            bottomSheet.imageView.setImageURI(resultUri)
-            bottomSheet.imageView.tag = resultUri
         }
     }
 }

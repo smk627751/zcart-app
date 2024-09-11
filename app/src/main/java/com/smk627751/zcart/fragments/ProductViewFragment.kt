@@ -29,6 +29,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
 import com.smk627751.zcart.R
+import com.smk627751.zcart.Repository.Repository.listenProducts
 import com.smk627751.zcart.adapter.ProductViewAdapter
 import com.smk627751.zcart.adapter.SearchViewAdapter
 import com.smk627751.zcart.dto.Product
@@ -50,6 +51,7 @@ class ProductViewFragment : Fragment() {
     var searchViewAdapter: SearchViewAdapter? = null
     lateinit var recyclerView: RecyclerView
     var adapter: ProductViewAdapter? = null
+    var isLoadingMore = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -159,6 +161,46 @@ class ProductViewFragment : Fragment() {
             }
         })
         updateViewVisibility()
+//        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                val layoutManager = recyclerView.layoutManager as StaggeredGridLayoutManager
+//                val visibleItemCount = layoutManager.childCount
+//                val totalItemCount = layoutManager.itemCount
+//                val firstVisibleItemPositions = layoutManager.findFirstVisibleItemPositions(null)
+//                val firstVisibleItemPosition = firstVisibleItemPositions.minOrNull() ?: 0
+//                // Check if end of the list is reached
+//                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+//                    && firstVisibleItemPosition >= 0) {
+//                    // Load more data
+////                    shimmerFrameLayout.visibility = View.VISIBLE
+////                    shimmerFrameLayout.startShimmerAnimation()
+//                    loadMoreProducts()
+//                }
+//            }
+//        })
+    }
+    fun loadMoreProducts() {
+        isLoadingMore = true
+        // Get current snapshots
+        val currentList = adapter?.currentList
+        if (currentList?.isEmpty() == true) return
+
+        val lastVisibleProduct = currentList?.getSnapshot(currentList.size - 1)
+
+        // Fetch more products
+        val newOptions = listenProducts(
+            searchQuery = "",  // Modify based on your need
+            type = "all",  // Modify based on your need
+            limit = 5,
+            lastVisibleProduct = lastVisibleProduct
+        )
+        recyclerView.post {
+            adapter?.updateData(newOptions)
+            shimmerFrameLayout.visibility = View.GONE
+            shimmerFrameLayout.stopShimmerAnimation()
+        }
+        isLoadingMore = false
     }
     private fun updateViewVisibility() {
         // Log to check the current item count
@@ -172,12 +214,12 @@ class ProductViewFragment : Fragment() {
         // Switch the view based on item count
         if (itemCount == 0) {
             Log.d("ProductViewFragment", "Showing no product found view")
-            viewSwitcher?.findViewById<View>(R.id.no_product_found_view)?.visibility = View.VISIBLE
+            view?.findViewById<View>(R.id.no_product_found_view)?.visibility = View.VISIBLE
             viewSwitcher?.findViewById<View>(R.id.recycler_view)?.visibility = View.GONE
         } else if (itemCount > 0) {
             Log.d("ProductViewFragment", "Showing recycler view")
             viewSwitcher?.findViewById<View>(R.id.recycler_view)?.visibility = View.VISIBLE
-            viewSwitcher?.findViewById<View>(R.id.no_product_found_view)?.visibility = View.GONE
+            view?.findViewById<View>(R.id.no_product_found_view)?.visibility = View.GONE
         }
     }
     private fun showShimmer(callback: () -> Unit) {

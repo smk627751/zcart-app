@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.RadioGroup
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,12 +21,11 @@ import com.google.android.material.textfield.TextInputLayout
 import com.hbb20.CountryCodePicker
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
-import com.smk627751.zcart.bottomsheet.OTPBottomSheet
 import com.smk627751.zcart.viewmodel.SignUpViewModel
 
 class SignUpActivity : AppCompatActivity() {
     lateinit var viewModel: SignUpViewModel
-    lateinit var parent: ScrollView
+    lateinit var parent: ViewGroup
     lateinit var nameLayout : TextInputLayout
     lateinit var name : EditText
     lateinit var emailLayout : TextInputLayout
@@ -121,21 +120,30 @@ class SignUpActivity : AppCompatActivity() {
                     name.text.toString(),
                     email.text.toString(),
                     "${ccp.selectedCountryCodeWithPlus}${phone.text}",
-                    password.text.toString(),
-                    confirmPassword.text.toString(),
                     accountType
                 ).also {
-                    OTPBottomSheet("${ccp.selectedCountryCodeWithPlus}${phone.text}"){
-                        viewModel.signUp({
-                            Utility.makeToast(this, "Verification email sent").also {
-                                Intent(this, SignInActivity::class.java).also {
-                                    startActivity(it)
-                                }
+//                    OTPBottomSheet("${ccp.selectedCountryCodeWithPlus}${phone.text}"){
+//                        viewModel.signUp({
+//                            Utility.makeToast(this, "Verification email sent").also {
+//                                Intent(this, SignInActivity::class.java).also {
+//                                    startActivity(it)
+//                                }
+//                            }
+//                        },{
+//                            Utility.makeToast(this, it.message.toString())
+//                        })
+//                    }.show(supportFragmentManager,"OTP")
+                    setProgress(true)
+                    viewModel.signUp({
+                        setProgress(false)
+                        Utility.makeToast(this, "Verification email sent").also {
+                            Intent(this, SignInActivity::class.java).also {
+                                startActivity(it)
                             }
-                        },{
-                            Utility.makeToast(this, it.message.toString())
-                        })
-                    }.show(supportFragmentManager,"OTP")
+                        }
+                    },{
+                        Utility.makeToast(this, it.message.toString())
+                    })
                 }
             }
         }

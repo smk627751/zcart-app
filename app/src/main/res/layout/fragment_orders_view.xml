@@ -15,20 +15,20 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="Orders"
-            app:menu="@menu/search"/>
+            app:menu="@menu/search" />
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/category_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:scrimVisibleHeightTrigger="0dp"
             android:visibility="gone">
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/filter_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:layout_collapseMode="none">
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -47,6 +47,25 @@
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:id="@+id/no_orders_found_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/outline_shopping_cart_24"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Orders placed"
+            style="?attr/textAppearanceBody1"
+            app:iconTint="?attr/colorAccent"/>
+    </LinearLayout>
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
@@ -56,26 +75,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:id="@+id/no_orders_found_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_centerInParent="true"
-                android:visibility="gone">
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/outline_shopping_cart_24"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No Orders placed"
-                    style="?attr/textAppearanceBody1"
-                    app:iconTint="?attr/colorAccent"/>
-            </LinearLayout>
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/orders_view"
                 android:layout_width="match_parent"

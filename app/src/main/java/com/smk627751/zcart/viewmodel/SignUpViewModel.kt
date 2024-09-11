@@ -22,12 +22,17 @@ class SignUpViewModel : ViewModel() {
     val confirmPasswordError = MutableLiveData<String?>()
     val accountTypeError = MutableLiveData<String?>()
 
-    fun setUser(name: String, email: String, phone: String, password: String, confirmPassword: String, accountType: String)
+    fun setUser(
+        name: String,
+        email: String,
+        phone: String,
+        accountType: String
+    )
     {
         user.value = when(accountType)
         {
-            "Customer" -> Customer(name,email,phone,password,accountType)
-            "Vendor" -> Vendor(name,email,phone,password,accountType)
+            "Customer" -> Customer(name,email,phone,accountType)
+            "Vendor" -> Vendor(name,email,phone,accountType)
             else -> null
         }
     }
@@ -66,6 +71,14 @@ class SignUpViewModel : ViewModel() {
         // Phone validation
         if (phone.isEmpty() || phone.isBlank()) {
             phoneError.value = "Enter your phone number"
+            isValid = false
+        }
+        else if (!phone.matches(Regex("\\d+"))) {
+            phoneError.value = "Phone number must contain only digits"
+            isValid = false
+        }
+        if (phone.startsWith("0")) {
+            phoneError.value = "Phone number cannot start with 0"
             isValid = false
         }
         else if (phone.length != 10) {

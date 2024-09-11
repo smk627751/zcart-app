@@ -25,7 +25,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.place_order_card, parent, false)
-        var sum = 0
+        var sum : Long = 0
         orders.forEach {
             quantities[it.id] = 1
             sum += it.price

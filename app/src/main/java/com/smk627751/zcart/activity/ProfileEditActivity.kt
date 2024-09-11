@@ -26,10 +26,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.textfield.TextInputLayout
 import com.hbb20.CountryCodePicker
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.Utility.hideSoftKeyboard
+import com.smk627751.zcart.Utility.saveBitmapToFile
 import com.smk627751.zcart.bottomsheet.ImageOptionDialogFragment
 import com.smk627751.zcart.bottomsheet.OTPBottomSheet
 import com.smk627751.zcart.dto.Customer
@@ -50,10 +52,14 @@ class ProfileEditActivity : AppCompatActivity() {
     lateinit var parent : ViewGroup
     lateinit var toolbar: MaterialToolbar
     lateinit var imageView : ImageView
+    lateinit var nameLayout : TextInputLayout
     lateinit var nameField : EditText
+    lateinit var addressLayout : TextInputLayout
     lateinit var address : TextView
+    lateinit var zipcodeLayout : TextInputLayout
     lateinit var zipcode : TextView
     lateinit var ccp : CountryCodePicker
+    lateinit var phoneLayout : TextInputLayout
     lateinit var phone : TextView
     lateinit var progress: ProgressBar
     lateinit var saveButton : Button
@@ -76,8 +82,12 @@ class ProfileEditActivity : AppCompatActivity() {
         parent = findViewById(R.id.main)
         toolbar = findViewById(R.id.toolbar)
         imageView = findViewById(R.id.profile_image)
+        nameLayout = findViewById(R.id.name_layout)
         nameField = findViewById(R.id.profile_name_et)
         ccp = findViewById(R.id.ccp)
+        addressLayout = findViewById(R.id.address_layout)
+        zipcodeLayout = findViewById(R.id.zipcode_layout)
+        phoneLayout = findViewById(R.id.phone_input_layout)
         phone = findViewById(R.id.phone_field)
         address = findViewById(R.id.profile_address_field)
         zipcode = findViewById(R.id.profile_zipcode_field)
@@ -124,16 +134,16 @@ class ProfileEditActivity : AppCompatActivity() {
             setUpProfile(user)
         }
         viewModel.nameError.observe(this) {
-            nameField.error = it
+            nameLayout.error = it
         }
         viewModel.phoneError.observe(this) {
-            phone.error = it
+            phoneLayout.error = it
         }
         viewModel.addressError.observe(this) {
-            address.error = it
+            addressLayout.error = it
         }
         viewModel.zipcodeError.observe(this) {
-            zipcode.error = it
+            zipcodeLayout.error = it
         }
         // Set click listener for save button
         saveButton.setOnClickListener {
@@ -141,16 +151,17 @@ class ProfileEditActivity : AppCompatActivity() {
             {
                 return@setOnClickListener
             }
-            if (prevPhone != "${ccp.selectedCountryCodeWithPlus}${phone.text}")
-            {
-                OTPBottomSheet("${ccp.selectedCountryCodeWithPlus}${phone.text}"){
-                    updateProfile(user)
-                }.show(supportFragmentManager, "OTP")
-            }
-            else
-            {
-                updateProfile(user)
-            }
+//            if (prevPhone != "${ccp.selectedCountryCodeWithPlus}${phone.text}")
+//            {
+//                OTPBottomSheet("${ccp.selectedCountryCodeWithPlus}${phone.text}"){
+//                    updateProfile(user)
+//                }.show(supportFragmentManager, "OTP")
+//            }
+//            else
+//            {
+//                updateProfile(user)
+//            }
+            updateProfile(user)
         }
     }
     private fun updateProfile(user: User)
@@ -193,7 +204,7 @@ class ProfileEditActivity : AppCompatActivity() {
             }
         }
     }
-    fun setProgress(inProgress : Boolean)
+    private fun setProgress(inProgress : Boolean)
     {
         if(inProgress)
         {
@@ -221,31 +232,6 @@ class ProfileEditActivity : AppCompatActivity() {
         phone.text = user.phone.replace(ccp.selectedCountryCodeWithPlus, "")
         prevPhone = user.phone
     }
-    private fun saveBitmapToFile(bitmap: Bitmap): Uri {
-        // Create a file name with a timestamp
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        // Create the file to store the image
-        val imageFile = File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        )
-
-        // Save the bitmap to the file
-        try {
-            val outputStream = FileOutputStream(imageFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        // Return the URI for the file
-        return Uri.fromFile(imageFile)
-    }
     // Function to handle result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -253,13 +239,13 @@ class ProfileEditActivity : AppCompatActivity() {
         {
             UCrop.of(data?.data!!, Uri.fromFile(File(cacheDir, "${UUID.randomUUID()}_cropped.jpg")))
                 .withAspectRatio(1f, 1f)
-                .withMaxResultSize(500, 500)
+                .withMaxResultSize(1000, 1000)
                 .start(this)
         }
         if (requestCode == 2 && resultCode == RESULT_OK)
         {
             val bitmap : Bitmap = data?.extras?.get("data") as Bitmap
-            val imageUri = saveBitmapToFile(bitmap)
+            val imageUri = saveBitmapToFile(this,bitmap)
             UCrop.of(imageUri, Uri.fromFile(File(cacheDir, "${UUID.randomUUID()}_cropped.jpg")))
                 .withAspectRatio(1f, 1f)
                 .withMaxResultSize(500, 500)

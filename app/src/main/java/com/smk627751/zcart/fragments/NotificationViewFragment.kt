@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.smk627751.zcart.R
 import com.smk627751.zcart.adapter.NotificationAdapter
+import com.smk627751.zcart.dto.Notification
 import com.smk627751.zcart.viewmodel.NotificationViewModel
 
 class NotificationViewFragment : Fragment() {
     lateinit var viewModel: NotificationViewModel
     lateinit var buttonGroup : MaterialButtonToggleGroup
+    lateinit var noNotificationFoundView : View
     lateinit var recyclerView : RecyclerView
     lateinit var adapter : NotificationAdapter
     var setBadge: ((Int) -> Unit)? = null
@@ -30,6 +32,7 @@ class NotificationViewFragment : Fragment() {
         viewModel = ViewModelProvider(this)[NotificationViewModel::class.java]
         // Initialize views
         buttonGroup = view.findViewById(R.id.button_group)
+        noNotificationFoundView = view.findViewById(R.id.no_notification_found_view)
         recyclerView = view.findViewById(R.id.recycler_view)
         // Set up RecyclerView
         buttonGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -42,15 +45,30 @@ class NotificationViewFragment : Fragment() {
             }
         }
         adapter = NotificationAdapter(mutableListOf())
+        updateVisibility(mutableListOf())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         recyclerView.itemAnimator = DefaultItemAnimator()
         // Observe notifications
         viewModel.notifications.observe(viewLifecycleOwner) {
+            updateVisibility(it)
             adapter.updateData(it)
             setBadge?.invoke(it.filter { !it.isRead }.size)
         }
         viewModel.getNotifications("all")
         return view
+    }
+    private fun updateVisibility(notifications : List<Notification>)
+    {
+        if (notifications.isNotEmpty())
+        {
+            recyclerView.visibility = View.VISIBLE
+            noNotificationFoundView.visibility = View.GONE
+        }
+        else
+        {
+            recyclerView.visibility = View.GONE
+            noNotificationFoundView.visibility = View.VISIBLE
+        }
     }
 }

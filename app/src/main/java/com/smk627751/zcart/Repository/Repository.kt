@@ -14,6 +14,7 @@ import com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.messaging
@@ -45,7 +46,7 @@ object Repository {
     var user: User? = null
     private set
     private val auth by lazy { Firebase.auth }
-    private val db by lazy { Firebase.firestore }
+    val db by lazy { Firebase.firestore }
     private val storage = Firebase.storage
     private val storageRef = storage.reference
     val IMAGE_PATH = "images/"
@@ -357,21 +358,38 @@ object Repository {
                 }
             }
     }
-    fun listenProducts(searchQuery: String,type : String = "all"): FirestoreRecyclerOptions<Product>
+    fun listenProducts(
+        searchQuery: String,
+        type : String = "all",
+        limit: Long = 10,  // Limit for pagination
+        lastVisibleProduct: DocumentSnapshot? = null
+    ): FirestoreRecyclerOptions<Product>
     {
         val query = if (searchQuery.isNotEmpty())
                     {
                         when (type) {
-                            "name" -> db.collection("products").whereGreaterThanOrEqualTo("name", searchQuery).whereLessThanOrEqualTo("name", searchQuery + "\uf8ff")
+                            "name" -> db.collection("products")
+                                .whereGreaterThanOrEqualTo("name", searchQuery)
+                                .whereLessThanOrEqualTo("name", searchQuery + "\uf8ff")
+//                                .limit(limit).apply {
+//                                    lastVisibleProduct?.let {startAfter(it)}
+//                                }
                             "category" -> {
-                                var query = db.collection("products").orderBy("name")
+                                var query = db.collection("products")
+                                    .orderBy("name")
                                 val categories = searchQuery.split(",").map { it.trim() }
                                 for (category in categories) {
                                     query = query.whereArrayContains("category", category)
                                 }
                                 query
+//                                    .limit(limit).apply {
+//                                    lastVisibleProduct?.let {startAfter(it)}
+//                                }
                             }
                             else -> db.collection("products")
+//                                .limit(limit).apply {
+//                                lastVisibleProduct?.let {startAfter(it)}
+//                            }
                         }
                     }
                     else
@@ -380,13 +398,30 @@ object Repository {
                         {
                             if (user is Vendor) {
                                 val vendor = user as Vendor
-                                db.collection("products").whereIn("id", vendor.products)
+                                if (vendor.products.isNotEmpty())
+                                {
+                                    db.collection("products")
+                                        .whereIn("id", vendor.products)
+//                                        .limit(limit).apply {
+//                                            lastVisibleProduct?.let {startAfter(it)}
+//                                        }
+                                }
+                                else
+                                {
+                                    return FirestoreRecyclerOptions.Builder<Product>().build()
+                                }
 
                             } else {
                                 db.collection("products")
+//                                    .limit(limit).apply {
+//                                        lastVisibleProduct?.let {startAfter(it)}
+//                                    }
                             }
                         }
                         else db.collection("products")
+//                            .limit(limit).apply {
+//                                lastVisibleProduct?.let {startAfter(it)}
+//                            }
                     }
         val options = FirestoreRecyclerOptions.Builder<Product>()
             .setQuery(query, Product::class.java)

@@ -74,7 +74,7 @@ class PlaceOrderActivity : AppCompatActivity() {
         }
 
         placeOrderButton.setOnClickListener {
-            if (username.text.isEmpty() || deliveryAddress.text.isEmpty() || phone.text.isEmpty()) {
+            if (viewModel.validate(username.text.toString(),deliveryAddress.text.toString(),phone.text.toString()).not()) {
                 Utility.makeToast(this, "Please fill all the fields")
                 return@setOnClickListener
             }

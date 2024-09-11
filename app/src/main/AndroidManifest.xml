@@ -17,11 +17,17 @@
         android:theme="@style/Theme.ZCart"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AddProductActivity"
+            android:exported="false"
+            android:launchMode="singleTask"/>
+        <activity
             android:name=".activity.ProfileViewActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".activity.ProfileEditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="fullSensor"

@@ -44,6 +44,25 @@
                 style="@style/Widget.Material3.Button.OutlinedButton"/>
         </com.google.android.material.button.MaterialButtonToggleGroup>
     </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:id="@+id/no_notification_found_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/outline_notifications_24"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Notifications Found"
+            style="?attr/textAppearanceBody1"
+            app:iconTint="?attr/colorAccent"/>
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/header"
         android:id="@+id/recycler_view"

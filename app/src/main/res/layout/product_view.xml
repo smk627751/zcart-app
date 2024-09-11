@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -24,6 +24,17 @@
                 app:menu="@menu/filter_menu"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap" />
+            <com.google.android.material.search.SearchView
+                android:id="@id/search_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_anchor="@id/search_bar">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/search_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="16dp" />
+            </com.google.android.material.search.SearchView>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/category_list"
@@ -50,53 +61,48 @@
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-        <com.google.android.material.search.SearchView
-            android:id="@id/search_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/search_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="16dp" />
-        </com.google.android.material.search.SearchView>
+
+        <LinearLayout
+            android:id="@+id/no_product_found_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="16dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/outline_shopping_bag_24"
+                app:iconTint="?attr/colorAccent" />
+
+            <TextView
+                style="?attr/textAppearanceBody1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No product found"
+                app:iconTint="?attr/colorOnSurface" />
+        </LinearLayout>
         <ViewSwitcher
         android:id="@+id/view_switcher"
         android:layout_below="@id/category_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <LinearLayout
-                android:id="@+id/no_product_found_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginHorizontal="16dp"
-                android:gravity="center">
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/outline_shopping_bag_24"
-                    app:iconTint="?attr/colorAccent"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No product found"
-                    style="?attr/textAppearanceBody1"
-                    app:iconTint="?attr/colorOnSurface"/>
-            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="16dp"/>
+                android:layout_marginHorizontal="16dp"
+                android:background="?attr/colorSurface"/>
     </ViewSwitcher>
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_layout"
         android:layout_below="@id/category_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="?attr/colorSurface">
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

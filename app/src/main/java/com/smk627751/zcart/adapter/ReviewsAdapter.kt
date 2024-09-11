@@ -16,7 +16,6 @@ import com.smk627751.zcart.R
 import com.smk627751.zcart.dto.Review
 import com.smk627751.zcart.Repository.Repository
 import com.smk627751.zcart.Utility
-import com.smk627751.zcart.activity.ProfileViewActivity
 import com.smk627751.zcart.dto.User
 import com.smk627751.zcart.viewmodel.DetailViewModel
 
@@ -54,12 +53,12 @@ class ReviewsAdapter(private val reviews: Map<String,Review>, private val viewMo
                     .into(holder.logo)
                 holder.date.text = Utility.formatTime(review.timestamp)
 
-                holder.logo.setOnClickListener { v ->
-                    Intent(v.context, ProfileViewActivity::class.java).also { intent ->
-                        intent.putExtra("user",user)
-                        v.context.startActivity(intent)
-                    }
-                }
+//                holder.logo.setOnClickListener { v ->
+//                    Intent(v.context, ProfileViewActivity::class.java).also { intent ->
+//                        intent.putExtra("user",user)
+//                        v.context.startActivity(intent)
+//                    }
+//                }
             }
         }
         holder.ratings.removeAllViews()

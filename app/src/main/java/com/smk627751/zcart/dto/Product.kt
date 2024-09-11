@@ -7,7 +7,7 @@ data class Product(
     val vendorId: String,
     val image: String = "",
     val name: String,
-    val price: Int,
+    val price: Long,
     val description: String = "",
     val category: MutableList<String>,
     val reviews: MutableMap<String,Review>?

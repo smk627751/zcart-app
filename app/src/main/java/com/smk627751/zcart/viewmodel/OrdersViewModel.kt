@@ -10,8 +10,16 @@ import com.smk627751.zcart.dto.Order
 class OrdersViewModel : ViewModel() {
     private val _options = MutableLiveData<FirestoreRecyclerOptions<Order>>()
     val options: LiveData<FirestoreRecyclerOptions<Order>> = _options
+    val _isVendor = MutableLiveData<Boolean>()
+    val isVendor: LiveData<Boolean> = _isVendor
     init {
         getOrders()
+        isVendor()
+    }
+    fun isVendor() {
+        Repository.isVendor {
+            _isVendor.value = it
+        }
     }
     fun getOrders(query: String = "all") {
         Repository.getOrders(query){

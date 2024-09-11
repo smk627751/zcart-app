@@ -31,7 +31,6 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.adapter.ReviewsAdapter
-import com.smk627751.zcart.bottomsheet.AddProductBottomSheet
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.viewmodel.DetailViewModel
 import com.yalantis.ucrop.UCrop
@@ -45,7 +44,6 @@ class DetailViewActivity : AppCompatActivity() {
     lateinit var detailView: NestedScrollView
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
     private var shimmerRunnable : Runnable? = null
-    lateinit var bottomSheet : AddProductBottomSheet
     lateinit var name : TextView
     lateinit var price : TextView
     lateinit var description : TextView
@@ -199,7 +197,15 @@ class DetailViewActivity : AppCompatActivity() {
             toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
                 when (menuItem.itemId) {
                     R.id.action_edit -> {
-                        showBottomSheet()
+//                        showBottomSheet()
+                        Intent(this,AddProductActivity::class.java).apply {
+                            putExtra("product",viewModel.product.value)
+                            putExtra("mode","edit")
+                            startActivity(this).also {
+                                finish()
+                            }
+                            overridePendingTransition(R.anim.slide_up,R.anim.fade_in)
+                        }
                         true
                     }
                     R.id.action_delete -> {
@@ -214,10 +220,6 @@ class DetailViewActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
     }
-    private fun showBottomSheet() {
-        bottomSheet = AddProductBottomSheet(viewModel.product.value!!, "edit")
-        bottomSheet.show(supportFragmentManager, "Add Product")
-    }
     private fun showAlertDialog()
     {
         val dialog = MaterialAlertDialogBuilder(this)
@@ -231,19 +233,5 @@ class DetailViewActivity : AppCompatActivity() {
             .setNegativeButton("No") { _, _ -> }
             .create()
         dialog.show()
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            UCrop.of(data?.data!!, Uri.fromFile(File(cacheDir, "${UUID.randomUUID()}_cropped.jpg")))
-                .withAspectRatio(1f, 1f)
-                .withMaxResultSize(500, 500)
-                .start(this@DetailViewActivity)
-        }
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            val resultUri = UCrop.getOutput(data!!)
-            bottomSheet.imageView.setImageURI(resultUri)
-            bottomSheet.imageView.tag = resultUri
-        }
     }
 }
