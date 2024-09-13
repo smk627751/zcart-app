@@ -2,6 +2,7 @@ package com.smk627751.zcart.activity
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -90,9 +91,16 @@ class OrderDetailsViewActivity : AppCompatActivity() {
             }
         }
         viewModel.order.observe(this) {
-            prevStatus = it.status
-            setUpView(it)
-            updateOrderStatus(orderStatusIndicator,it.status)
+            if (it != null)
+            {
+                prevStatus = it.status
+                setUpView(it)
+                updateOrderStatus(orderStatusIndicator,it.status)
+            }
+            else
+            {
+                finish()
+            }
         }
     }
 
@@ -102,10 +110,14 @@ class OrderDetailsViewActivity : AppCompatActivity() {
         deliveryAddress.text = order.deliveryAddress
         phone.text = order.phone
         orderId.text = order.id
+        orderId.paintFlags = orderId.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         date.text = Utility.formatTime(order.timestamp)
         quantity.text = order.quantity.toString()
-        totalPrice.text = order.totalPrice.toString()
-        orderStatus.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item, viewModel.orderStatus.keys.toList())
+        totalPrice.text = "₹${order.totalPrice}"
+        var orderStatusList = viewModel.orderStatus.keys.toList()
+        val startIndex = orderStatusList.indexOf(order.status)
+        orderStatusList = orderStatusList.subList(if(startIndex != -1) startIndex else 0, orderStatusList.size)
+        orderStatus.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item, orderStatusList)
         orderStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -123,7 +135,7 @@ class OrderDetailsViewActivity : AppCompatActivity() {
             copyToClipboard(order.id)
             Utility.makeToast(this, "Order ID copied to clipboard")
         }
-        orderStatus.setSelection(viewModel.getCount(order.status))
+        orderStatus.setSelection(orderStatusList.indexOf(order.status))
         if (order.status == "Order cancelled" || order.status == "Order delivered") {
             updateOrderStatus.visibility = View.GONE
             cancelOrder.visibility = View.GONE

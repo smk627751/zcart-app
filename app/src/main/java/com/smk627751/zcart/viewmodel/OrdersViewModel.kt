@@ -1,5 +1,6 @@
 package com.smk627751.zcart.viewmodel
 
+import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,13 +9,24 @@ import com.smk627751.zcart.Repository.Repository
 import com.smk627751.zcart.dto.Order
 
 class OrdersViewModel : ViewModel() {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> = _isLoading
+    private val _itemCount = MutableLiveData<Int>()
+    val itemCount : LiveData<Int> = _itemCount
     private val _options = MutableLiveData<FirestoreRecyclerOptions<Order>>()
     val options: LiveData<FirestoreRecyclerOptions<Order>> = _options
-    val _isVendor = MutableLiveData<Boolean>()
+    private val _isVendor = MutableLiveData<Boolean>()
     val isVendor: LiveData<Boolean> = _isVendor
     init {
-        getOrders()
-        isVendor()
+        load()
+        Handler().postDelayed({
+            getOrders()
+            isVendor()
+        }, 500)
+    }
+    fun load()
+    {
+        _isLoading.value = true
     }
     fun isVendor() {
         Repository.isVendor {
@@ -22,8 +34,13 @@ class OrdersViewModel : ViewModel() {
         }
     }
     fun getOrders(query: String = "all") {
-        Repository.getOrders(query){
-            _options.value = it
+        load()
+        Repository.getOrders(query){count,options ->
+            _options.value = options
+            _itemCount.value = count
+            Handler().postDelayed({
+                _isLoading.value = false
+            },500)
         }
     }
 }

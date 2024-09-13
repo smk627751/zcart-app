@@ -1,6 +1,5 @@
 package com.smk627751.zcart.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,19 +16,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.smk627751.zcart.R
-import com.smk627751.zcart.Repository.Repository
-import com.smk627751.zcart.Utility
 import com.smk627751.zcart.dto.Notification
-import com.smk627751.zcart.dto.Product
-import com.smk627751.zcart.dto.Review
 import com.smk627751.zcart.fragments.CartViewFragment
 import com.smk627751.zcart.fragments.NotificationViewFragment
 import com.smk627751.zcart.fragments.OrdersViewFragment
 import com.smk627751.zcart.fragments.ProductViewFragment
 import com.smk627751.zcart.fragments.ProfileViewFragment
 import com.smk627751.zcart.viewmodel.HomeViewModel
-import com.yalantis.ucrop.UCrop
-import java.util.UUID
 
 class HomeActivity : AppCompatActivity() {
     lateinit var fragmentContainer: FragmentContainerView
@@ -44,7 +36,7 @@ class HomeActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
 
@@ -98,8 +90,16 @@ class HomeActivity : AppCompatActivity() {
             badge.number = notifications.filter { !it.isRead }.size
             if (badge.number == 0)
                 badge.isVisible = false
-            badge.backgroundColor = ContextCompat.getColor(this, R.color.black)
-            badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
+            if (resources.configuration.isNightModeActive)
+            {
+                badge.backgroundColor = ContextCompat.getColor(this@HomeActivity, R.color.white)
+                badge.badgeTextColor = ContextCompat.getColor(this@HomeActivity, R.color.black)
+            }
+            else
+            {
+                badge.backgroundColor = ContextCompat.getColor(this@HomeActivity, R.color.black)
+                badge.badgeTextColor = ContextCompat.getColor(this@HomeActivity, R.color.white)
+            }
             badge.maxNumber = 99
         }
     }
@@ -167,8 +167,16 @@ class HomeActivity : AppCompatActivity() {
                                 if (badge != null && it > 0) {
                                     badge.isVisible = true
                                     badge.number = it
-                                    badge.backgroundColor = ContextCompat.getColor(this@HomeActivity, R.color.black)
-                                    badge.badgeTextColor = ContextCompat.getColor(this@HomeActivity, R.color.white)
+                                    if (resources.configuration.isNightModeActive)
+                                    {
+                                        badge.backgroundColor = ContextCompat.getColor(this@HomeActivity, R.color.white)
+                                        badge.badgeTextColor = ContextCompat.getColor(this@HomeActivity, R.color.black)
+                                    }
+                                    else
+                                    {
+                                        badge.backgroundColor = ContextCompat.getColor(this@HomeActivity, R.color.black)
+                                        badge.badgeTextColor = ContextCompat.getColor(this@HomeActivity, R.color.white)
+                                    }
                                     badge.maxNumber = 99
                                 }
                             }

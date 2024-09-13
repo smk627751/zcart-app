@@ -14,15 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.DocumentSnapshot
 import com.smk627751.zcart.R
-import com.smk627751.zcart.Repository.Repository.listenProducts
 import com.smk627751.zcart.activity.DetailViewActivity
 import com.smk627751.zcart.dto.Product
 
 class ProductViewAdapter(options: FirestoreRecyclerOptions<Product>) : FirestoreRecyclerAdapter<Product, ProductViewAdapter.ViewHolder>(options) {
-    private var lastVisibleProduct: DocumentSnapshot? = null
-    var isLoadingMore = false
     val currentList = snapshots
     constructor(options: FirestoreRecyclerOptions<Product>, width:Int):this(options)
     {
@@ -45,7 +41,7 @@ class ProductViewAdapter(options: FirestoreRecyclerOptions<Product>) : Firestore
         ViewCompat.setTransitionName(holder.itemView, "image_transition")
         products.add(model.name)
         holder.name.text = model.name
-        holder.price.text = model.price.toString()
+        holder.price.text = "₹${model.price}"
         Glide.with(holder.itemView)
             .load(model.image)
             .placeholder(R.drawable.baseline_image_24)

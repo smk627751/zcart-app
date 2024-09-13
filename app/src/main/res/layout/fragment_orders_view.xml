@@ -11,42 +11,46 @@
         android:minHeight="?attr/actionBarSize"
         android:layout_height="wrap_content"
         app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@id/scroll_view">
+        app:liftOnScrollTargetViewId="@id/scroll_view"
+        android:fitsSystemWindows="true">
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="Orders"
-            app:menu="@menu/search" />
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/category_list"
+            app:title="Orders" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/filter_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:scrimVisibleHeightTrigger="0dp"
+            android:layout_height="wrap_content"
+            app:layout_collapseMode="none"
             android:visibility="gone">
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/filter_toolbar"
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_collapseMode="none">
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:scrollbars="none">
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/category_view"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:scrollbars="none">
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/category_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        app:singleLine="true"
-                        app:singleSelection="true">
-                    </com.google.android.material.chip.ChipGroup>
-                </HorizontalScrollView>
-            </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                    android:layout_gravity="center_vertical"
+                    app:singleLine="true"
+                    app:singleSelection="true">
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:elevation="1dp"
+        android:visibility="gone"
+        android:background="?attr/colorSurface">
+        <include layout="@layout/orders_view_placeholder"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <LinearLayout
         android:id="@+id/no_orders_found_view"
         android:layout_width="match_parent"
@@ -66,23 +70,23 @@
             style="?attr/textAppearanceBody1"
             app:iconTint="?attr/colorAccent"/>
     </LinearLayout>
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scroll_view"
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:id="@+id/scroll_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="?attr/colorSurface">-->
+<!--        </RelativeLayout>-->
+<!--    </androidx.core.widget.NestedScrollView>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orders_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorSurface">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/orders_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:listitem="@layout/order_item"/>
-        </RelativeLayout>
-    </androidx.core.widget.NestedScrollView>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/order_item" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@id/scroll_view">
+        app:liftOnScrollTargetViewId="@id/scroll_view"
+        android:fitsSystemWindows="true">
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,5 +71,16 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/notification_item_layout"/>
+        tools:listitem="@layout/notification_item_layout"
+        android:background="?attr/colorSurface"/>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginHorizontal="16dp"
+        android:visibility="gone"
+        android:background="?attr/colorSurface">
+        <include layout="@layout/notifications_placeholder" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

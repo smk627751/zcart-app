@@ -7,11 +7,12 @@ data class Product(
     val vendorId: String,
     val image: String = "",
     val name: String,
-    val price: Long,
+    val price: Double,
     val description: String = "",
     val category: MutableList<String>,
-    val reviews: MutableMap<String,Review>?
+    val reviews: MutableMap<String,Review>?,
+    val searchName : String = name.lowercase()
 ): Serializable
 {
-    constructor() : this("", "","", "", 0,"", mutableListOf<String>(),mutableMapOf<String,Review>())
+    constructor() : this("", "","", "", 0.0,"", mutableListOf<String>(),mutableMapOf<String,Review>())
 }

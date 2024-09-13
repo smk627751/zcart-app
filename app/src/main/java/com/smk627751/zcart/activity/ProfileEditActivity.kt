@@ -1,5 +1,6 @@
 package com.smk627751.zcart.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,6 +11,7 @@ import android.os.Environment
 import android.os.ext.SdkExtensions
 import android.provider.MediaStore
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -128,7 +130,6 @@ class ProfileEditActivity : AppCompatActivity() {
                 }
             }.show(supportFragmentManager, "image")
         }
-
         // Observe user data
         viewModel.user.observe(this) {user ->
             setUpProfile(user)
@@ -217,6 +218,7 @@ class ProfileEditActivity : AppCompatActivity() {
             progress.visibility = View.GONE
         }
     }
+    @SuppressLint("ClickableViewAccessibility")
     private fun setUpProfile(user : User)
     {
         this.user = user
@@ -231,6 +233,15 @@ class ProfileEditActivity : AppCompatActivity() {
         zipcode.text = user.zipcode.toString()
         phone.text = user.phone.replace(ccp.selectedCountryCodeWithPlus, "")
         prevPhone = user.phone
+        address.setOnTouchListener { v, event ->
+            if (v.canScrollVertically(1) || v.canScrollVertically(-1)) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                if (event.action == MotionEvent.ACTION_UP) {
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            false
+        }
     }
     // Function to handle result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

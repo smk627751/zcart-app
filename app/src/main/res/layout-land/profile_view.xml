@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="Profile"
-            app:menu="@menu/profile_menu"/>
+            app:menu="@menu/profile_menu"
+            android:fitsSystemWindows="true"/>
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

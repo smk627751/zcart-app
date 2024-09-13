@@ -61,7 +61,12 @@
                     android:id="@+id/profile_address_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="5"/>
+                    android:maxLines="5"
+                    android:scrollbars="vertical"
+                    android:overScrollMode="always"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:imeOptions="flagNoEnterAction"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/zipcode_layout"

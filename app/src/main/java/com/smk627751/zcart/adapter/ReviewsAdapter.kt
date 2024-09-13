@@ -1,6 +1,5 @@
 package com.smk627751.zcart.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.smk627751.zcart.R
 import com.smk627751.zcart.dto.Review
 import com.smk627751.zcart.Repository.Repository
 import com.smk627751.zcart.Utility
-import com.smk627751.zcart.dto.User
 import com.smk627751.zcart.viewmodel.DetailViewModel
 
 class ReviewsAdapter(private val reviews: Map<String,Review>, private val viewModel: DetailViewModel) : RecyclerView.Adapter<ReviewsAdapter.ViewHolder>() {

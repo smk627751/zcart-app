@@ -104,6 +104,11 @@ class DetailViewActivity : AppCompatActivity() {
         shimmerFrameLayout.startShimmerAnimation()
         ViewCompat.setTransitionName(image, "image_transition")
         viewModel.product.observe(this) {
+            if (it == null)
+            {
+                finish()
+                return@observe
+            }
             val transition = TransitionInflater.from(this).inflateTransition(android.R.transition.move)
             transition.duration = 200 // Set transition duration (in milliseconds)
             window.sharedElementEnterTransition = transition
@@ -112,7 +117,7 @@ class DetailViewActivity : AppCompatActivity() {
             shimmerFrameLayout.visibility = View.GONE
             detailView.visibility = View.VISIBLE
             name.text = it.name
-            price.text = it.price.toString()
+            price.text = "₹${it.price}"
             description.text = it.description
             Glide.with(this)
                 .load(it.image)

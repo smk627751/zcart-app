@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smk627751.zcart.R
@@ -21,6 +22,7 @@ import com.smk627751.zcart.Utility
 import com.smk627751.zcart.activity.ProfileEditActivity
 import com.smk627751.zcart.activity.SignInActivity
 import com.smk627751.zcart.adapter.ProductViewAdapter
+import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.dto.User
 import com.smk627751.zcart.viewmodel.ProfileViewModel
 

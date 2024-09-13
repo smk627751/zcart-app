@@ -9,10 +9,13 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.smk627751.zcart.activity.PlaceOrderActivity
@@ -23,11 +26,13 @@ import com.smk627751.zcart.viewmodel.CartViewModel
 
 class CartViewFragment : Fragment() {
     lateinit var viewModel: CartViewModel
+    lateinit var toolbar: MaterialToolbar
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
     lateinit var fragmentContainer : FrameLayout
     lateinit var cartItemsView : RecyclerView
     lateinit var noProductView : LinearLayout
-    lateinit var myOrders : Button
-    lateinit var buyNowButton : Button
+//    lateinit var myOrders : Button
+    lateinit var buyNowButton : FloatingActionButton
     var adapter: CartAdapter = CartAdapter(listOf()){
         cartItem -> viewModel.removeFromCart(cartItem)
     }
@@ -38,24 +43,36 @@ class CartViewFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.cart_view, container, false)
         viewModel = ViewModelProvider(this)[CartViewModel::class.java]
+        toolbar = view.findViewById(R.id.toolbar)
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_layout)
         fragmentContainer = view.findViewById(R.id.fragment_container)
         cartItemsView = view.findViewById(R.id.cart_items_view)
         noProductView = view.findViewById(R.id.no_product_found_view)
-        myOrders = view.findViewById(R.id.my_orders)
+//        myOrders = view.findViewById(R.id.my_orders)
         cartItemsView.layoutManager = LinearLayoutManager(context)
         buyNowButton = view.findViewById(R.id.buy_now_button)
 
-        myOrders.visibility = View.VISIBLE
-        myOrders.setOnClickListener {
-            fragmentContainer.visibility = View.VISIBLE
-            childFragmentManager.beginTransaction().apply {
-                replace(R.id.fragment_container, OrdersViewFragment())
-                addToBackStack(null)
-                commit()
+        shimmerFrameLayout.visibility = View.VISIBLE
+        shimmerFrameLayout.startShimmerAnimation()
+//        myOrders.visibility = View.VISIBLE
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.my_orders -> {
+                    fragmentContainer.visibility = View.VISIBLE
+                    childFragmentManager.beginTransaction().apply {
+                        replace(R.id.fragment_container, OrdersViewFragment())
+                        addToBackStack(null)
+                        commit()
+                    }
+                    true
+                }
+
+                else -> false
             }
         }
-
         viewModel.cartItems.observe(viewLifecycleOwner) {cartItems ->
+            shimmerFrameLayout.visibility = View.GONE
+            shimmerFrameLayout.stopShimmerAnimation()
             setAdapter(cartItems)
             buyNowButton.isEnabled = cartItems.isNotEmpty()
         }

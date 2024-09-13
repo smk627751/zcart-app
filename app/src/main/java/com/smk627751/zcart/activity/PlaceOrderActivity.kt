@@ -51,7 +51,7 @@ class PlaceOrderActivity : AppCompatActivity() {
         viewModel.setProducts(intent.getSerializableExtra("products") as Array<Product>)
         viewModel.products.observe(this) {products ->
             adapter = OrderProductsAdapter(products){
-                totalPrice.text = it.toString()
+                totalPrice.text = "₹$it"
             }
             setUpView()
         }
@@ -80,7 +80,7 @@ class PlaceOrderActivity : AppCompatActivity() {
             }
             setProgress(true)
 
-            viewModel.placeOrder(adapter!!.itemCount,adapter!!.getQuantities(),totalPrice.text.toString(),username.text.toString(),deliveryAddress.text.toString(),"${ccp.selectedCountryCodeWithPlus}${phone.text}"){
+            viewModel.placeOrder(adapter!!.getProducts(),adapter!!.itemCount,adapter!!.getQuantities(),totalPrice.text.toString(),username.text.toString(),deliveryAddress.text.toString(),"${ccp.selectedCountryCodeWithPlus}${phone.text}"){
                 Utility.makeToast(this, "Order Placed Successfully")
                 setProgress(false)
                 finish()

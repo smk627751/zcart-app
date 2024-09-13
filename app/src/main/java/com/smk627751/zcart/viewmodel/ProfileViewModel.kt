@@ -1,17 +1,14 @@
 package com.smk627751.zcart.viewmodel
 
 import android.net.Uri
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.smk627751.zcart.Repository.Repository
-import com.smk627751.zcart.dto.Customer
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.dto.User
 import com.smk627751.zcart.dto.Vendor
-import java.util.regex.Pattern
 
 class ProfileViewModel : ViewModel() {
     val nameError = MutableLiveData<String?>()
@@ -38,7 +35,7 @@ class ProfileViewModel : ViewModel() {
         return email == Repository.user?.email
     }
     fun getMyProducts() : FirestoreRecyclerOptions<Product> {
-        return Repository.listenProducts("","myProducts")
+        return Repository.listenProducts("", "myProducts"){}
     }
     /**Function to check if the user is a vendor*/
     fun checkIfVendor() {

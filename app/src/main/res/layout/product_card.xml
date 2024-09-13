@@ -12,7 +12,8 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/product_image"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:minHeight="170dp"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:transitionName="image_transition"
             app:shapeAppearanceOverlay="@style/roundedRectangleImageView"
@@ -37,6 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="$99"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textAppearance="?attr/textAppearanceTitleLarge" />
         </LinearLayout>
     </LinearLayout>

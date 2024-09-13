@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -14,24 +15,27 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@id/cart_items_view">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="Cart"/>
-    </com.google.android.material.appbar.AppBarLayout>
-    <Button
-        android:id="@+id/my_orders"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Orders"
-        app:layout_anchor="@id/header"
-        app:layout_anchorGravity="end"
-        android:layout_margin="8dp"
-        style="@style/Widget.Material3.Button.OutlinedButton"/>
+        app:liftOnScroll="true"
+        app:liftOnScrollTargetViewId="@id/cart_items_view"
+        android:fitsSystemWindows="true">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="Cart"
+            app:menu="@menu/orders"/>
+    </com.google.android.material.appbar.AppBarLayout>
+<!--    <Button-->
+<!--        android:id="@+id/my_orders"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="My Orders"-->
+<!--        app:layout_anchor="@id/header"-->
+<!--        app:layout_anchorGravity="center|end"-->
+<!--        android:layout_margin="8dp"-->
+<!--        style="@style/Widget.Material3.Button.OutlinedButton"/>-->
     <LinearLayout
         android:id="@+id/no_product_found_view"
         android:layout_centerInParent="true"
@@ -39,7 +43,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -50,15 +55,26 @@
         android:text="No Items added"
         android:textSize="16sp"/>
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cart_items_view"
-        android:layout_below="@+id/header"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:elevation="1dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:visibility="gone">
+        <include layout="@layout/cart_view_placeholder"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cart_items_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/cart_item" />
+    </LinearLayout>
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
@@ -67,14 +83,13 @@
         android:backgroundTint="@android:color/transparent"
         android:layout_gravity="bottom">
     </com.google.android.material.bottomappbar.BottomAppBar>
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buy_now_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:icon="@drawable/baseline_shopping_cart_checkout_24"
+        android:src="@drawable/baseline_shopping_cart_checkout_24"
         app:layout_anchor="@id/bottom_app_bar"
-        app:layout_anchorGravity="center"
-        android:text="Buy Now"
-        style="@style/Widget.Material3.Button"/>
+        android:backgroundTint="?attr/colorPrimary"
+        app:tint="?attr/colorOnPrimary" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

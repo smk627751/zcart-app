@@ -11,6 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.smk627751.zcart.R
 
 class ImageOptionDialogFragment(val callBack: (option : String) -> Unit) : BottomSheetDialogFragment() {
+    constructor() : this({})
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,5 +43,10 @@ class ImageOptionDialogFragment(val callBack: (option : String) -> Unit) : Botto
             bottomSheet.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         }
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        dismissAllowingStateLoss()
     }
 }

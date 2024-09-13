@@ -13,7 +13,7 @@ import com.smk627751.zcart.R
 import com.smk627751.zcart.dto.Product
 
 class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPrice : (totalPrice : Double) -> Unit) : RecyclerView.Adapter<OrderProductsAdapter.ViewHolder>() {
-    val quantities = mutableMapOf<String, Int>()
+    private val quantities = mutableMapOf<Product, MutableMap<Double,Int>>()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image : ShapeableImageView = itemView.findViewById(R.id.product_image)
         val name : TextView = itemView.findViewById(R.id.product_name)
@@ -25,12 +25,12 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.place_order_card, parent, false)
-        var sum : Long = 0
+        var sum = 0.0
         orders.forEach {
-            quantities[it.id] = 1
+            quantities[it] = mutableMapOf(it.price to 1)
             sum += it.price
         }
-        updateTotalPrice(sum.toDouble())
+        updateTotalPrice(sum)
         return ViewHolder(view)
     }
 
@@ -41,11 +41,11 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = orders[position]
         holder.name.text = product.name
-        holder.price.text = product.price.toString()
+        holder.price.text = "₹${product.price}"
         Glide.with(holder.itemView)
             .load(product.image)
             .into(holder.image)
-        holder.quantity.setText(quantities[product.id].toString())
+        holder.quantity.setText(quantities[product]?.get(product.price).toString())
         holder.increaseQuantity.setOnClickListener {
             var q = holder.quantity.text.toString().toInt()
             if (q == 10)
@@ -54,8 +54,8 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
             }
             q++
             holder.quantity.text = q.toString()
-            quantities[product.id] = q
-            updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
+            quantities[product]?.set(product.price, q)
+            updateTotalPrice(getTotalPrice())
         }
         holder.decreaseQuantity.setOnClickListener {
             var q = holder.quantity.text.toString().toInt()
@@ -63,28 +63,17 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
                 q--
             }
             holder.quantity.text = q.toString()
-            quantities[product.id] = q
-            updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
-        }
-        holder.quantity.addTextChangedListener { text ->
-            val quantity = text.toString().toIntOrNull()
-            if (quantity!= null && quantity > 10)
-            {
-                holder.quantity.text = 10.toString()
-                return@addTextChangedListener
-            }
-            if (quantity != null && quantity > 0) {
-                quantities[product.id] = quantity
-                updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
-            }
-            else {
-                holder.quantity.text = 1.toString()
-                quantities[product.id] = 1
-                updateTotalPrice(quantities.values.sumOf { it * product.price }.toDouble())
-            }
+            quantities[product]?.set(product.price, q)
+            updateTotalPrice(getTotalPrice())
         }
     }
+    private fun getTotalPrice(): Double {
+        return quantities.values.sumOf { it.map { it.key * it.value }.sum() }
+    }
     fun getQuantities(): Int {
-        return quantities.values.sum()
+        return quantities.values.sumOf { it.values.sum() }
+    }
+    fun getProducts(): MutableMap<Product, MutableMap<Double, Int>> {
+        return quantities
     }
 }

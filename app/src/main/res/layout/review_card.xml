@@ -9,18 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp">
-        <ImageView
+<!--        <ImageView-->
+<!--            android:id="@+id/logo"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:src="@drawable/baseline_person_24" />-->
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/logo"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/baseline_person_24" />
+            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="4dp"
+            android:padding="4dp"
+            android:src="@drawable/baseline_person_24"
+            app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorAccent"
+            app:shapeAppearanceOverlay="@style/circleImageView"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_margin="5dp">
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginVertical="8dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

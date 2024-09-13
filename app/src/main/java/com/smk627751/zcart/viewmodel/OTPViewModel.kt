@@ -2,13 +2,10 @@ package com.smk627751.zcart.viewmodel
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.smk627751.zcart.Repository.Repository
-import com.smk627751.zcart.dto.Customer
-import com.smk627751.zcart.dto.Vendor
 
 class OTPViewModel : ViewModel() {
     private val _bundle = MutableLiveData<Bundle>()

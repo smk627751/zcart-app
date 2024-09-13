@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.smk627751.zcart.activity.DetailViewActivity
 import com.smk627751.zcart.R
+import com.smk627751.zcart.Utility
 import com.smk627751.zcart.dto.Product
 
 class CartAdapter(val cartItems: List<Product>,val isCart: Boolean = true,val deleteCallback: (Product) -> Unit) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
@@ -39,7 +40,7 @@ class CartAdapter(val cartItems: List<Product>,val isCart: Boolean = true,val de
             .load(cartItem.image)
             .into(holder.logo)
         holder.productName.text = cartItem.name
-        holder.price.text = cartItem.price.toString()
+        holder.price.text = "₹${cartItem.price}"
         holder.itemView.setOnClickListener{
             Intent(holder.itemView.context, DetailViewActivity::class.java)
                 .also {
@@ -50,7 +51,9 @@ class CartAdapter(val cartItems: List<Product>,val isCart: Boolean = true,val de
         if (isCart)
         {
             holder.closeButton.setOnClickListener{
-                deleteCallback(cartItem)
+                Utility.showAlertDialog(holder.itemView.context, "Are you sure you want to delete this item?") {
+                    deleteCallback(cartItem)
+                }
             }
         }
         else

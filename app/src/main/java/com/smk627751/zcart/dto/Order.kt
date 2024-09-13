@@ -4,7 +4,7 @@ import java.io.Serializable
 
 class Order(
     val id: String,
-    val vendorIds: List<String>,
+    val vendorIds: String,
     val customerId: String,
     val products: List<String>,
     val items: Int,
@@ -17,7 +17,7 @@ class Order(
     val timestamp: Long
 ) : Serializable
 {
-    constructor() : this("", mutableListOf(),"", mutableListOf(), 0, 0,0.0, "", "","", "",0)
+    constructor() : this("", "","", mutableListOf(), 0, 0,0.0, "", "","", "",0)
     override fun toString(): String {
         return "Order(id='$id', customerId='$customerId', products=$products, items=$items, quantity=$quantity, totalPrice=$totalPrice, status='$status', name='$name',deliveryAddress='$deliveryAddress', timestamp=$timestamp)"
     }

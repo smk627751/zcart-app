@@ -10,12 +10,13 @@
         android:layout_height="wrap_content"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@id/recycler_view"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurface"
+        android:fitsSystemWindows="true">
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_collapseMode="pin"
-            app:scrimVisibleHeightTrigger="0dp">
+            app:scrimVisibleHeightTrigger="?attr/actionBarSize">
             <com.google.android.material.search.SearchBar
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
@@ -23,29 +24,14 @@
                 android:hint="Search..."
                 app:menu="@menu/filter_menu"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap" />
-            <com.google.android.material.search.SearchView
-                android:id="@id/search_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_anchor="@id/search_bar">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/search_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp" />
-            </com.google.android.material.search.SearchView>
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/category_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scrimVisibleHeightTrigger="0dp"
-            android:visibility="gone">
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/category_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_collapseMode="none">
+                app:layout_collapseMode="none"
+                android:visibility="gone">
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,9 +45,18 @@
                         app:singleLine="true"/>
                 </HorizontalScrollView>
             </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
+    <com.google.android.material.search.SearchView
+        android:id="@id/search_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/search_bar">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="16dp" />
+    </com.google.android.material.search.SearchView>
         <LinearLayout
             android:id="@+id/no_product_found_view"
             android:layout_width="match_parent"

@@ -14,7 +14,6 @@ import com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.messaging
@@ -39,20 +38,19 @@ import java.util.concurrent.TimeUnit
 
 
 object Repository {
-    val orderStatus = arrayOf("Order placed", "Order shipped", "Out for delivery","Order delivered", "Order cancelled")
     private lateinit var userSession: Session
     lateinit var currentUserId : String
     private set
     var user: User? = null
     private set
     private val auth by lazy { Firebase.auth }
-    val db by lazy { Firebase.firestore }
+    private val db by lazy { Firebase.firestore }
     private val storage = Firebase.storage
     private val storageRef = storage.reference
-    val IMAGE_PATH = "images/"
+    const val IMAGE_PATH = "images/"
     val genericCategory = genericCategories
     val category = specificCategories
-    var resendToken : PhoneAuthProvider.ForceResendingToken? = null
+    var resendToken : ForceResendingToken? = null
     fun setSession(session: Session)
     {
         userSession = session
@@ -360,20 +358,16 @@ object Repository {
     }
     fun listenProducts(
         searchQuery: String,
-        type : String = "all",
-        limit: Long = 10,  // Limit for pagination
-        lastVisibleProduct: DocumentSnapshot? = null
+        type: String = "all",
+        callBack: (itemsize : Int) -> Unit,
     ): FirestoreRecyclerOptions<Product>
     {
         val query = if (searchQuery.isNotEmpty())
                     {
                         when (type) {
                             "name" -> db.collection("products")
-                                .whereGreaterThanOrEqualTo("name", searchQuery)
-                                .whereLessThanOrEqualTo("name", searchQuery + "\uf8ff")
-//                                .limit(limit).apply {
-//                                    lastVisibleProduct?.let {startAfter(it)}
-//                                }
+                                .whereGreaterThanOrEqualTo("searchName", searchQuery.trim().lowercase())
+                                .whereLessThanOrEqualTo("searchName", searchQuery.trim().lowercase() + "\uf8ff")
                             "category" -> {
                                 var query = db.collection("products")
                                     .orderBy("name")
@@ -382,14 +376,8 @@ object Repository {
                                     query = query.whereArrayContains("category", category)
                                 }
                                 query
-//                                    .limit(limit).apply {
-//                                    lastVisibleProduct?.let {startAfter(it)}
-//                                }
                             }
                             else -> db.collection("products")
-//                                .limit(limit).apply {
-//                                lastVisibleProduct?.let {startAfter(it)}
-//                            }
                         }
                     }
                     else
@@ -402,9 +390,6 @@ object Repository {
                                 {
                                     db.collection("products")
                                         .whereIn("id", vendor.products)
-//                                        .limit(limit).apply {
-//                                            lastVisibleProduct?.let {startAfter(it)}
-//                                        }
                                 }
                                 else
                                 {
@@ -413,19 +398,19 @@ object Repository {
 
                             } else {
                                 db.collection("products")
-//                                    .limit(limit).apply {
-//                                        lastVisibleProduct?.let {startAfter(it)}
-//                                    }
                             }
                         }
                         else db.collection("products")
-//                            .limit(limit).apply {
-//                                lastVisibleProduct?.let {startAfter(it)}
-//                            }
                     }
         val options = FirestoreRecyclerOptions.Builder<Product>()
             .setQuery(query, Product::class.java)
             .build()
+        query.get().addOnCompleteListener {
+            if (it.isSuccessful)
+            {
+                callBack(it.result.size())
+            }
+        }
         return options
     }
     fun addToCart(productId : String, callBack : () -> Unit)
@@ -513,7 +498,7 @@ object Repository {
                 }
             }
     }
-    fun getOrders(searchQuery: String,callBack : (options: FirestoreRecyclerOptions<Order>) -> Unit)
+    fun getOrders(searchQuery: String,callBack : (itemsize : Int,options: FirestoreRecyclerOptions<Order>) -> Unit)
     {
         when(searchQuery)
         {
@@ -533,37 +518,59 @@ object Repository {
                         val options = FirestoreRecyclerOptions.Builder<Order>()
                             .setQuery(query, Order::class.java)
                             .build()
-                        callBack(options)
+                        query.get().addOnCompleteListener {
+                            if (it.isSuccessful)
+                            {
+                                callBack(it.result.size(),options)
+                            }
+                        }
                     }
                     else if (it is Vendor)
                     {
-                        val query = db.collection("orders").whereArrayContains("vendorIds", currentUserId).orderBy("timestamp",Query.Direction.DESCENDING)
+                        val query = db.collection("orders")
+                            .whereEqualTo("vendorIds", currentUserId)
+                            .orderBy("timestamp",Query.Direction.DESCENDING)
                         val options = FirestoreRecyclerOptions.Builder<Order>()
                             .setQuery(query, Order::class.java)
                             .build()
-                        callBack(options)
+                        query.get().addOnCompleteListener {
+                            if (it.isSuccessful)
+                            {
+                                callBack(it.result.size(),options)
+                            }
+                        }
                     }
                 }
             }
             "Order placed","Order shipped","Out for delivery","Order delivered","Order cancelled" ->{
                 val query = db.collection("orders")
-                    .whereArrayContains("vendorIds", currentUserId)
+                    .whereEqualTo("vendorIds", currentUserId)
                     .orderBy("timestamp",Query.Direction.DESCENDING)
                     .whereEqualTo("status", searchQuery)
                 val options = FirestoreRecyclerOptions.Builder<Order>()
                     .setQuery(query, Order::class.java)
                     .build()
-                callBack(options)
+                query.get().addOnCompleteListener {
+                    if (it.isSuccessful)
+                    {
+                        callBack(it.result.size(),options)
+                    }
+                }
             }
             else -> {
                 val query = db.collection("orders")
-                    .whereArrayContains("vendorIds", currentUserId)
+                    .whereEqualTo("vendorIds", currentUserId)
                     .orderBy("timestamp",Query.Direction.DESCENDING)
                     .whereEqualTo("id", searchQuery)
                 val options = FirestoreRecyclerOptions.Builder<Order>()
                     .setQuery(query, Order::class.java)
                     .build()
-                callBack(options)
+                query.get().addOnCompleteListener {
+                    if (it.isSuccessful)
+                    {
+                        callBack(it.result.size(),options)
+                    }
+                }
             }
         }
     }
@@ -575,6 +582,9 @@ object Repository {
             .addOnSuccessListener {
                 val order = it.toObject(Order::class.java)
                 callBack(order)
+            }
+            .addOnFailureListener {
+                callBack(null)
             }
     }
     fun updateOrderStatus(orderId : String, status : String, callBack: () -> Unit)
@@ -695,7 +705,7 @@ object Repository {
                 .setCallbacks(object : OnVerificationStateChangedCallbacks() {
                     override fun onCodeSent(
                         verificationId: String,
-                        forceResendingToken: PhoneAuthProvider.ForceResendingToken
+                        forceResendingToken: ForceResendingToken
                     ) {
                         resendToken = forceResendingToken
                         success(verificationId)

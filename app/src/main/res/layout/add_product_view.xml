@@ -84,6 +84,7 @@
                 android:inputType="numberDecimal"
                 android:maxLines="1"
                 android:padding="15dp"
+                android:maxLength="6"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="16dp"/>
             <TextView
@@ -99,7 +100,12 @@
                 android:background="@drawable/edit_text_bg"
                 android:padding="15dp"
                 android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="16dp"/>
+                android:layout_marginHorizontal="16dp"
+                android:scrollbars="vertical"
+                android:overScrollMode="always"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:imeOptions="flagNoEnterAction"/>
             <Button
                 android:id="@+id/add_product_button"
                 android:layout_width="match_parent"
