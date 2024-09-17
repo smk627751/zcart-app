@@ -74,4 +74,4 @@ zcart is an e-commerce Android application that allows users to browse products,
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/zcart.git
+   git clone https://github.com/smk627751/zcart.git
