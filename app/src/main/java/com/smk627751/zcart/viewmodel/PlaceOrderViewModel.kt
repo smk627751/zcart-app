@@ -25,9 +25,7 @@ class PlaceOrderViewModel : ViewModel() {
                 && phone.all { it.isDigit() }
     }
     fun placeOrder(products: MutableMap<Product, MutableMap<Double, Int>>, itemCount : Int, quantities : Int, totalPrice : String, username: String, deliveryAddress: String,phone : String, callBack: () -> Unit) {
-        if (products != null)
-        {
-//            val order = Order(
+        //            val order = Order(
 //                Utility.generateOrderId(),
 //                products.value!!.map { it.vendorId },
 //                Repository.currentUserId,
@@ -41,39 +39,33 @@ class PlaceOrderViewModel : ViewModel() {
 //                phone,
 //                System.currentTimeMillis()
 //            )
-            val vendors = mutableSetOf<String>()
-            products.keys.forEach {
-                vendors.add(it.vendorId)
+        val vendors = mutableSetOf<String>()
+        products.keys.forEach {
+            vendors.add(it.vendorId)
+        }
+        vendors.forEach { vendorId ->
+            val ownProducts = products.filter { it.key.vendorId == vendorId }
+            val order = Order(
+                    Utility.generateId(),
+                    vendorId,
+                    Repository.currentUserId,
+                    ownProducts.keys.map { it.id },
+                    ownProducts.size,
+                    ownProducts.values.sumOf { it.values.sum() },
+                    ownProducts.values.sumOf { it.map { it.key * it.value }.sum() },
+                    "Order placed",
+                    username.trim(),
+                    deliveryAddress.trim(),
+                    phone.trim(),
+                    System.currentTimeMillis()
+                )
+            Repository.placeOrder(order,ownProducts.keys.toTypedArray()){
+                callBack()
             }
-            vendors.forEach { vendorId ->
-                val ownProducts = products.filter { it.key.vendorId == vendorId }
-//                var price = 0.0
-//                ownProducts.values.forEach{
-//                    it.forEach {
-//                        price += it.key * it.value
-//                    }
-//                }
-                val order = Order(
-                        Utility.generateId(),
-                        vendorId,
-                        Repository.currentUserId,
-                        ownProducts.keys.map { it.id },
-                        ownProducts.size,
-                        ownProducts.values.sumOf { it.values.sum() },
-                        ownProducts.values.sumOf { it.map { it.key * it.value }.sum() },
-                        "Order placed",
-                        username.trim(),
-                        deliveryAddress.trim(),
-                        phone.trim(),
-                        System.currentTimeMillis()
-                    )
-                Repository.placeOrder(order,ownProducts.keys.toTypedArray()){
-                    callBack()
-                }
-                Repository.addNotification(OrderNotification("${getUsername()} placed an order",vendorId).apply {
-                    this.orderId = order.id
-                })
-            }
+            Repository.addNotification(OrderNotification("${getUsername()} placed an order",vendorId).apply {
+                this.orderId = order.id
+            })
+        }
 //            Repository.placeOrder(order,products.value!!){
 //                callBack()
 //                products.value!!.forEach {
@@ -85,7 +77,6 @@ class PlaceOrderViewModel : ViewModel() {
 //                    })
 //                }
 //            }
-        }
     }
     fun getUsername(): String {
         return Repository.user?.name ?: ""

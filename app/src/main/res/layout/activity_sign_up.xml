@@ -152,15 +152,15 @@
                 android:text="Sign Up"
                 android:textStyle="bold" />
 
-            <ProgressBar
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/round"
                 android:indeterminate="true"
-                android:indeterminateTint="?attr/colorSurface"
-                android:padding="2dp"
+                app:indicatorColor="?attr/colorSurface"
+                android:padding="4dp"
                 android:visibility="gone"/>
         </LinearLayout>
         <LinearLayout
