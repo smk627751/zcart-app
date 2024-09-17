@@ -2,9 +2,6 @@ package com.smk627751.zcart.dto
 
 val genericCategories = listOf(
     "Electronics",
-    "Mobile Phones",
-    "Laptops",
-    "Audio & Headphones",
     "Fashion",
     "Clothing",
     "Footwear",

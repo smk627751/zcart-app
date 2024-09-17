@@ -4,6 +4,7 @@ import android.app.Activity
 import android.net.Uri
 import android.util.Log
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseUser
@@ -15,6 +16,7 @@ import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCall
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.messaging
 import com.google.firebase.storage.storage
@@ -401,7 +403,7 @@ object Repository {
                             }
                         }
                         else db.collection("products")
-                    }
+                    }.orderBy("name")
         val options = FirestoreRecyclerOptions.Builder<Product>()
             .setQuery(query, Product::class.java)
             .build()
@@ -488,8 +490,8 @@ object Repository {
                             val vendor = user as Vendor
                             vendor.orders.add(order.id)
                             updateUserData(it.vendorId,vendor) {
+                                customer.cartItems.clear()
                                 updateUserData(customer) {
-                                    customer.cartItems.clear()
                                     callBack()
                                 }
                             }
@@ -507,14 +509,10 @@ object Repository {
                     if (it is Customer)
                     {
                         val orders = it.myOrders
-                        val query = if(orders.isNotEmpty())
-                        {
-                            db.collection("orders")
-                                .whereIn("id", orders)
+                        val query = db.collection("orders")
+                                .whereEqualTo("customerId", currentUserId)
                                 .whereNotEqualTo("status","Order cancelled")
                                 .orderBy("timestamp",Query.Direction.DESCENDING)
-                        }
-                        else return@getUserData
                         val options = FirestoreRecyclerOptions.Builder<Order>()
                             .setQuery(query, Order::class.java)
                             .build()

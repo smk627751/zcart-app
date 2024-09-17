@@ -3,12 +3,18 @@ package com.smk627751.zcart.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
+import android.transition.ChangeBounds
+import android.transition.Fade
+import android.transition.TransitionManager
+import android.transition.TransitionSet
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -17,8 +23,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.NestedScrollingParent
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.transition.MaterialArcMotion
+import com.google.android.material.transition.MaterialContainerTransform
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.receiver.InternetStateChangeReceiver
@@ -33,6 +42,7 @@ class SignInActivity : AppCompatActivity() {
     lateinit var passwordLayout : TextInputLayout
     lateinit var password : EditText
     lateinit var forgotPassword : Button
+    lateinit var container : LinearLayout
     lateinit var signIn : Button
     lateinit var progress : ProgressBar
     @SuppressLint("ClickableViewAccessibility")
@@ -56,9 +66,22 @@ class SignInActivity : AppCompatActivity() {
         passwordLayout = findViewById(R.id.password_layout)
         password = findViewById(R.id.password)
         forgotPassword = findViewById(R.id.forgot_password)
+        container = findViewById(R.id.container)
         signIn = findViewById(R.id.sign_in_button)
         progress = findViewById(R.id.progress)
 
+        email.addTextChangedListener {
+            viewModel.setEmail(it.toString())
+        }
+        password.addTextChangedListener {
+            viewModel.setPassword(it.toString())
+        }
+        viewModel.emailError.observe(this) {
+            emailLayout.error = it
+        }
+        viewModel.passwordError.observe(this) {
+            passwordLayout.error = it
+        }
         parent.setOnTouchListener { _, _ ->
             email.clearFocus()
             password.clearFocus()
@@ -79,12 +102,12 @@ class SignInActivity : AppCompatActivity() {
             }
         }
         signIn.setOnClickListener {
-            if (email.text.isEmpty() || password.text.isEmpty())
+            if (!viewModel.validate())
                 return@setOnClickListener
             setProgress(true)
             emailLayout.error = null
             passwordLayout.error = null
-            viewModel.signIn(email.text.toString(),password.text.toString(),
+            viewModel.signIn(
                 {
                     setProgress(false)
                     goToHome()

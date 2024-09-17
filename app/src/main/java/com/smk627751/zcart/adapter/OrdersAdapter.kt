@@ -34,7 +34,7 @@ class OrdersAdapter(options: FirestoreRecyclerOptions<Order>) : FirestoreRecycle
         holder.orderId.text = model.id
         holder.date.text = Utility.formatTime(model.timestamp)
 //        holder.quantity.text = model.quantity.toString()
-        holder.totalPrice.text = "₹${model.totalPrice}"
+        holder.totalPrice.text = Utility.formatNumberIndianSystem(model.totalPrice)
         holder.orderStatus.text = model.status
         holder.itemView.setOnClickListener {
             Intent(holder.itemView.context, OrderDetailsViewActivity::class.java).also {
@@ -43,19 +43,6 @@ class OrdersAdapter(options: FirestoreRecyclerOptions<Order>) : FirestoreRecycle
             }
         }
     }
-
-//    override fun onChildChanged(
-//        type: ChangeEventType,
-//        snapshot: DocumentSnapshot,
-//        newIndex: Int,
-//        oldIndex: Int
-//    ) {
-//        super.onChildChanged(type, snapshot, newIndex, oldIndex)
-//        if (type == ChangeEventType.ADDED)
-//        {
-//            notifyNewDataInserted()
-//        }
-//    }
 
     private fun notifyNewDataInserted() {
         callBack("New data inserted")

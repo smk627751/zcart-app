@@ -69,4 +69,5 @@ dependencies {
     implementation(libs.shimmer)
     annotationProcessor (libs.compiler)
     implementation(libs.material.v190)
+    implementation(libs.core)
 }

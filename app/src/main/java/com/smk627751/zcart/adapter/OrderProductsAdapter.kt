@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.smk627751.zcart.R
+import com.smk627751.zcart.Utility
 import com.smk627751.zcart.dto.Product
 
 class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPrice : (totalPrice : Double) -> Unit) : RecyclerView.Adapter<OrderProductsAdapter.ViewHolder>() {
@@ -41,7 +42,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = orders[position]
         holder.name.text = product.name
-        holder.price.text = "₹${product.price}"
+        holder.price.text = Utility.formatNumberIndianSystem(product.price)
         Glide.with(holder.itemView)
             .load(product.image)
             .into(holder.image)

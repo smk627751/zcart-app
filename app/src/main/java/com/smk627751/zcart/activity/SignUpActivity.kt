@@ -168,7 +168,7 @@ class SignUpActivity : AppCompatActivity() {
             .show()
     }
 
-    fun setProgress(inProgress : Boolean)
+    private fun setProgress(inProgress : Boolean)
     {
         if(inProgress)
         {

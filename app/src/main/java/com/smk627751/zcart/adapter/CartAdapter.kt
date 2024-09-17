@@ -40,7 +40,7 @@ class CartAdapter(val cartItems: List<Product>,val isCart: Boolean = true,val de
             .load(cartItem.image)
             .into(holder.logo)
         holder.productName.text = cartItem.name
-        holder.price.text = "₹${cartItem.price}"
+        holder.price.text = Utility.formatNumberIndianSystem(cartItem.price)
         holder.itemView.setOnClickListener{
             Intent(holder.itemView.context, DetailViewActivity::class.java)
                 .also {

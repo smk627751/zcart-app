@@ -54,7 +54,7 @@ class PlaceOrderViewModel : ViewModel() {
 //                    }
 //                }
                 val order = Order(
-                        Utility.generateOrderId(),
+                        Utility.generateId(),
                         vendorId,
                         Repository.currentUserId,
                         ownProducts.keys.map { it.id },
@@ -62,9 +62,9 @@ class PlaceOrderViewModel : ViewModel() {
                         ownProducts.values.sumOf { it.values.sum() },
                         ownProducts.values.sumOf { it.map { it.key * it.value }.sum() },
                         "Order placed",
-                        username,
-                        deliveryAddress,
-                        phone,
+                        username.trim(),
+                        deliveryAddress.trim(),
+                        phone.trim(),
                         System.currentTimeMillis()
                     )
                 Repository.placeOrder(order,ownProducts.keys.toTypedArray()){

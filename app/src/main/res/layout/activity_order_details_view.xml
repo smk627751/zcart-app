@@ -149,6 +149,17 @@
                                android:id="@+id/order_status"
                                android:layout_width="match_parent"
                                android:layout_height="wrap_content" />
+<!--                           <com.google.android.material.textfield.TextInputLayout-->
+<!--                               android:id="@+id/order_status"-->
+<!--                               android:layout_width="match_parent"-->
+<!--                               android:layout_height="wrap_content"-->
+<!--                               style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">-->
+<!--                               <AutoCompleteTextView-->
+<!--                                   android:layout_width="match_parent"-->
+<!--                                   android:layout_height="wrap_content"-->
+<!--                                   android:inputType="none"-->
+<!--                                   />-->
+<!--                           </com.google.android.material.textfield.TextInputLayout>-->
                        </LinearLayout>
                    </LinearLayout>
                    <LinearLayout
@@ -345,4 +356,13 @@
            </LinearLayout>
        </LinearLayout>
    </androidx.core.widget.NestedScrollView>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="?attr/colorSurface"
+        android:visibility="gone">
+        <include layout="@layout/order_details_placeholder" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

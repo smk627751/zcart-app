@@ -1,6 +1,8 @@
 package com.smk627751.zcart.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -87,6 +89,7 @@ class PlaceOrderActivity : AppCompatActivity() {
             }
         }
     }
+    @SuppressLint("ClickableViewAccessibility")
     private fun setUpView()
     {
         productsView.adapter = adapter
@@ -96,6 +99,15 @@ class PlaceOrderActivity : AppCompatActivity() {
         username.setText(viewModel.getUsername())
         deliveryAddress.text = viewModel.getDeliveryAddress()
         phone.text = viewModel.getPhoneNumber().replaceFirst(ccp.selectedCountryCodeWithPlus, "")
+        deliveryAddress.setOnTouchListener { v, event ->
+            if (v.canScrollVertically(1) || v.canScrollVertically(-1)) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                if (event.action == MotionEvent.ACTION_UP) {
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            false
+        }
     }
     private fun setProgress(inProgress : Boolean)
     {

@@ -17,7 +17,10 @@ class InternetStateChangeReceiver : BroadcastReceiver() {
                 if (!isConnectedToInternet(it) && !(context as Activity).isFinishing) {
                     MaterialAlertDialogBuilder(context)
                         .setMessage("No internet connection")
-                        .setPositiveButton("OK") { _, _ ->
+                        .setPositiveButton("Retry") { _, _ ->
+                            onReceive(context, intent)
+                        }
+                        .setNegativeButton("OK") { _, _ ->
                             if(context is AppCompatActivity)
                             {
                                 context.finish()

@@ -1,8 +1,13 @@
 package com.smk627751.zcart.fragments
 
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.transition.ChangeBounds
+import android.transition.Fade
+import android.transition.TransitionManager
+import android.transition.TransitionSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +15,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import android.widget.Toolbar
 import android.widget.ViewSwitcher
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -19,8 +25,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.R.attr.duration
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.search.SearchBar
@@ -36,7 +44,7 @@ class ProductViewFragment : Fragment() {
 
     lateinit var viewModel: ProductViewModel
     lateinit var parentLayout: ViewGroup
-    lateinit var categoryList : View
+    lateinit var categoryList : MaterialToolbar
     lateinit var categoryView : ChipGroup
     lateinit var searchBar: SearchBar
     lateinit var searchView: SearchView
@@ -54,6 +62,7 @@ class ProductViewFragment : Fragment() {
         val view = inflater.inflate(R.layout.product_view, container, false)
         viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         viewModel.isLoading.observe(viewLifecycleOwner) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return@observe
             if (it) {
                 shimmerFrameLayout.visibility = View.VISIBLE
                 shimmerFrameLayout.startShimmerAnimation()
@@ -97,6 +106,7 @@ class ProductViewFragment : Fragment() {
     }
 
     private fun setupCategoryList() {
+        this.categoryView.removeAllViews()
         val categories = viewModel.getCategories()
         categories.forEach { category ->
             val categoryView = layoutInflater.inflate(R.layout.filter_chip, categoryView, false) as Chip
@@ -118,14 +128,20 @@ class ProductViewFragment : Fragment() {
         searchBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.filter_menu -> {
-                    categoryList.isVisible = !categoryList.isVisible
+                    val transitionSet = TransitionSet().apply {
+                        addTransition(Fade())
+                        addTransition(ChangeBounds())
+                        duration = 200
+                    }
+                    TransitionManager.beginDelayedTransition(categoryList, transitionSet).also {
+                        categoryList.isVisible = !categoryList.isVisible
+                    }
                     true
                 }
 
                 else -> false
             }
         }
-        searchView.setupWithSearchBar(searchBar)
         searchList.layoutManager = LinearLayoutManager(requireContext())
         searchView.editText.addTextChangedListener { text ->
             viewModel.setFilterList(text.toString())
@@ -135,6 +151,7 @@ class ProductViewFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 query.let { viewModel.getProductsByName(it) }
                 searchBar.setText(query)
+                setupCategoryList()
                 searchView.hide()
                 true
             }
@@ -143,7 +160,6 @@ class ProductViewFragment : Fragment() {
             }
         }
     }
-
     private fun setAdapter(options: FirestoreRecyclerOptions<Product>?) {
         adapter = options?.let { ProductViewAdapter(it) }
         recyclerView.adapter = adapter
@@ -189,6 +205,12 @@ class ProductViewFragment : Fragment() {
         }
     }
     private fun showShimmer(callback: () -> Unit) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+        {
+            noProductView.visibility = View.GONE
+            callback()
+            return
+        }
         shimmerFrameLayout.removeCallbacks(shimmerRunnable)
         noProductView.visibility = View.GONE
         shimmerFrameLayout.visibility = View.VISIBLE
@@ -208,6 +230,7 @@ class ProductViewFragment : Fragment() {
                 "category" -> viewModel.getProductsByCategory(it.key)
                 "name" -> viewModel.getProductsByName(it.key)
             }
+            setupCategoryList()
             searchBar.setText(it.key)
             searchView.hide()
         }

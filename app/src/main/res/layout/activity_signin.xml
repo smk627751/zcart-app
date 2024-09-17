@@ -62,26 +62,32 @@
             android:layout_marginEnd="16dp"
             style="@style/Widget.Material3.Button.TextButton"
             android:text="Forgot password"/>
-        <Button
-            android:id="@+id/sign_in_button"
+        <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
-            android:padding="15dp"
-            android:text="Sign in"
-            android:textStyle="bold" />
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/round"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/white"
-            android:padding="2dp"
-            android:visibility="gone"/>
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="16dp"
+                android:text="Sign in"
+                android:textStyle="bold" />
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/round"
+                android:indeterminate="true"
+                android:indeterminateTint="?attr/colorSurface"
+                android:padding="4dp"
+                android:visibility="gone"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

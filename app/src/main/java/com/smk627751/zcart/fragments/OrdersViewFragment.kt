@@ -1,5 +1,6 @@
 package com.smk627751.zcart.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,7 +51,7 @@ class OrdersViewFragment : Fragment() {
         noOrdersView = view.findViewById(R.id.no_orders_found_view)
         noOrdersView.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         viewModel.isLoading.observe(viewLifecycleOwner){
-            Log.d("TAG", "onCreateView: $it")
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return@observe
             if (it)
             {
                 shimmerFrameLayout.visibility = View.VISIBLE
@@ -71,6 +72,7 @@ class OrdersViewFragment : Fragment() {
             {
                 toolbar.inflateMenu(R.menu.search)
                 val searchView = toolbar.menu.findItem(R.id.search).actionView as SearchView
+                searchView.queryHint = "Enter order ID"
                 searchView.setBackgroundResource(R.drawable.edit_text_bg)
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {

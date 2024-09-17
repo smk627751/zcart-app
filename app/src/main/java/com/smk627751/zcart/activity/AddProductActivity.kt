@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.ext.SdkExtensions
 import android.provider.MediaStore
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -47,8 +46,8 @@ import com.smk627751.zcart.Utility.saveBitmapToFile
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.viewmodel.AddProductViewModel
 import com.yalantis.ucrop.UCrop
+import io.noties.markwon.Markwon
 import java.io.File
-import java.util.UUID
 
 class AddProductActivity : AppCompatActivity() {
     lateinit var viewModel: AddProductViewModel
@@ -84,6 +83,7 @@ class AddProductActivity : AppCompatActivity() {
         productDescription = findViewById(R.id.product_description)
         addProductBtn = findViewById(R.id.add_product_button)!!
         progress = findViewById(R.id.progress)
+        val markwon = Markwon.create(this)
         parent.setOnTouchListener { _, _ ->
             Utility.hideSoftKeyboard(this)
             false
@@ -160,19 +160,10 @@ class AddProductActivity : AppCompatActivity() {
                     startActivityForResult(this,1)
                 }
             } else {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(
-                            this,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 2)
-                }
-                else
-                {
                     Intent(Intent.ACTION_PICK).apply {
                         type = "image/*"
                         startActivityForResult(this,1)
                     }
-                }
             }
         }
         chipGroup.setOnClickListener{
@@ -184,7 +175,7 @@ class AddProductActivity : AppCompatActivity() {
                 .setPositiveButton("OK") { _, _ ->
                     chipGroup.removeAllViews()
                     viewModel.selectedItems.forEach {
-                        createChip(it)
+                        createChip(chipGroup,it)
                     }
                     categoryLayout = null
                 }
@@ -199,6 +190,7 @@ class AddProductActivity : AppCompatActivity() {
                 setProgress(false)
                 Utility.makeToast(this, it)
                 finish()
+                overridePendingTransition(R.anim.fade_out,R.anim.slide_down)
             }
         }
     }
@@ -241,7 +233,7 @@ class AddProductActivity : AppCompatActivity() {
         productDescription.setText(product.description)
         viewModel.selectedItems.addAll(product.category)
         product.category.forEach {
-            createChip(it)
+            createChip(chipGroup,it)
         }
     }
     private fun loadCategoryLayout()
@@ -251,29 +243,18 @@ class AddProductActivity : AppCompatActivity() {
         val searchView = categoryLayout?.findViewById<SearchView>(R.id.search_view)
         val listView = categoryLayout?.findViewById<ListView>(R.id.list_view)
         viewModel.selectedItems.forEach {
-            val chip = View.inflate(this, R.layout.entry_chip, null) as Chip
-            chip.text = it
-            chip.setOnCloseIconClickListener { _ ->
-                chipGroup?.removeView(chip)
-                viewModel.selectedItems.remove(it)
+            if (chipGroup != null) {
+                createChip(chipGroup,it)
             }
-            chipGroup?.addView(chip)
         }
         listView?.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, Repository.category)
         listView?.setOnItemClickListener { _, _, position, _ ->
             if (!viewModel.selectedItems.contains(filteredList[position]))
             {
-                val chip = View.inflate(this, R.layout.entry_chip, null) as Chip
-                chip.text = filteredList[position]
-                chip.setOnCloseIconClickListener { _ ->
-                    chipGroup?.removeView(chip)
-                    viewModel.selectedItems.remove(filteredList[position])
+                if (chipGroup != null) {
+                    createChip(chipGroup,filteredList[position])
                 }
-                chipGroup?.addView(chip)
                 viewModel.selectedItems.add(filteredList[position])
-                chipGroup?.post {
-                    chipGroup.parent?.requestChildFocus(chipGroup, chip)
-                }
             }
         }
         searchView?.setOnQueryTextListener(object : OnQueryTextListener {
@@ -293,7 +274,7 @@ class AddProductActivity : AppCompatActivity() {
             }
         })
     }
-    private fun createChip(text : String)
+    private fun createChip(chipGroup: ChipGroup,text : String)
     {
         val chip = View.inflate(this, R.layout.entry_chip, null) as Chip
         chip.text = text
@@ -302,6 +283,9 @@ class AddProductActivity : AppCompatActivity() {
             viewModel.selectedItems.remove(text)
         }
         chipGroup.addView(chip)
+        chipGroup.post {
+            chipGroup.parent?.requestChildFocus(chipGroup, chip)
+        }
     }
     private fun setProgress(inProgress : Boolean)
     {
@@ -322,7 +306,7 @@ class AddProductActivity : AppCompatActivity() {
                 UCrop.of(data?.data!!, Uri.fromFile(
                     File(
                     cacheDir,
-                    "${UUID.randomUUID()}_cropped.jpg"
+                    "${Utility.generateId()}_cropped.jpg"
                 )
                 ))
                     .withAspectRatio(1f, 1f)
@@ -337,7 +321,7 @@ class AddProductActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 //        super.onBackPressed()
-        if (viewModel.validate())
+        if (viewModel.isModified)
         {
             Utility.showAlertDialog(this,"Are you sure you want to close?"){
                 finish()

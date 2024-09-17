@@ -11,6 +11,7 @@ import com.smk627751.zcart.dto.User
 import com.smk627751.zcart.dto.Vendor
 
 class ProfileViewModel : ViewModel() {
+    /** LiveData for error messages*/
     val nameError = MutableLiveData<String?>()
     val addressError = MutableLiveData<String?>()
     val zipcodeError = MutableLiveData<String?>()

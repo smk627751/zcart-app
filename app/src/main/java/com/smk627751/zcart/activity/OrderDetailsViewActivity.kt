@@ -3,6 +3,7 @@ package com.smk627751.zcart.activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.graphics.Paint
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -20,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
@@ -44,6 +46,7 @@ class OrderDetailsViewActivity : AppCompatActivity() {
     lateinit var phone : TextView
     private lateinit var updateOrderStatus : Button
     private lateinit var cancelOrder : Button
+    private lateinit var shimmerFrameLayout: ShimmerFrameLayout
     var prevStatus = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +80,11 @@ class OrderDetailsViewActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             finish()
         }
-
+        shimmerFrameLayout = findViewById<ShimmerFrameLayout?>(R.id.shimmer_layout)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            shimmerFrameLayout.visibility = View.VISIBLE
+            shimmerFrameLayout.startShimmerAnimation()
+        }
         viewModel.isVendor.observe(this) {
             if (it)
             {
@@ -93,6 +100,8 @@ class OrderDetailsViewActivity : AppCompatActivity() {
         viewModel.order.observe(this) {
             if (it != null)
             {
+                shimmerFrameLayout.stopShimmerAnimation()
+                shimmerFrameLayout.visibility = View.GONE
                 prevStatus = it.status
                 setUpView(it)
                 updateOrderStatus(orderStatusIndicator,it.status)
@@ -113,7 +122,7 @@ class OrderDetailsViewActivity : AppCompatActivity() {
         orderId.paintFlags = orderId.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         date.text = Utility.formatTime(order.timestamp)
         quantity.text = order.quantity.toString()
-        totalPrice.text = "₹${order.totalPrice}"
+        totalPrice.text = Utility.formatNumberIndianSystem(order.totalPrice)
         var orderStatusList = viewModel.orderStatus.keys.toList()
         val startIndex = orderStatusList.indexOf(order.status)
         orderStatusList = orderStatusList.subList(if(startIndex != -1) startIndex else 0, orderStatusList.size)
@@ -124,7 +133,7 @@ class OrderDetailsViewActivity : AppCompatActivity() {
                 view: View?,
                 position: Int,
                 id: Long) {
-                order.status = viewModel.orderStatus.keys.toList()[position]
+                order.status = orderStatusList[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

@@ -1,6 +1,7 @@
 package com.smk627751.zcart.viewmodel
 
 import android.os.Handler
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -38,6 +39,7 @@ class OrdersViewModel : ViewModel() {
         Repository.getOrders(query){count,options ->
             _options.value = options
             _itemCount.value = count
+            Log.d("TAG", "getOrders: $count")
             Handler().postDelayed({
                 _isLoading.value = false
             },500)

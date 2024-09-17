@@ -22,9 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:hint="Search..."
-                app:menu="@menu/filter_menu"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" />
+                app:menu="@menu/filter_menu" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/category_list"
@@ -97,7 +95,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurface"
+        android:visibility="gone">
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.smk627751.zcart.fragments
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,8 +53,11 @@ class CartViewFragment : Fragment() {
         cartItemsView.layoutManager = LinearLayoutManager(context)
         buyNowButton = view.findViewById(R.id.buy_now_button)
 
-        shimmerFrameLayout.visibility = View.VISIBLE
-        shimmerFrameLayout.startShimmerAnimation()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
+            shimmerFrameLayout.visibility = View.VISIBLE
+            shimmerFrameLayout.startShimmerAnimation()
+        }
 //        myOrders.visibility = View.VISIBLE
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -102,5 +106,10 @@ class CartViewFragment : Fragment() {
             noProductView.visibility = View.GONE
             cartItemsView.visibility = View.VISIBLE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCartItems()
     }
 }

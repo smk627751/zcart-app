@@ -2,7 +2,11 @@ package com.smk627751.zcart.activity
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -25,9 +29,9 @@ import com.smk627751.zcart.fragments.ProfileViewFragment
 import com.smk627751.zcart.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
-    lateinit var fragmentContainer: FragmentContainerView
-    var bottomNavigationView: BottomNavigationView? = null
-    var navigationRailView: NavigationRailView? = null
+    private lateinit var fragmentContainer: FragmentContainerView
+    private var bottomNavigationView: BottomNavigationView? = null
+    private var navigationRailView: NavigationRailView? = null
     private lateinit var viewModel: HomeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +43,10 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
-
+        val intent = intent
+//        Log.d("test","replacement ${intent?.getStringExtra("replacement")}")
         fragmentContainer = findViewById(R.id.fragment_container)
-        for (i in 0 until 50) {
+//        for (i in 0 until 50) {
 //            Repository.addProductToDb(
 //                Product(
 //                    "$i",
@@ -60,13 +65,26 @@ class HomeActivity : AppCompatActivity() {
 //                    it.reference.delete()
 //                }
 //            }
-        }
+//        }
 //        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         viewModel.setLandscape(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         when(val view: View = findViewById(R.id.navigation)){
             is BottomNavigationView -> bottomNavigationView = view
             is NavigationRailView -> navigationRailView = view
+        }
+        if (intent?.getStringExtra("replacement") != null)
+        {
+            Log.d("test","replacement ${intent.getStringExtra("replacement")}")
+            val view = if (viewModel.isLandscape.value!!) navigationRailView else bottomNavigationView
+            when(intent.getStringExtra("replacement"))
+            {
+                "cart" -> {
+                    bottomNavigationView?.post {
+                        view?.selectedItemId = viewModel.cartId
+                    }
+                }
+            }
         }
         viewModel.notifications.observe(this) { notifications ->
             setBadge(notifications,viewModel.isLandscape.value!!)
@@ -90,7 +108,12 @@ class HomeActivity : AppCompatActivity() {
             badge.number = notifications.filter { !it.isRead }.size
             if (badge.number == 0)
                 badge.isVisible = false
-            if (resources.configuration.isNightModeActive)
+            if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    resources.configuration.isNightModeActive
+                } else {
+                    false
+                }
+            )
             {
                 badge.backgroundColor = ContextCompat.getColor(this@HomeActivity, R.color.white)
                 badge.badgeTextColor = ContextCompat.getColor(this@HomeActivity, R.color.black)
@@ -111,9 +134,14 @@ class HomeActivity : AppCompatActivity() {
         } else {
             viewModel.setLandscape(false)
         }
-        if (newConfig.isNightModeActive)
+        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                newConfig.isNightModeActive
+            } else {
+                false
+            }
+        )
         {
-            window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.bottom_navigation_color_dark)
         }
         else
         {
@@ -121,11 +149,16 @@ class HomeActivity : AppCompatActivity() {
         }
     }
     private fun setUpNavigation(isVendor: Boolean, isLandscape: Boolean) {
-        if (resources.configuration.isNightModeActive)
+        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                resources.configuration.isNightModeActive && !isLandscape
+            } else {
+                false
+            }
+        )
         {
-            window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.bottom_navigation_color_dark)
         }
-        else
+        else if (!isLandscape)
         {
             window.navigationBarColor = ContextCompat.getColor(this, R.color.bottom_navigation_color)
         }
@@ -150,7 +183,6 @@ class HomeActivity : AppCompatActivity() {
                     }
 
                     viewModel.addId -> {
-//                        showAddProductBottomSheet()
                        Intent(this,AddProductActivity::class.java).apply {
                             putExtra("mode","add")
                             startActivity(this)
@@ -167,7 +199,12 @@ class HomeActivity : AppCompatActivity() {
                                 if (badge != null && it > 0) {
                                     badge.isVisible = true
                                     badge.number = it
-                                    if (resources.configuration.isNightModeActive)
+                                    if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                            resources.configuration.isNightModeActive
+                                        } else {
+                                            false
+                                        }
+                                    )
                                     {
                                         badge.backgroundColor = ContextCompat.getColor(this@HomeActivity, R.color.white)
                                         badge.badgeTextColor = ContextCompat.getColor(this@HomeActivity, R.color.black)

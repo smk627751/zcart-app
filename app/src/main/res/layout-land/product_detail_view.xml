@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:layout_margin="16dp"
             app:shapeAppearanceOverlay="@style/roundedRectangleImageView"
             android:src="@color/cardview_dark_background" />
@@ -102,7 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:padding="8dp"
+                        android:padding="16dp"
                         style="?attr/textAppearanceBody1"
                         android:background="@drawable/edit_text_bg"
                         android:backgroundTint="?attr/colorSurfaceVariant"/>

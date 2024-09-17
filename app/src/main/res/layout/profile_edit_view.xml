@@ -99,7 +99,12 @@
                     app:ccp_showFlag="true"
                     app:ccp_showNameCode="true"
                     app:ccp_showPhoneCode="true"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    app:ccpDialog_textColor="?attr/colorOnSurface"
+                    android:tooltipText="?attr/colorOnSurface"
+                    app:ccp_hintExampleNumberType="MOBILE"
+                    app:ccp_contentColor="?attr/colorOnSurface"
+                    app:ccpDialog_cornerRadius="12dp"/>
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phone_input_layout"
                     android:layout_width="0dp"
@@ -109,6 +114,7 @@
                         android:id="@+id/phone_field"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

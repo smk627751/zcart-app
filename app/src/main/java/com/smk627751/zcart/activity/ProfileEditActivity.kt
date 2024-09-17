@@ -67,6 +67,7 @@ class ProfileEditActivity : AppCompatActivity() {
     lateinit var saveButton : Button
     lateinit var user: User
     lateinit var prevPhone : String
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -96,9 +97,10 @@ class ProfileEditActivity : AppCompatActivity() {
         saveButton = findViewById(R.id.save_button)
         progress = findViewById(R.id.progress)
 
-        parent.setOnClickListener {
+        parent.setOnTouchListener { _, _ ->
             nameField.clearFocus()
             hideSoftKeyboard(this)
+            false
         }
         toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -172,10 +174,11 @@ class ProfileEditActivity : AppCompatActivity() {
             val imageUrl = it.ifEmpty { user.image }
             when(user) {
                 is Vendor -> Vendor(
-                    nameField.text.toString(),
-                    user.email,
+                    nameField.text.toString().trim(),
+                    user.email.trim(),
                     "${ccp.selectedCountryCodeWithPlus}${phone.text}",
-                    user.accountType, address.text.toString(),
+                    user.accountType,
+                    address.text.toString().trim(),
                     zipcode.text.toString().toInt(),
                     imageUrl
                 ).apply {
@@ -185,9 +188,10 @@ class ProfileEditActivity : AppCompatActivity() {
 
                 is Customer -> Customer(
                     nameField.text.toString(),
-                    user.email,
+                    user.email.trim(),
                     "${ccp.selectedCountryCodeWithPlus}${phone.text}",
-                    user.accountType, address.text.toString(),
+                    user.accountType,
+                    address.text.toString().trim(),
                     zipcode.text.toString().toInt(),
                     imageUrl
                 ).apply {
@@ -265,6 +269,7 @@ class ProfileEditActivity : AppCompatActivity() {
         if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             UCrop.getOutput(data!!).also {
                 imageView.setImageURI(it).also {
+                    imageView.invalidate()
                     imageView.requestLayout()
                 }
                 imageView.tag = it

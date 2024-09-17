@@ -3,6 +3,7 @@ package com.smk627751.zcart.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.MenuItem
@@ -34,6 +35,7 @@ import com.smk627751.zcart.adapter.ReviewsAdapter
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.viewmodel.DetailViewModel
 import com.yalantis.ucrop.UCrop
+import io.noties.markwon.Markwon
 import java.io.File
 import java.util.UUID
 
@@ -69,7 +71,7 @@ class DetailViewActivity : AppCompatActivity() {
         setContentView(R.layout.product_detail_view)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
             insets
         }
 //        Utility.registerInternetReceiver(this)
@@ -98,10 +100,12 @@ class DetailViewActivity : AppCompatActivity() {
         addToCartButton = findViewById(R.id.add_to_cart_button)
         sendButton = findViewById(R.id.send_button)
         reviewSection = findViewById(R.id.review_section)
-
+        val markwon = Markwon.create(this)
         detailView.visibility = View.GONE
-        shimmerFrameLayout.visibility = View.VISIBLE
-        shimmerFrameLayout.startShimmerAnimation()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            shimmerFrameLayout.visibility = View.VISIBLE
+            shimmerFrameLayout.startShimmerAnimation()
+        }
         ViewCompat.setTransitionName(image, "image_transition")
         viewModel.product.observe(this) {
             if (it == null)
@@ -109,16 +113,16 @@ class DetailViewActivity : AppCompatActivity() {
                 finish()
                 return@observe
             }
-            val transition = TransitionInflater.from(this).inflateTransition(android.R.transition.move)
-            transition.duration = 200 // Set transition duration (in milliseconds)
-            window.sharedElementEnterTransition = transition
-            window.sharedElementExitTransition = transition
+//            val transition = TransitionInflater.from(this).inflateTransition(android.R.transition.move)
+//            transition.duration = 200 // Set transition duration (in milliseconds)
+//            window.sharedElementEnterTransition = transition
+//            window.sharedElementExitTransition = transition
             shimmerFrameLayout.stopShimmerAnimation()
             shimmerFrameLayout.visibility = View.GONE
             detailView.visibility = View.VISIBLE
             name.text = it.name
-            price.text = "₹${it.price}"
-            description.text = it.description
+            price.text = Utility.formatNumberIndianSystem(it.price)
+            description.text = markwon.toMarkdown(it.description)
             Glide.with(this)
                 .load(it.image)
                 .into(image)
@@ -157,6 +161,11 @@ class DetailViewActivity : AppCompatActivity() {
         addToCartButton.setOnClickListener {
             viewModel.addToCart{
                 Utility.makeToast(this, "Product added to cart")
+                Intent(this, HomeActivity::class.java).also {
+                    it.putExtra("replacement","cart")
+                    it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(it)
+                }
             }
         }
 

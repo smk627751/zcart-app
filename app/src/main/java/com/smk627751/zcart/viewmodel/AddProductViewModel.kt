@@ -4,15 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.smk627751.zcart.Repository.Repository
+import com.smk627751.zcart.Utility
 import com.smk627751.zcart.dto.Product
-import java.util.UUID
 
 class AddProductViewModel : ViewModel() {
+    /** Flag to check if the product is modified */
     var isModified = false
 
+    // LiveData for the product
     private val _product = MutableLiveData<Product>()
     val product : LiveData<Product> = _product
 
+    // LiveData for all fields
     private val _imageUri = MutableLiveData<Uri>()
     val imageUri: LiveData<Uri> = _imageUri
     private val _productName = MutableLiveData<String>()
@@ -22,6 +25,7 @@ class AddProductViewModel : ViewModel() {
     private val _productDescription = MutableLiveData<String>()
     val productDescription : LiveData<String> = _productDescription
 
+    //Livedata for error messages
     private val _imageUriError = MutableLiveData<String?>()
     val imageUriError : LiveData<String?> = _imageUriError
     private val _productNameError = MutableLiveData<String?>()
@@ -47,21 +51,21 @@ class AddProductViewModel : ViewModel() {
         isModified = true
     }
     fun setProductName(name: String) {
-        _productName.value = name
+        _productName.value = name.trim()
         isModified = true
     }
     fun setProductPrice(price: String) {
-        _productPrice.value = price
+        _productPrice.value = price.trim()
         isModified = true
     }
     fun setProductDescription(description: String) {
-        _productDescription.value = description
+        _productDescription.value = description.trim()
         isModified = true
     }
-
+    /**Function to add the product to the database*/
     fun addProduct(callback: (msg: String) -> Unit) {
         val product = _product.value
-        val productId = product?.id ?: UUID.randomUUID().toString()
+        val productId = product?.id ?: Utility.generateId()
         Repository.uploadImage("${Repository.IMAGE_PATH}/${productId}.jpg", _imageUri.value) { imageUrl ->
             when (_mode.value) {
                 "add" -> {
@@ -98,7 +102,7 @@ class AddProductViewModel : ViewModel() {
             }
         }
     }
-
+    /**Function to validate the fields*/
     fun validate(): Boolean {
         var isValid = true
         if (imageUri.value == null)

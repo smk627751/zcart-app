@@ -46,6 +46,9 @@ class ProductViewModel : ViewModel() {
                 searchList[it] = "category"
             }
         }
+        val sortedSearchList = searchList.toList().sortedWith { o1, o2 -> o1.first.compareTo(o2.first) }
+        searchList.clear()
+        searchList.putAll(sortedSearchList.toMap())
         _filterList.value = searchList
     }
     fun getCategories(): List<String> {

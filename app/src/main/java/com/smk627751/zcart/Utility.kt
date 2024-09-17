@@ -6,9 +6,11 @@ import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.smk627751.zcart.receiver.InternetStateChangeReceiver
 import java.io.File
 import java.io.FileOutputStream
@@ -23,12 +25,31 @@ object Utility {
     {
         context.registerReceiver(InternetStateChangeReceiver(), IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
     }
-    fun generateOrderId(): String {
+    fun generateId(): String {
         return UUID.randomUUID().toString()
     }
     fun makeToast(context : Context, msg : String)
     {
         Toast.makeText(context,msg, Toast.LENGTH_SHORT).show()
+    }
+    fun makeSnackBar(view : View, msg : String)
+    {
+        Snackbar.make(view,msg, Snackbar.LENGTH_SHORT).show()
+    }
+    fun formatNumberIndianSystem(number: Double): String {
+        var numberStr = number.toString().replace(".0","")
+//        if("₹${model.price}".endsWith(".0")) "₹${model.price}".replace(".0","") else "₹${model.price}"
+//        val regex = Regex("(\\d+)(\\d{3})(\\d{2})?")
+//        regex.matchEntire(numberStr)
+
+        numberStr =  if (numberStr.length > 3) {
+            val firstGroup = numberStr.substring(0, numberStr.length - 3)
+            val rest = numberStr.takeLast(3)
+            firstGroup.reversed().chunked(2).joinToString(",").reversed() + "," + rest
+        } else {
+            numberStr
+        }
+        return "₹${numberStr}"
     }
     fun formatTime(time : Long) : String
     {

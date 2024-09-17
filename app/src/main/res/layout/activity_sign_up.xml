@@ -46,12 +46,12 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"/>
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Phone number"
-                android:layout_marginVertical="8dp"
-                style="?attr/textAppearanceTitleMedium" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Phone number"-->
+<!--                android:layout_marginVertical="8dp"-->
+<!--                style="?attr/textAppearanceTitleMedium" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,9 +65,14 @@
                     android:layout_weight="0.5"
                     app:ccp_defaultNameCode="IN"
                     app:ccp_showFlag="true"
-                    app:ccp_showNameCode="true"
+                    app:ccp_showNameCode="false"
                     app:ccp_showPhoneCode="true"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    app:ccpDialog_textColor="?attr/colorOnSurface"
+                    android:tooltipText="?attr/colorOnSurface"
+                    app:ccp_hintExampleNumberType="MOBILE"
+                    app:ccp_contentColor="?attr/colorOnSurface"
+                    app:ccpDialog_cornerRadius="12dp"/>
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phone_layout"
                     android:layout_width="0dp"
@@ -154,7 +159,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/round"
                 android:indeterminate="true"
-                android:indeterminateTint="@color/white"
+                android:indeterminateTint="?attr/colorSurface"
                 android:padding="2dp"
                 android:visibility="gone"/>
         </LinearLayout>

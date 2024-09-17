@@ -1,5 +1,6 @@
 package com.smk627751.zcart.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,8 +41,11 @@ class NotificationViewFragment : Fragment() {
         noNotificationFoundView = view.findViewById(R.id.no_notification_found_view)
         recyclerView = view.findViewById(R.id.recycler_view)
         // Set up shimmer layout
-        shimmerFrameLayout.startShimmerAnimation()
-        shimmerFrameLayout.visibility = View.VISIBLE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
+            shimmerFrameLayout.startShimmerAnimation()
+            shimmerFrameLayout.visibility = View.VISIBLE
+        }
         noNotificationFoundView.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         // Set up RecyclerView
         buttonGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -85,6 +89,12 @@ class NotificationViewFragment : Fragment() {
         }
     }
     private fun showShimmer(callback: () -> Unit) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+        {
+            noNotificationFoundView.visibility = View.GONE
+            callback()
+            return
+        }
         shimmerFrameLayout.removeCallbacks(shimmerRunnable)
         noNotificationFoundView.visibility = View.GONE
         shimmerFrameLayout.visibility = View.VISIBLE
