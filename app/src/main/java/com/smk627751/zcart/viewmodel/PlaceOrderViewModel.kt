@@ -82,7 +82,7 @@ class PlaceOrderViewModel : ViewModel() {
         return Repository.user?.name ?: ""
     }
     fun getDeliveryAddress(): String {
-        return Repository.user?.address ?: ""
+        return (Repository.user?.address ?: "" ) + ("\n${Repository.user?.zipcode}" ?: "")
     }
 
     fun getPhoneNumber(): String {

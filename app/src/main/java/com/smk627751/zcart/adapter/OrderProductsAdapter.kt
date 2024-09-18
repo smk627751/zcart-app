@@ -51,6 +51,7 @@ class OrderProductsAdapter(private val orders: Array<Product>, val updateTotalPr
             var q = holder.quantity.text.toString().toInt()
             if (q == 10)
             {
+                Utility.makeToast(holder.itemView.context, "Maximum quantity reached")
                 return@setOnClickListener
             }
             q++

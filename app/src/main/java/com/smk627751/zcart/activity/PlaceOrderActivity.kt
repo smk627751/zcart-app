@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ import com.smk627751.zcart.viewmodel.PlaceOrderViewModel
 class PlaceOrderActivity : AppCompatActivity() {
     lateinit var viewModel: PlaceOrderViewModel
     lateinit var parent:CoordinatorLayout
+    lateinit var scrollView: NestedScrollView
     lateinit var toolbar: MaterialToolbar
     lateinit var productsView : RecyclerView
     var adapter: OrderProductsAdapter? = null
@@ -60,6 +62,7 @@ class PlaceOrderActivity : AppCompatActivity() {
         }
         parent = findViewById(R.id.main)
         toolbar = findViewById(R.id.toolbar)
+        scrollView = findViewById(R.id.scroll_view)
         productsView = findViewById(R.id.products_view)
         username = findViewById(R.id.username)
         deliveryAddress = findViewById(R.id.delivery_address)
@@ -69,7 +72,10 @@ class PlaceOrderActivity : AppCompatActivity() {
         placeOrderButton = findViewById(R.id.place_order_button)
         progress = findViewById(R.id.progress)
 
-        parent.setOnClickListener {_ ->
+        scrollView.setOnClickListener {_ ->
+            username.clearFocus()
+            deliveryAddress.clearFocus()
+            phone.clearFocus()
             Utility.hideSoftKeyboard(this)
         }
         toolbar.setNavigationOnClickListener {
