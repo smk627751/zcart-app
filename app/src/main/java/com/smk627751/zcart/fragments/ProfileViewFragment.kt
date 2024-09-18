@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,7 @@ import com.smk627751.zcart.viewmodel.ProfileViewModel
 class ProfileViewFragment : Fragment() {
     lateinit var viewModel : ProfileViewModel
     lateinit var parent : ViewGroup
+    lateinit var scrollView: NestedScrollView
     lateinit var toolbar: MaterialToolbar
     lateinit var imageView : ImageView
     lateinit var name : TextView
@@ -52,6 +54,7 @@ class ProfileViewFragment : Fragment() {
         // Initialize views
         parent = view.findViewById(R.id.main)
         toolbar = view.findViewById(R.id.toolbar)
+        scrollView = view.findViewById(R.id.scroll_view)
         imageView = view.findViewById(R.id.profile_image)
         name = view.findViewById(R.id.profile_name)
         email = view.findViewById(R.id.profile_email)
@@ -155,5 +158,9 @@ class ProfileViewFragment : Fragment() {
                 }
                 .create()
                 .show()
+    }
+
+    fun scrollToTop() {
+        scrollView.smoothScrollTo(0, 0)
     }
 }

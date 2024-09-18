@@ -138,4 +138,8 @@ class OrdersViewFragment : Fragment() {
         adapter?.startListening()
         ordersView.layoutManager = LinearLayoutManager(requireContext())
     }
+
+    fun scrollToTop() {
+        ordersView.smoothScrollToPosition(0)
+    }
 }

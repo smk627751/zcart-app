@@ -24,8 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="Cart"
-            app:menu="@menu/orders"/>
+            app:title="Cart" />
     </com.google.android.material.appbar.AppBarLayout>
 <!--    <Button-->
 <!--        android:id="@+id/my_orders"-->

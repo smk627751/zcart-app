@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -53,16 +54,17 @@ class ProfileEditActivity : AppCompatActivity() {
     lateinit var viewModel: ProfileViewModel
     lateinit var parent : ViewGroup
     lateinit var toolbar: MaterialToolbar
+    lateinit var scrollView: NestedScrollView
     lateinit var imageView : ImageView
     lateinit var nameLayout : TextInputLayout
     lateinit var nameField : EditText
     lateinit var addressLayout : TextInputLayout
-    lateinit var address : TextView
+    lateinit var address : EditText
     lateinit var zipcodeLayout : TextInputLayout
-    lateinit var zipcode : TextView
+    lateinit var zipcode : EditText
     lateinit var ccp : CountryCodePicker
     lateinit var phoneLayout : TextInputLayout
-    lateinit var phone : TextView
+    lateinit var phone : EditText
     lateinit var progress: ProgressBar
     lateinit var saveButton : Button
     lateinit var user: User
@@ -84,6 +86,7 @@ class ProfileEditActivity : AppCompatActivity() {
         // Initialize views
         parent = findViewById(R.id.main)
         toolbar = findViewById(R.id.toolbar)
+        scrollView = findViewById(R.id.scroll_view)
         imageView = findViewById(R.id.profile_image)
         nameLayout = findViewById(R.id.name_layout)
         nameField = findViewById(R.id.profile_name_et)
@@ -97,12 +100,17 @@ class ProfileEditActivity : AppCompatActivity() {
         saveButton = findViewById(R.id.save_button)
         progress = findViewById(R.id.progress)
 
-        parent.setOnTouchListener { _, _ ->
+        scrollView.setOnTouchListener { _, _ ->
             nameField.clearFocus()
+            address.clearFocus()
+            zipcode.clearFocus()
+            phone.clearFocus()
             hideSoftKeyboard(this)
             false
         }
+        // Set click listener for toolbar
         toolbar.setNavigationOnClickListener {
+            hideSoftKeyboard(this)
             onBackPressed()
         }
         // Set click listener for image view
@@ -233,9 +241,9 @@ class ProfileEditActivity : AppCompatActivity() {
             .error(R.drawable.baseline_person_24)
             .into(imageView)
         nameField.setText(user.name)
-        address.text = user.address
-        zipcode.text = user.zipcode.toString()
-        phone.text = user.phone.replace(ccp.selectedCountryCodeWithPlus, "")
+        address.setText(user.address)
+        zipcode.setText(user.zipcode.toString())
+        phone.setText(user.phone.replace(ccp.selectedCountryCodeWithPlus, ""))
         prevPhone = user.phone
         address.setOnTouchListener { v, event ->
             if (v.canScrollVertically(1) || v.canScrollVertically(-1)) {

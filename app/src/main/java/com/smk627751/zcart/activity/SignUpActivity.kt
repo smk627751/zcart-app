@@ -114,7 +114,7 @@ class SignUpActivity : AppCompatActivity() {
             Log.d("SignUpActivity",accountType)
         }
         signUp.setOnClickListener {
-            if (viewModel.validate(name.text.toString(),email.text.toString(),"${phone.text}",password.text.toString(),confirmPassword.text.toString(),accountType != ""))
+            if (viewModel.validate(name.text.toString(),email.text.toString(),phone.text.toString(),password.text.toString(),confirmPassword.text.toString(),accountType != ""))
             {
                 viewModel.setUser(
                     name.text.toString(),

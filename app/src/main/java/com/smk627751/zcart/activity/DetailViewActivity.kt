@@ -29,6 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
+import com.smk627751.zcart.Utility.hideSoftKeyboard
 import com.smk627751.zcart.adapter.ReviewsAdapter
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.viewmodel.DetailViewModel
@@ -129,7 +130,8 @@ class DetailViewActivity : AppCompatActivity() {
             setUpratingBars(viewModel.getIndividualRating())
             setUpMenu(false)
         }
-        parent.setOnTouchListener {_,_ ->
+        detailView.setOnTouchListener {_,_ ->
+            reviewField.clearFocus()
             Utility.hideSoftKeyboard(this)
             false
         }
@@ -161,11 +163,12 @@ class DetailViewActivity : AppCompatActivity() {
                     it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(it)
                 }
+                finish()
             }
         }
 
         sendButton.setOnClickListener {
-            if (reviewField.text.isEmpty())
+            if (reviewField.text.isEmpty()||reviewField.text.isBlank())
             {
                 Utility.makeToast(this, "Please enter a review")
                 return@setOnClickListener
@@ -227,6 +230,7 @@ class DetailViewActivity : AppCompatActivity() {
         }
         toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+            hideSoftKeyboard(this)
         }
     }
     private fun showAlertDialog()

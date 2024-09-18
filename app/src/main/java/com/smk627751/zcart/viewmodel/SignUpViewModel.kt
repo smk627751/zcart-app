@@ -1,5 +1,6 @@
 package com.smk627751.zcart.viewmodel
 
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -67,7 +68,7 @@ class SignUpViewModel : ViewModel() {
         } else {
             emailError.value = null
         }
-
+        Log.d("SignUpViewModel", phone)
         // Phone validation
         if (phone.isEmpty() || phone.isBlank()) {
             phoneError.value = "Enter your phone number"

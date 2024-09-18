@@ -1,6 +1,7 @@
 package com.smk627751.zcart.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -85,6 +86,11 @@ class PlaceOrderActivity : AppCompatActivity() {
             viewModel.placeOrder(adapter!!.getProducts(),adapter!!.itemCount,adapter!!.getQuantities(),totalPrice.text.toString(),username.text.toString(),deliveryAddress.text.toString(),"${ccp.selectedCountryCodeWithPlus}${phone.text}"){
                 Utility.makeToast(this, "Order Placed Successfully")
                 setProgress(false)
+                Intent(this, HomeActivity::class.java).also {
+                    it.putExtra("replacement","orders")
+                    it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(it)
+                }
                 finish()
             }
         }

@@ -11,6 +11,7 @@ import android.transition.Fade
 import android.transition.TransitionManager
 import android.transition.TransitionSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -36,7 +37,7 @@ import com.smk627751.zcart.viewmodel.SignInViewModel
 
 class SignInActivity : AppCompatActivity() {
     lateinit var viewModel: SignInViewModel
-    lateinit var parent: RelativeLayout
+    lateinit var parent: ViewGroup
     lateinit var emailLayout : TextInputLayout
     lateinit var email : EditText
     lateinit var passwordLayout : TextInputLayout

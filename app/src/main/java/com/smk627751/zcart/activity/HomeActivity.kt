@@ -75,13 +75,17 @@ class HomeActivity : AppCompatActivity() {
         }
         if (intent?.getStringExtra("replacement") != null)
         {
-            Log.d("test","replacement ${intent.getStringExtra("replacement")}")
             val view = if (viewModel.isLandscape.value!!) navigationRailView else bottomNavigationView
             when(intent.getStringExtra("replacement"))
             {
                 "cart" -> {
                     bottomNavigationView?.post {
                         view?.selectedItemId = viewModel.cartId
+                    }
+                }
+                "orders" -> {
+                    bottomNavigationView?.post {
+                        view?.selectedItemId = viewModel.ordersId
                     }
                 }
             }
@@ -260,7 +264,7 @@ class HomeActivity : AppCompatActivity() {
         menu?.clear()
         if (isVendor) {
             addMenuItem(menu,viewModel.homeId,"Home",R.drawable.home_icon)
-            addMenuItem(menu,viewModel.ordersId,"Orders",R.drawable.cart_icon)
+            addMenuItem(menu,viewModel.ordersId,"Orders",R.drawable.order_icon)
             addMenuItem(menu,viewModel.addId,"Add",R.drawable.add_icon)
             addMenuItem(menu,viewModel.notificationsId,"Notification",R.drawable.notification_icon).also {
                 viewModel.getNotifications()
@@ -270,6 +274,7 @@ class HomeActivity : AppCompatActivity() {
         } else {
             addMenuItem(menu,viewModel.homeId,"Home",R.drawable.home_icon)
             addMenuItem(menu,viewModel.cartId,"Cart",R.drawable.cart_icon)
+            addMenuItem(menu,viewModel.ordersId,"Orders",R.drawable.order_icon)
             addMenuItem(menu,viewModel.profileId,"Profile",R.drawable.profile_icon)
         }
     }
@@ -281,7 +286,29 @@ class HomeActivity : AppCompatActivity() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment != null && currentFragment::class == fragment::class)
         {
-            return
+            when(currentFragment)
+            {
+                is ProductViewFragment -> {
+                    currentFragment.scrollToTop()
+                    return
+                }
+                is NotificationViewFragment -> {
+                    currentFragment.scrollToTop()
+                    return
+                }
+                is OrdersViewFragment -> {
+                    currentFragment.scrollToTop()
+                    return
+                }
+                is CartViewFragment -> {
+                    currentFragment.scrollToTop()
+                    return
+                }
+                is ProfileViewFragment -> {
+                    currentFragment.scrollToTop()
+                    return
+                }
+            }
         }
         supportFragmentManager.beginTransaction().apply {
             addToBackStack(null)

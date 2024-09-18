@@ -86,13 +86,13 @@ class AddProductActivity : AppCompatActivity() {
         productDescription = findViewById(R.id.product_description)
         addProductBtn = findViewById(R.id.add_product_button)!!
         progress = findViewById(R.id.progress)
-        parent.setOnTouchListener { _, _ ->
+        scrollView.setOnTouchListener { _, _ ->
+            productName.clearFocus()
+            productPrice.clearFocus()
+            productDescription.clearFocus()
             Utility.hideSoftKeyboard(this)
             false
         }
-        setFocus(productName)
-        setFocus(productPrice)
-        setFocus(productDescription)
         val intent = intent
         val product = intent.getSerializableExtra("product") as Product?
         val mode = intent.getStringExtra("mode")
@@ -196,17 +196,6 @@ class AddProductActivity : AppCompatActivity() {
                 Utility.makeToast(this, it)
                 finish()
                 overridePendingTransition(R.anim.fade_out,R.anim.slide_down)
-            }
-        }
-    }
-
-    private fun setFocus(input: EditText) {
-        input.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                // Delay to allow keyboard to fully open
-                input.postDelayed({
-                    scrollView.smoothScrollTo(0, input.bottom)
-                }, 200)
             }
         }
     }

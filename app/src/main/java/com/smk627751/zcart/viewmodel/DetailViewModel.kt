@@ -95,7 +95,7 @@ class DetailViewModel : ViewModel() {
     }
     /**Function to add the review to the product*/
     fun addReview(rating : Float,text : String,callback: () -> Unit) {
-        val review = Review(Repository.currentUserId,rating,text)
+        val review = Review(Repository.currentUserId,rating,text.trim())
         if (_product.value?.reviews?.containsKey(Repository.currentUserId)!!)
         {
             review.isEdited = true

@@ -94,7 +94,7 @@ class ProductViewFragment : Fragment() {
         recyclerView.layoutManager = if (resources.configuration.orientation == ORIENTATION_PORTRAIT){
             GridLayoutManager(context,2)
         }
-        else GridLayoutManager(context,3)
+        else GridLayoutManager(context,4)
         recyclerView.itemAnimator = DefaultItemAnimator()
 
         noProductView.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
@@ -245,5 +245,9 @@ class ProductViewFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         adapter?.stopListening()
+    }
+
+    fun scrollToTop() {
+        recyclerView.smoothScrollToPosition(0)
     }
 }

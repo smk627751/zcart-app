@@ -106,4 +106,8 @@ class NotificationViewFragment : Fragment() {
         }
         shimmerFrameLayout.postDelayed(shimmerRunnable, 500)
     }
+
+    fun scrollToTop() {
+        recyclerView.smoothScrollToPosition(0)
+    }
 }

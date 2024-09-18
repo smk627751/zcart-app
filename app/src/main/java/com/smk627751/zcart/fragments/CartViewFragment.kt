@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,26 +60,26 @@ class CartViewFragment : Fragment() {
             shimmerFrameLayout.startShimmerAnimation()
         }
 //        myOrders.visibility = View.VISIBLE
-        toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.my_orders -> {
-                    fragmentContainer.visibility = View.VISIBLE
-                    childFragmentManager.beginTransaction().apply {
-                        replace(R.id.fragment_container, OrdersViewFragment())
-                        addToBackStack(null)
-                        commit()
-                    }
-                    true
-                }
-
-                else -> false
-            }
-        }
+//        toolbar.setOnMenuItemClickListener {
+//            when (it.itemId) {
+//                R.id.my_orders -> {
+//                    fragmentContainer.visibility = View.VISIBLE
+//                    childFragmentManager.beginTransaction().apply {
+//                        replace(R.id.fragment_container, OrdersViewFragment())
+//                        addToBackStack(null)
+//                        commit()
+//                    }
+//                    true
+//                }
+//
+//                else -> false
+//            }
+//        }
         viewModel.cartItems.observe(viewLifecycleOwner) {cartItems ->
             shimmerFrameLayout.visibility = View.GONE
             shimmerFrameLayout.stopShimmerAnimation()
             setAdapter(cartItems)
-            buyNowButton.isEnabled = cartItems.isNotEmpty()
+            buyNowButton.isVisible = cartItems.isNotEmpty()
         }
 
         buyNowButton.setOnClickListener {
@@ -111,5 +112,9 @@ class CartViewFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getCartItems()
+    }
+
+    fun scrollToTop() {
+        cartItemsView.smoothScrollToPosition(0)
     }
 }

@@ -391,7 +391,7 @@ object Repository {
                                 if (vendor.products.isNotEmpty())
                                 {
                                     db.collection("products")
-                                        .whereIn("id", vendor.products)
+                                        .whereEqualTo("vendorId", currentUserId)
                                 }
                                 else
                                 {

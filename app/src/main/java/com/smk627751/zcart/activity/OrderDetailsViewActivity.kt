@@ -12,17 +12,20 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.adapter.CartAdapter
@@ -32,6 +35,7 @@ import com.smk627751.zcart.viewmodel.OrderDetailViewModel
 class OrderDetailsViewActivity : AppCompatActivity() {
     lateinit var viewModel: OrderDetailViewModel
     private lateinit var toolbar : MaterialToolbar
+    lateinit var progressBar: LinearProgressIndicator
     private lateinit var orderId : TextView
     private lateinit var date : TextView
     private lateinit var quantity : TextView
@@ -63,6 +67,7 @@ class OrderDetailsViewActivity : AppCompatActivity() {
         intent.getStringExtra("order_id")?.let { viewModel.setOrder(it) }
 
         toolbar = findViewById(R.id.toolbar)
+        progressBar = findViewById(R.id.progress)
         orderId = findViewById(R.id.order_id)
         date = findViewById(R.id.date)
         quantity = findViewById(R.id.quantity)
@@ -173,7 +178,9 @@ class OrderDetailsViewActivity : AppCompatActivity() {
                 Utility.makeToast(this, "Status not changed")
                 return@setOnClickListener
             }
+            progressBar.isVisible = true
             viewModel.updateOrderStatus(order.status) {
+                progressBar.isVisible = false
                 Utility.makeToast(this, "Order status updated")
                 finish()
             }
