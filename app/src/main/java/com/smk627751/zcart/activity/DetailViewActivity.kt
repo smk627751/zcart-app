@@ -2,10 +2,8 @@ package com.smk627751.zcart.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -34,35 +32,32 @@ import com.smk627751.zcart.Utility
 import com.smk627751.zcart.adapter.ReviewsAdapter
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.viewmodel.DetailViewModel
-import com.yalantis.ucrop.UCrop
 import io.noties.markwon.Markwon
-import java.io.File
-import java.util.UUID
 
 class DetailViewActivity : AppCompatActivity() {
     lateinit var viewModel: DetailViewModel
     lateinit var parent : ViewGroup
     lateinit var toolbar: MaterialToolbar
-    lateinit var detailView: NestedScrollView
-    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    private lateinit var detailView: NestedScrollView
+    private lateinit var shimmerFrameLayout: ShimmerFrameLayout
     private var shimmerRunnable : Runnable? = null
     lateinit var name : TextView
     lateinit var price : TextView
-    lateinit var description : TextView
-    lateinit var consolidated_rating : TextView
-    lateinit var fivestar : LinearProgressIndicator
-    lateinit var fourstar : LinearProgressIndicator
-    lateinit var threestar : LinearProgressIndicator
-    lateinit var twostar : LinearProgressIndicator
-    lateinit var onestar : LinearProgressIndicator
+    private lateinit var description : TextView
+    private lateinit var consolidatedRating : TextView
+    private lateinit var fivestar : LinearProgressIndicator
+    private lateinit var fourstar : LinearProgressIndicator
+    private lateinit var threestar : LinearProgressIndicator
+    private lateinit var twostar : LinearProgressIndicator
+    private lateinit var onestar : LinearProgressIndicator
     lateinit var image : ImageView
-    lateinit var ratingLayout : LinearLayout
-    lateinit var ratingBar : RatingBar
-    lateinit var placeOrderButton : Button
-    lateinit var addToCartButton : Button
-    lateinit var reviewField: EditText
-    lateinit var sendButton : Button
-    lateinit var reviewSection : RecyclerView
+    private lateinit var ratingLayout : LinearLayout
+    private lateinit var ratingBar : RatingBar
+    private lateinit var placeOrderButton : Button
+    private lateinit var addToCartButton : Button
+    private lateinit var reviewField: EditText
+    private lateinit var sendButton : Button
+    private lateinit var reviewSection : RecyclerView
     var adapter: ReviewsAdapter? = null
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +83,7 @@ class DetailViewActivity : AppCompatActivity() {
         price = findViewById(R.id.product_price)
         description = findViewById(R.id.product_description)
         ratingLayout = findViewById(R.id.rating_layout)
-        consolidated_rating = findViewById(R.id.consolidated_rating)
+        consolidatedRating = findViewById(R.id.consolidated_rating)
         fivestar = findViewById(R.id.five_star_bar)
         fourstar = findViewById(R.id.four_star_bar)
         threestar = findViewById(R.id.three_star_bar)
@@ -130,7 +125,7 @@ class DetailViewActivity : AppCompatActivity() {
             adapter = ReviewsAdapter(viewModel.product.value?.reviews ?: mutableMapOf(),viewModel)
             reviewSection.adapter = adapter
             reviewSection.layoutManager = LinearLayoutManager(this)
-            consolidated_rating.text = viewModel.consolidatedRating().toString()
+            consolidatedRating.text = viewModel.consolidatedRating().toString()
             setUpratingBars(viewModel.getIndividualRating())
             setUpMenu(false)
         }

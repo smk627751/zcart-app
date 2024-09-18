@@ -1,5 +1,6 @@
 package com.smk627751.zcart.bottomsheet
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,11 @@ class ImageOptionDialogFragment(val callBack: (option : String) -> Unit) : Botto
         setupFullHeight()
         return view
     }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        dismiss()
+    }
     companion object {
         fun newInstance(callBack: (option : String) -> Unit): ImageOptionDialogFragment = ImageOptionDialogFragment(callBack)
     }
@@ -43,10 +49,5 @@ class ImageOptionDialogFragment(val callBack: (option : String) -> Unit) : Botto
             bottomSheet.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         }
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        dismissAllowingStateLoss()
     }
 }

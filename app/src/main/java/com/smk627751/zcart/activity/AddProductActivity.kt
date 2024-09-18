@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -51,6 +52,7 @@ import java.io.File
 
 class AddProductActivity : AppCompatActivity() {
     lateinit var viewModel: AddProductViewModel
+    lateinit var scrollView: NestedScrollView
     lateinit var imageView: ImageView
     lateinit var parent : ViewGroup
     private lateinit var toolbar: MaterialToolbar
@@ -76,6 +78,7 @@ class AddProductActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[AddProductViewModel::class.java]
         parent = findViewById(R.id.main)
         toolbar = findViewById(R.id.toolbar)
+        scrollView = findViewById(R.id.scroll_view)
         imageView = findViewById(R.id.product_image)
         productName = findViewById(R.id.product_name)
         chipGroup = findViewById(R.id.chip_group)
@@ -83,11 +86,13 @@ class AddProductActivity : AppCompatActivity() {
         productDescription = findViewById(R.id.product_description)
         addProductBtn = findViewById(R.id.add_product_button)!!
         progress = findViewById(R.id.progress)
-        val markwon = Markwon.create(this)
         parent.setOnTouchListener { _, _ ->
             Utility.hideSoftKeyboard(this)
             false
         }
+        setFocus(productName)
+        setFocus(productPrice)
+        setFocus(productDescription)
         val intent = intent
         val product = intent.getSerializableExtra("product") as Product?
         val mode = intent.getStringExtra("mode")
@@ -194,6 +199,18 @@ class AddProductActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun setFocus(input: EditText) {
+        input.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                // Delay to allow keyboard to fully open
+                input.postDelayed({
+                    scrollView.smoothScrollTo(0, input.bottom)
+                }, 200)
+            }
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setUpView(product : Product)
     {

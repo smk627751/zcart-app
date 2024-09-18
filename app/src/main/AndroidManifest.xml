@@ -19,7 +19,8 @@
         <activity
             android:name=".activity.AddProductActivity"
             android:exported="false"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.ProfileViewActivity"
             android:exported="false"
@@ -27,7 +28,8 @@
         <activity
             android:name=".activity.ProfileEditActivity"
             android:exported="false"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="fullSensor"
@@ -46,7 +48,8 @@
         <activity
             android:name=".activity.DetailViewActivity"
             android:exported="false"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.HomeActivity"
             android:exported="false"
@@ -55,11 +58,13 @@
         <activity
             android:name=".activity.SignUpActivity"
             android:exported="false"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.SignInActivity"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

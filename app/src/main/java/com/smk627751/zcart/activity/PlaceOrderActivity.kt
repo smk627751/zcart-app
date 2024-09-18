@@ -53,7 +53,7 @@ class PlaceOrderActivity : AppCompatActivity() {
         viewModel.setProducts(intent.getSerializableExtra("products") as Array<Product>)
         viewModel.products.observe(this) {products ->
             adapter = OrderProductsAdapter(products){
-                totalPrice.text = "₹$it"
+                totalPrice.text = Utility.formatNumberIndianSystem(it)
             }
             setUpView()
         }
