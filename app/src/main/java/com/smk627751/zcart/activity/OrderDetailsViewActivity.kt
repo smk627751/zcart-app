@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -35,6 +36,7 @@ import com.smk627751.zcart.viewmodel.OrderDetailViewModel
 class OrderDetailsViewActivity : AppCompatActivity() {
     lateinit var viewModel: OrderDetailViewModel
     private lateinit var toolbar : MaterialToolbar
+    lateinit var progressContainer : FrameLayout
     lateinit var progressBar: LinearProgressIndicator
     private lateinit var orderId : TextView
     private lateinit var date : TextView
@@ -61,13 +63,14 @@ class OrderDetailsViewActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-//        Utility.registerInternetReceiver(this)
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[OrderDetailViewModel::class.java]
         intent.getSerializableExtra("order")?.let { viewModel.setOrder(it as Order)}
         intent.getStringExtra("order_id")?.let { viewModel.setOrder(it) }
 
         toolbar = findViewById(R.id.toolbar)
         progressBar = findViewById(R.id.progress)
+        progressContainer = findViewById(R.id.progress_container)
         orderId = findViewById(R.id.order_id)
         date = findViewById(R.id.date)
         quantity = findViewById(R.id.quantity)
@@ -179,8 +182,10 @@ class OrderDetailsViewActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             progressBar.isVisible = true
+            progressContainer.isVisible = true
             viewModel.updateOrderStatus(order.status) {
                 progressBar.isVisible = false
+                progressContainer.isVisible = false
                 Utility.makeToast(this, "Order status updated")
                 finish()
             }

@@ -24,7 +24,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_collapseMode="pin"
+            app:title="Product details"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:navigationIcon="@drawable/baseline_arrow_back_24"
             app:navigationIconTint="?attr/colorAccent" />
@@ -37,7 +37,7 @@
             android:id="@+id/product_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.8"
             android:scaleType="fitCenter"
             android:layout_margin="16dp"
             app:shapeAppearanceOverlay="@style/roundedRectangleImageView"

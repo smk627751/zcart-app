@@ -403,7 +403,7 @@ object Repository {
                             }
                         }
                         else db.collection("products")
-                    }.orderBy("name")
+                    }.orderBy("price",Query.Direction.DESCENDING)
         val options = FirestoreRecyclerOptions.Builder<Product>()
             .setQuery(query, Product::class.java)
             .build()

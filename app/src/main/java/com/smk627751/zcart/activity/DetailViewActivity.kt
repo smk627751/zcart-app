@@ -70,7 +70,7 @@ class DetailViewActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
             insets
         }
-//        Utility.registerInternetReceiver(this)
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
         intent.getSerializableExtra("product")?.let { viewModel.setProduct(it as Product)}
         intent.getStringExtra("product_id")?.let { viewModel.setProduct(it) }
@@ -116,12 +116,12 @@ class DetailViewActivity : AppCompatActivity() {
             shimmerFrameLayout.stopShimmerAnimation()
             shimmerFrameLayout.visibility = View.GONE
             detailView.visibility = View.VISIBLE
-            name.text = it.name
-            price.text = Utility.formatNumberIndianSystem(it.price)
-            description.text = markwon.toMarkdown(it.description)
             Glide.with(this)
                 .load(it.image)
                 .into(image)
+            name.text = it.name
+            price.text = Utility.formatNumberIndianSystem(it.price)
+            description.text = markwon.toMarkdown(it.description)
             viewModel.checkIfVendor()
             adapter = ReviewsAdapter(viewModel.product.value?.reviews ?: mutableMapOf(),viewModel)
             reviewSection.adapter = adapter

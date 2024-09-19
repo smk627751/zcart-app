@@ -28,6 +28,19 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:elevation="1dp"
         android:visibility="gone"/>
+    <FrameLayout
+        android:id="@+id/progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:alpha="0.5"
+        android:elevation="1dp"
+        android:touchscreenBlocksFocus="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone"/>
    <androidx.core.widget.NestedScrollView
        android:id="@+id/scroll_view"
        android:layout_width="match_parent"

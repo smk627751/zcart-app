@@ -32,9 +32,13 @@ object Utility {
     {
         Toast.makeText(context,msg, Toast.LENGTH_SHORT).show()
     }
-    fun makeSnackBar(view : View, msg : String)
+    fun makeSnackBar(view : View, msg : String,action : ()->Unit)
     {
-        Snackbar.make(view,msg, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(view,msg, Snackbar.LENGTH_SHORT)
+            .setAction("retry") {
+                action()
+            }
+            .show()
     }
     fun formatNumberIndianSystem(number: Double): String {
         var numberStr = number.toString().replace(".0","")

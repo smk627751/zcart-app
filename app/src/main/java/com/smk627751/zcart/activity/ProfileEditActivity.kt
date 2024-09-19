@@ -79,7 +79,7 @@ class ProfileEditActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-//        Utility.registerInternetReceiver(this)
+        Utility.registerInternetReceiver(this)
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
@@ -243,7 +243,8 @@ class ProfileEditActivity : AppCompatActivity() {
         nameField.setText(user.name)
         address.setText(user.address)
         zipcode.setText(user.zipcode.toString())
-        phone.setText(user.phone.replace(ccp.selectedCountryCodeWithPlus, ""))
+        ccp.setCountryForPhoneCode(user.phone.substring(0,user.phone.length - 10).toInt())
+        phone.setText(user.phone.substring(user.phone.length - 10))
         prevPhone = user.phone
         address.setOnTouchListener { v, event ->
             if (v.canScrollVertically(1) || v.canScrollVertically(-1)) {

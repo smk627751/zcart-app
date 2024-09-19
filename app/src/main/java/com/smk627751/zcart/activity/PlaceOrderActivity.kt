@@ -51,7 +51,7 @@ class PlaceOrderActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-//        Utility.registerInternetReceiver(this)
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[PlaceOrderViewModel::class.java]
         viewModel.setProducts(intent.getSerializableExtra("products") as Array<Product>)
         viewModel.products.observe(this) {products ->
@@ -72,11 +72,12 @@ class PlaceOrderActivity : AppCompatActivity() {
         placeOrderButton = findViewById(R.id.place_order_button)
         progress = findViewById(R.id.progress)
 
-        scrollView.setOnClickListener {_ ->
+        scrollView.setOnTouchListener { v, event ->
             username.clearFocus()
             deliveryAddress.clearFocus()
             phone.clearFocus()
             Utility.hideSoftKeyboard(this)
+            true
         }
         toolbar.setNavigationOnClickListener {
             finish()

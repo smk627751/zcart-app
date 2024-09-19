@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.smk627751.zcart.R
+import com.smk627751.zcart.Utility
 import com.smk627751.zcart.dto.Notification
 import com.smk627751.zcart.fragments.CartViewFragment
 import com.smk627751.zcart.fragments.NotificationViewFragment
@@ -66,7 +67,7 @@ class HomeActivity : AppCompatActivity() {
 //                }
 //            }
 //        }
-//        Utility.registerInternetReceiver(this)
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         viewModel.setLandscape(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         when(val view: View = findViewById(R.id.navigation)){

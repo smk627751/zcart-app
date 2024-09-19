@@ -12,23 +12,18 @@
         app:liftOnScrollTargetViewId="@id/recycler_view"
         android:background="?attr/colorSurface"
         android:fitsSystemWindows="true">
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_collapseMode="pin"
-            app:scrimVisibleHeightTrigger="?attr/actionBarSize">
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:hint="Search..."
-                app:menu="@menu/filter_menu" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            android:layout_height="56dp"
+            android:hint="Search..."
+            app:layout_scrollFlags="noScroll|exitUntilCollapsed"
+            app:menu="@menu/filter_menu" />
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/category_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_collapseMode="none"
+                app:layout_collapseMode="pin"
                 android:visibility="gone">
                 <HorizontalScrollView
                     android:layout_width="match_parent"

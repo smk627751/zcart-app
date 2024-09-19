@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@id/scroll_view"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:statusBarForeground="@android:color/transparent"
+        app:liftOnScrollColor="@android:color/transparent">
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

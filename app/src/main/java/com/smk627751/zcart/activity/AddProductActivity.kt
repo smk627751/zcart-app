@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
@@ -62,6 +63,7 @@ class AddProductActivity : AppCompatActivity() {
     private lateinit var productPrice: EditText
     private lateinit var productDescription: EditText
     private lateinit var addProductBtn: Button
+    lateinit var progressContainer : FrameLayout
     lateinit var progress: ProgressBar
     var filteredList = Repository.category
 
@@ -84,7 +86,8 @@ class AddProductActivity : AppCompatActivity() {
         chipGroup = findViewById(R.id.chip_group)
         productPrice = findViewById(R.id.product_price)
         productDescription = findViewById(R.id.product_description)
-        addProductBtn = findViewById(R.id.add_product_button)!!
+        addProductBtn = findViewById(R.id.add_product_button)
+        progressContainer = findViewById(R.id.progress_container)
         progress = findViewById(R.id.progress)
         scrollView.setOnTouchListener { _, _ ->
             productName.clearFocus()
@@ -297,12 +300,12 @@ class AddProductActivity : AppCompatActivity() {
     {
         if(inProgress)
         {
-            addProductBtn.visibility = View.GONE
+            progressContainer.visibility = View.VISIBLE
             progress.visibility = View.VISIBLE
         }
         else
         {
-            addProductBtn.visibility = View.VISIBLE
+            addProductBtn.visibility = View.GONE
             progress.visibility = View.GONE
         }
     }

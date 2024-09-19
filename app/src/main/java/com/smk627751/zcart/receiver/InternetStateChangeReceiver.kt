@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.smk627751.zcart.R
 import com.smk627751.zcart.Utility
 
 class InternetStateChangeReceiver : BroadcastReceiver() {
@@ -15,19 +16,22 @@ class InternetStateChangeReceiver : BroadcastReceiver() {
         if (intent?.action == "android.net.conn.CONNECTIVITY_CHANGE") {
             context?.let {
                 if (!isConnectedToInternet(it) && !(context as Activity).isFinishing) {
-                    MaterialAlertDialogBuilder(context)
-                        .setMessage("No internet connection")
-                        .setPositiveButton("Retry") { _, _ ->
-                            onReceive(context, intent)
-                        }
-                        .setNegativeButton("OK") { _, _ ->
-                            if(context is AppCompatActivity)
-                            {
-                                context.finish()
-                            }
-                        }
-                        .setCancelable(false)
-                        .show()
+//                    MaterialAlertDialogBuilder(context)
+//                        .setMessage("No internet connection")
+//                        .setPositiveButton("Retry") { _, _ ->
+//                            onReceive(context, intent)
+//                        }
+//                        .setNegativeButton("OK") { _, _ ->
+//                            if(context is AppCompatActivity)
+//                            {
+//                                context.finish()
+//                            }
+//                        }
+//                        .setCancelable(false)
+//                        .show()
+                    Utility.makeSnackBar(context.requireViewById(R.id.main),("No internet connection")){
+                        onReceive(context, intent)
+                    }
                 }
             }
         }

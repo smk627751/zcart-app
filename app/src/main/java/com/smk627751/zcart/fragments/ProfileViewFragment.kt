@@ -74,7 +74,15 @@ class ProfileViewFragment : Fragment() {
                     true
                 }
                 R.id.menu_logout -> {
-                    showAlertDialog()
+//                    showAlertDialog()
+                    Utility.showAlertDialog(requireContext(),"Are you sure want to Logout?"){
+                        viewModel.logout {
+                            Intent(context, SignInActivity::class.java).also {
+                                startActivity(it)
+                                activity?.finish()
+                            }
+                        }
+                    }
                     true
                 }
                 else -> false

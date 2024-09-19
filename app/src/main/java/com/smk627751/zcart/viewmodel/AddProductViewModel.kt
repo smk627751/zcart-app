@@ -122,7 +122,13 @@ class AddProductViewModel : ViewModel() {
         if (_productPrice.value.isNullOrEmpty()) {
             _productPriceError.value = "Product price is required"
             isValid = false
-        } else {
+        }
+        else if (_productPrice.value!!.toDouble() == 0.0)
+        {
+            _productPriceError.value = "Product price cannot be zero"
+            isValid = false
+        }
+        else {
             _productPriceError.value = null
         }
         if (_productDescription.value.isNullOrEmpty()) {
