@@ -1,5 +1,6 @@
 package com.smk627751.zcart.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,10 @@ import com.smk627751.zcart.dto.ReviewNotification
 import com.smk627751.zcart.dto.User
 
 class DetailViewModel : ViewModel() {
+    private val _isPurchased = MutableLiveData<Boolean>()
+    /** LiveData for the purchased status */
+    val isPurchased: LiveData<Boolean> = _isPurchased
+
     private val _rating = MutableLiveData<MutableMap<Int, Int>>()
     /** LiveData for the rating */
     val rating: LiveData<MutableMap<Int, Int>> = _rating
@@ -28,6 +33,13 @@ class DetailViewModel : ViewModel() {
     fun checkIfOwnProduct(callback: (Boolean) -> Unit) {
         Repository.isOwnProduct(_product.value!!.id){
             callback(it)
+        }
+    }
+    fun isPurchasedProduct()
+    {
+        Repository.isPurchased(_product.value!!.id){
+            Log.d("isPurchased in viewmodel",it.toString())
+            _isPurchased.value = it
         }
     }
     fun consolidatedRating() : Float

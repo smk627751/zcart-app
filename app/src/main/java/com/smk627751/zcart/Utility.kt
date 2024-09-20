@@ -41,7 +41,12 @@ object Utility {
             .show()
     }
     fun formatNumberIndianSystem(number: Double): String {
-        var numberStr = number.toString().replace(".0","")
+        var numberStr = number.toString()
+        if (numberStr.endsWith(".0"))
+        {
+            numberStr = numberStr.replace(".0","")
+        }
+        if (number <= 100) return "₹${numberStr}"
 //        if("₹${model.price}".endsWith(".0")) "₹${model.price}".replace(".0","") else "₹${model.price}"
 //        val regex = Regex("(\\d+)(\\d{3})(\\d{2})?")
 //        regex.matchEntire(numberStr)

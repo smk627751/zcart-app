@@ -142,7 +142,17 @@ class SignUpActivity : AppCompatActivity() {
                             }
                         }
                     },{
-                        Utility.makeToast(this, it.message.toString())
+                        setProgress(false)
+                        if (it.message == "No Internet connection")
+                        {
+                            Utility.makeSnackBar(parent, "No Internet connection"){
+                                signUp.performClick()
+                            }
+                        }
+                        else
+                        {
+                            Utility.makeToast(this, it.message.toString())
+                        }
                     })
                 }
             }

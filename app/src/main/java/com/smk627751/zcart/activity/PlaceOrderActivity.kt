@@ -5,10 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,7 @@ import com.smk627751.zcart.Utility
 import com.smk627751.zcart.adapter.OrderProductsAdapter
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.viewmodel.PlaceOrderViewModel
+
 
 class PlaceOrderActivity : AppCompatActivity() {
     lateinit var viewModel: PlaceOrderViewModel
@@ -111,7 +113,18 @@ class PlaceOrderActivity : AppCompatActivity() {
     {
         productsView.adapter = adapter
         productsView.layoutManager = LinearLayoutManager(this).also {
-            it.orientation = LinearLayoutManager.HORIZONTAL
+            it.orientation = LinearLayoutManager.VERTICAL
+            productsView.getViewTreeObserver().addOnGlobalLayoutListener {
+                var totalHeight = 0
+                for (i in 0 until productsView.childCount) {
+                    val child: View = productsView.getChildAt(i)
+                    child.measure(0, 0)
+                    totalHeight += child.measuredHeight + child.marginTop + child.marginBottom
+                }
+                val params: ViewGroup.LayoutParams = productsView.layoutParams
+                params.height = totalHeight
+                productsView.setLayoutParams(params)
+            }
         }
         username.setText(viewModel.getUsername())
         deliveryAddress.text = viewModel.getDeliveryAddress()

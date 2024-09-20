@@ -59,6 +59,8 @@ class AddProductActivity : AppCompatActivity() {
     private lateinit var nameError: TextView
     private lateinit var chipGroup: ChipGroup
     private var categoryLayout: LinearLayout? = null
+    private lateinit var category : LinearLayout
+    private lateinit var selectCategory: ImageView
     private lateinit var categoryError: TextView
     private lateinit var productPrice: EditText
     private lateinit var priceError: TextView
@@ -88,6 +90,8 @@ class AddProductActivity : AppCompatActivity() {
         productName = findViewById(R.id.product_name)
         nameError = findViewById(R.id.name_error)
         chipGroup = findViewById(R.id.chip_group)
+        category = findViewById(R.id.category_layout)
+        selectCategory = findViewById(R.id.select_category_btn)
         categoryError = findViewById(R.id.category_error)
         productPrice = findViewById(R.id.product_price)
         priceError = findViewById(R.id.price_error)
@@ -99,6 +103,7 @@ class AddProductActivity : AppCompatActivity() {
         filteredList = viewModel.category
         if (viewModel.selectedItems.isNotEmpty())
         {
+            chipGroup.removeAllViews()
             viewModel.selectedItems.forEach {
                 createChip(chipGroup,it)
             }
@@ -223,7 +228,7 @@ class AddProductActivity : AppCompatActivity() {
                     }
             }
         }
-        chipGroup.setOnClickListener{
+        category.setOnClickListener{
             categoryLayout?.parent?.let { (it as ViewGroup).removeView(categoryLayout) }
             loadCategoryLayout()
             MaterialAlertDialogBuilder(this)
@@ -237,7 +242,7 @@ class AddProductActivity : AppCompatActivity() {
                     categoryLayout = null
                 }
                 .setNegativeButton("Cancel") { _, _ ->
-                    viewModel.selectedItems.clear()
+//                    viewModel.selectedItems.clear()
                 }
                 .create()
                 .show()
@@ -378,11 +383,6 @@ class AddProductActivity : AppCompatActivity() {
             val resultUri = UCrop.getOutput(data!!)
             viewModel.setImageUri(resultUri!!)
         }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        viewModel.validate()
     }
     override fun onBackPressed() {
 //        super.onBackPressed()

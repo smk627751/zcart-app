@@ -130,17 +130,22 @@ class AddProductViewModel : ViewModel() {
         else {
             _categoryListError.value = null
         }
-        if (_productPrice.value.isNullOrEmpty()) {
-            _productPriceError.value = "Product price is required"
-            isValid = false
-        }
-        else if (_productPrice.value!!.toDouble() == 0.0)
+        try {
+            if (_productPrice.value.isNullOrEmpty()) {
+                _productPriceError.value = "Product price is required"
+                isValid = false
+            }
+            else if (_productPrice.value!!.toDouble() == 0.0)
+            {
+                _productPriceError.value = "Product price cannot be zero"
+                isValid = false
+            }
+            else {
+                _productPriceError.value = null
+            }
+        }catch (e : Exception)
         {
-            _productPriceError.value = "Product price cannot be zero"
-            isValid = false
-        }
-        else {
-            _productPriceError.value = null
+            _productPriceError.value = "Product price must be a number"
         }
         if (_productDescription.value.isNullOrEmpty()) {
             _productDescriptionError.value = "Product description is required"

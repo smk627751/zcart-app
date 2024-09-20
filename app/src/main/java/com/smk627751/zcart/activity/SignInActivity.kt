@@ -117,7 +117,9 @@ class SignInActivity : AppCompatActivity() {
                     setProgress(false)
                     if (it.message == "No Internet connection")
                     {
-                        Utility.makeSnackBar(parent, "No Internet connection"){}
+                        Utility.makeSnackBar(parent, "No Internet connection"){
+                            signIn.performClick()
+                        }
                     }
                     else
                     {

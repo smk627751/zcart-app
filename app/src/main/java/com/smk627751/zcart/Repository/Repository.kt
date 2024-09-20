@@ -102,7 +102,11 @@ object Repository {
             }
             .addOnFailureListener {
                 Log.e("uuid", "Error signing up: ${it.message}")
-                failure(it)
+                if (it.message?.contains("network") == true)
+                {
+                    failure(Exception("No Internet connection"))
+                }
+                else failure(it)
             }
     }
     private fun sendVerificationEmail(user: FirebaseUser) {
@@ -132,7 +136,7 @@ object Repository {
             }
             .addOnFailureListener {
                 Log.e("uuid", "Error signing in: ${it.message}")
-                if (it.message?.contains("password") == true)
+                if (it.message?.contains("network") == true)
                 {
                     failure(Exception("No Internet connection"))
                 }
@@ -774,5 +778,19 @@ object Repository {
                 }
             }
         }
+    }
+
+    fun isPurchased(id: String, callBack: (Boolean) -> Unit) {
+        val orders = (user as Customer).myOrders
+        orders.forEach { getOrderById(it){ order ->
+            if (order != null) {
+                val product = order.products.find { p -> p == id }
+                if (product != null)
+                {
+                    callBack(order.status == "Order delivered")
+                }
+                return@getOrderById
+            }
+        } }
     }
 }

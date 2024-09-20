@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -118,6 +119,7 @@ class DetailViewActivity : AppCompatActivity() {
             detailView.visibility = View.VISIBLE
             Glide.with(this)
                 .load(it.image)
+                .error(R.drawable.baseline_image_24)
                 .into(image)
             name.text = it.name
             price.text = Utility.formatNumberIndianSystem(it.price)
@@ -145,11 +147,20 @@ class DetailViewActivity : AppCompatActivity() {
             reviewField.setText(review.text)
             ratingBar.rating = review.rating
         }
-
+        viewModel.isPurchased.observe(this){
+            if (it)
+            {
+                ratingBar.visibility = View.VISIBLE
+                findViewById<RelativeLayout>(R.id.review_layout).visibility = View.VISIBLE
+            }
+        }
         viewModel.isVendor.observe(this){isVendor ->
             if (isVendor)
             {
                 setUpView()
+            }
+            else{
+                viewModel.isPurchasedProduct()
             }
         }
 

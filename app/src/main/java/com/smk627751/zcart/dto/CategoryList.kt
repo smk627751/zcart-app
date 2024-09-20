@@ -15,6 +15,7 @@ val specificCategories = listOf(
     "Cameras",
     "Audio & Headphones",
     "Wearable Technology",
+    "Gaming",
     "Fashion",
     "Men's Clothing",
     "Women's Clothing",

@@ -40,8 +40,7 @@
             android:layout_weight="0.8"
             android:scaleType="fitCenter"
             android:layout_margin="16dp"
-            app:shapeAppearanceOverlay="@style/roundedRectangleImageView"
-            android:src="@color/cardview_dark_background" />
+            app:shapeAppearanceOverlay="@style/roundedRectangleImageView" />
         <androidx.core.widget.NestedScrollView
             android:id="@+id/details_view"
             android:layout_width="0dp"
@@ -220,20 +219,22 @@
                         android:numStars="5"
                         android:padding="10dp"
                         android:theme="@style/RatingBar"
-                        android:stepSize="0.5" />
+                        android:stepSize="0.5"
+                        android:visibility="gone"/>
                     <RelativeLayout
                         android:id="@+id/review_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
-                        android:layout_marginHorizontal="8dp">
+                        android:layout_marginHorizontal="8dp"
+                        android:visibility="gone">
                         <EditText
                             android:id="@+id/review_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/edit_text_bg"
                             android:padding="16dp"
-                            android:hint="write a review"/>
+                            android:hint="write a review" />
 
                         <Button
                             android:id="@+id/send_button"
