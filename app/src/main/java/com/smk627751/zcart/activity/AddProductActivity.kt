@@ -2,7 +2,6 @@ package com.smk627751.zcart.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -41,7 +40,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smk627751.zcart.R
-import com.smk627751.zcart.Repository.Repository
 import com.smk627751.zcart.Utility
 import com.smk627751.zcart.Utility.saveBitmapToFile
 import com.smk627751.zcart.dto.Product

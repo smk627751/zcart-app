@@ -123,7 +123,7 @@ class DetailViewModel : ViewModel() {
     }
     /**Function to delete the review from the product*/
     fun deleteReview(review: Review,callback: () -> Unit) {
-        _product.value?.reviews?.remove(Repository.currentUserId)
+        _product.value?.reviews?.remove(review.userId)
         Repository.updateProductToDb(_product.value!!) {
             _product.value = _product.value
             callback()
