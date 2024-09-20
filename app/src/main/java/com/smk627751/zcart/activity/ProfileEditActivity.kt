@@ -69,6 +69,7 @@ class ProfileEditActivity : AppCompatActivity() {
     lateinit var saveButton : Button
     lateinit var user: User
     lateinit var prevPhone : String
+    lateinit var bottomSheet : ImageOptionDialogFragment
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,32 +114,33 @@ class ProfileEditActivity : AppCompatActivity() {
             hideSoftKeyboard(this)
             onBackPressed()
         }
-        // Set click listener for image view
-        imageView.setOnClickListener {
-            ImageOptionDialogFragment.newInstance{option ->
-                when(option)
-                {
-                    "camera" -> {
-                        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
-                            startActivityForResult(it, 2)
-                        }
-                    }
-                    "gallery" -> {
-                        val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(
-                                Build.VERSION_CODES.R) >= 2) {
-                            Intent(MediaStore.ACTION_PICK_IMAGES)
-                        }
-                        else Intent(Intent.ACTION_PICK)
-                        intent.type = "image/*"
-                        startActivityForResult(intent, 1)
-                    }
-                    "delete" -> {
-                        imageView.setImageResource(R.drawable.baseline_person_24)
-                        imageView.tag = null
-                        user.image = ""
+        bottomSheet = ImageOptionDialogFragment.newInstance{option ->
+            when(option)
+            {
+                "camera" -> {
+                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
+                        startActivityForResult(it, 2)
                     }
                 }
-            }.show(supportFragmentManager, "image")
+                "gallery" -> {
+                    val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(
+                            Build.VERSION_CODES.R) >= 2) {
+                        Intent(MediaStore.ACTION_PICK_IMAGES)
+                    }
+                    else Intent(Intent.ACTION_PICK)
+                    intent.type = "image/*"
+                    startActivityForResult(intent, 1)
+                }
+                "delete" -> {
+                    imageView.setImageResource(R.drawable.baseline_person_24)
+                    imageView.tag = null
+                    user.image = ""
+                }
+            }
+        }
+        // Set click listener for image view
+        imageView.setOnClickListener {
+            bottomSheet.show(supportFragmentManager, "image")
         }
         // Observe user data
         viewModel.user.observe(this) {user ->

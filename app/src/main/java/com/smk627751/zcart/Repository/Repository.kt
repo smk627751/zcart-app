@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.messaging
 import com.google.firebase.storage.storage
+import com.smk627751.zcart.Utility
 import com.smk627751.zcart.dto.Customer
 import com.smk627751.zcart.dto.Notification
 import com.smk627751.zcart.dto.Order
@@ -130,7 +131,12 @@ object Repository {
                 }
             }
             .addOnFailureListener {
-                failure(Exception("Invalid email or password"))
+                Log.e("uuid", "Error signing in: ${it.message}")
+                if (it.message?.contains("password") == true)
+                {
+                    failure(Exception("No Internet connection"))
+                }
+                else failure(Exception("Invalid email or password"))
             }
     }
     fun addUserToDb(user : User)

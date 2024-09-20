@@ -127,8 +127,12 @@ class DetailViewActivity : AppCompatActivity() {
             reviewSection.adapter = adapter
             reviewSection.layoutManager = LinearLayoutManager(this)
             consolidatedRating.text = viewModel.consolidatedRating().toString()
+            toolbar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+                hideSoftKeyboard(this)
+            }
             setUpratingBars(viewModel.getIndividualRating())
-            setUpMenu(false)
+//            setUpMenu(false)
         }
         detailView.setOnTouchListener {_,_ ->
             reviewField.clearFocus()
@@ -152,17 +156,20 @@ class DetailViewActivity : AppCompatActivity() {
         placeOrderButton.setOnClickListener {
             Intent(this, PlaceOrderActivity::class.java).also {
                 it.putExtra("products", arrayOf(viewModel.product.value))
-                startActivity(it)
+                startActivityForResult(it,1)
             }
         }
         addToCartButton.setOnClickListener {
             viewModel.addToCart{
                 Utility.makeToast(this, "Product added to cart")
-                Intent(this, HomeActivity::class.java).also {
-                    it.putExtra("replacement","cart")
-                    it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(it)
-                }
+//                Intent(this, HomeActivity::class.java).also {
+//                    it.putExtra("replacement","cart")
+//                    it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+//                    startActivity(it)
+//                }
+                setResult(1,Intent().apply {
+                    putExtra("replacement","cart")
+                })
                 finish()
             }
         }
@@ -228,10 +235,6 @@ class DetailViewActivity : AppCompatActivity() {
                 }
             }
         }
-        toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-            hideSoftKeyboard(this)
-        }
     }
     private fun showAlertDialog()
     {
@@ -246,5 +249,16 @@ class DetailViewActivity : AppCompatActivity() {
             .setNegativeButton("No") { _, _ -> }
             .create()
         dialog.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == 1)
+        {
+            setResult(1,Intent().apply {
+                putExtra("replacement","orders")
+            })
+            finish()
+        }
     }
 }

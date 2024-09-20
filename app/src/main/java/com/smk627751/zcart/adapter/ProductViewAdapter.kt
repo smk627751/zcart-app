@@ -56,7 +56,7 @@ class ProductViewAdapter(options: FirestoreRecyclerOptions<Product>) : Firestore
                 holder.image,
                 "image_transition"
             )
-            view.context.startActivity(intent, options.toBundle())
+            (view.context as Activity).startActivityForResult(intent, 1,options.toBundle())
         }
         holder.itemView.layoutParams.width = width
     }

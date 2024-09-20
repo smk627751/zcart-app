@@ -21,7 +21,8 @@
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"/>
+        android:iconifiedByDefault="false"
+        android:queryHint="Search for categories"/>
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"

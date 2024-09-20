@@ -2,6 +2,10 @@ package com.smk627751.zcart.fragments
 
 import android.os.Build
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.Fade
+import android.transition.TransitionManager
+import android.transition.TransitionSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -77,13 +80,19 @@ class OrdersViewFragment : Fragment() {
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         if (query.isNullOrEmpty()) viewModel.getOrders()
-                        else viewModel.getOrders(query)
+                        else {
+                            viewModel.getOrders(query)
+                            loadFilter()
+                        }
                         return true
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         if (newText.isNullOrEmpty()) viewModel.getOrders()
-                        else viewModel.getOrders(newText)
+                        else {
+                            viewModel.getOrders(newText)
+                            loadFilter()
+                        }
                         return true
                     }
                 })
@@ -102,11 +111,27 @@ class OrdersViewFragment : Fragment() {
         toolbar.setOnMenuItemClickListener {
             if (it.itemId == R.id.filter)
             {
-                category.isVisible = !category.isVisible
+                val transitionSet = TransitionSet().apply {
+                    addTransition(Fade())
+                    addTransition(ChangeBounds())
+                    duration = 200
+                }
+                TransitionManager.beginDelayedTransition(category, transitionSet).also {
+                    category.isVisible = !category.isVisible
+                }
             }
             true
         }
+        loadFilter()
+        viewModel.options.observe(viewLifecycleOwner) { options ->
+            setAdapter(options)
+        }
+        return view
+    }
+    fun loadFilter()
+    {
         var index = 0
+        categoryView.removeAllViews()
         orderStatus.forEach { status ->
             val view = layoutInflater.inflate(R.layout.filter_chip, categoryView, false) as Chip
             view.id = index++
@@ -117,10 +142,6 @@ class OrdersViewFragment : Fragment() {
             }
             categoryView.addView(view)
         }
-        viewModel.options.observe(viewLifecycleOwner) { options ->
-            setAdapter(options)
-        }
-        return view
     }
     override fun onStart() {
         super.onStart()

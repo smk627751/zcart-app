@@ -1,5 +1,6 @@
 package com.smk627751.zcart.viewmodel
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +11,7 @@ import com.smk627751.zcart.dto.Product
 class AddProductViewModel : ViewModel() {
     /** Flag to check if the product is modified */
     var isModified = false
-
+    val category = Repository.category
     // LiveData for the product
     private val _product = MutableLiveData<Product>()
     val product : LiveData<Product> = _product
@@ -20,6 +21,8 @@ class AddProductViewModel : ViewModel() {
     val imageUri: LiveData<Uri> = _imageUri
     private val _productName = MutableLiveData<String>()
     val productName : LiveData<String> = _productName
+    private val _categoryListError = MutableLiveData<String?>()
+    val categoryListError : LiveData<String?> = _categoryListError
     private val _productPrice = MutableLiveData<String>()
     val productPrice : LiveData<String> = _productPrice
     private val _productDescription = MutableLiveData<String>()
@@ -119,6 +122,14 @@ class AddProductViewModel : ViewModel() {
         } else {
             _productNameError.value = null
         }
+        if (selectedItems.isEmpty())
+        {
+            _categoryListError.value = "Please select at least one category"
+            isValid = false
+        }
+        else {
+            _categoryListError.value = null
+        }
         if (_productPrice.value.isNullOrEmpty()) {
             _productPriceError.value = "Product price is required"
             isValid = false
@@ -138,5 +149,10 @@ class AddProductViewModel : ViewModel() {
             _productDescriptionError.value = null
         }
         return isValid
+    }
+
+    fun addSelectedItem(selected: String) {
+        selectedItems.add(selected)
+        isModified = true
     }
 }

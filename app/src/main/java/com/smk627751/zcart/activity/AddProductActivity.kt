@@ -1,9 +1,8 @@
 package com.smk627751.zcart.activity
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -22,13 +21,13 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
@@ -48,7 +47,6 @@ import com.smk627751.zcart.Utility.saveBitmapToFile
 import com.smk627751.zcart.dto.Product
 import com.smk627751.zcart.viewmodel.AddProductViewModel
 import com.yalantis.ucrop.UCrop
-import io.noties.markwon.Markwon
 import java.io.File
 
 class AddProductActivity : AppCompatActivity() {
@@ -58,14 +56,18 @@ class AddProductActivity : AppCompatActivity() {
     lateinit var parent : ViewGroup
     private lateinit var toolbar: MaterialToolbar
     private lateinit var productName: EditText
+    private lateinit var nameError: TextView
     private lateinit var chipGroup: ChipGroup
     private var categoryLayout: LinearLayout? = null
+    private lateinit var categoryError: TextView
     private lateinit var productPrice: EditText
+    private lateinit var priceError: TextView
     private lateinit var productDescription: EditText
+    private lateinit var descriptionError: TextView
     private lateinit var addProductBtn: Button
     lateinit var progressContainer : FrameLayout
     lateinit var progress: ProgressBar
-    var filteredList = Repository.category
+    lateinit var filteredList : List<String>
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,18 +79,30 @@ class AddProductActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        Utility.registerInternetReceiver(this)
         viewModel = ViewModelProvider(this)[AddProductViewModel::class.java]
         parent = findViewById(R.id.main)
         toolbar = findViewById(R.id.toolbar)
         scrollView = findViewById(R.id.scroll_view)
         imageView = findViewById(R.id.product_image)
         productName = findViewById(R.id.product_name)
+        nameError = findViewById(R.id.name_error)
         chipGroup = findViewById(R.id.chip_group)
+        categoryError = findViewById(R.id.category_error)
         productPrice = findViewById(R.id.product_price)
+        priceError = findViewById(R.id.price_error)
         productDescription = findViewById(R.id.product_description)
+        descriptionError = findViewById(R.id.description_error)
         addProductBtn = findViewById(R.id.add_product_button)
         progressContainer = findViewById(R.id.progress_container)
         progress = findViewById(R.id.progress)
+        filteredList = viewModel.category
+        if (viewModel.selectedItems.isNotEmpty())
+        {
+            viewModel.selectedItems.forEach {
+                createChip(chipGroup,it)
+            }
+        }
         scrollView.setOnTouchListener { _, _ ->
             productName.clearFocus()
             productPrice.clearFocus()
@@ -130,13 +144,48 @@ class AddProductActivity : AppCompatActivity() {
             }
         }
         viewModel.productNameError.observe(this) {
-            productName.error = it
+            if (it != null)
+            {
+                nameError.isVisible = true
+                nameError.text = it
+            }
+            else
+            {
+                nameError.isVisible = false
+            }
+        }
+        viewModel.categoryListError.observe(this) {
+            if (it != null)
+            {
+                categoryError.isVisible = true
+                categoryError.text = it
+            }
+            else
+            {
+                categoryError.isVisible = false
+            }
         }
         viewModel.productPriceError.observe(this) {
-            productPrice.error = it
+            if (it != null)
+            {
+                priceError.isVisible = true
+                priceError.text = it
+            }
+            else
+            {
+                priceError.isVisible = false
+            }
         }
         viewModel.productDescriptionError.observe(this) {
-            productDescription.error = it
+            if (it != null)
+            {
+                descriptionError.isVisible = true
+                descriptionError.text = it
+            }
+            else
+            {
+                descriptionError.isVisible = false
+            }
         }
         productName.addTextChangedListener {
             viewModel.setProductName(it.toString())
@@ -187,7 +236,9 @@ class AddProductActivity : AppCompatActivity() {
                     }
                     categoryLayout = null
                 }
-                .setNegativeButton("Cancel") { _, _ -> }
+                .setNegativeButton("Cancel") { _, _ ->
+                    viewModel.selectedItems.clear()
+                }
                 .create()
                 .show()
         }
@@ -256,14 +307,15 @@ class AddProductActivity : AppCompatActivity() {
                 createChip(chipGroup,it)
             }
         }
-        listView?.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, Repository.category)
+        listView?.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, viewModel.category)
         listView?.setOnItemClickListener { _, _, position, _ ->
             if (!viewModel.selectedItems.contains(filteredList[position]))
             {
                 if (chipGroup != null) {
                     createChip(chipGroup,filteredList[position])
                 }
-                viewModel.selectedItems.add(filteredList[position])
+//                viewModel.selectedItems.add(filteredList[position])
+                viewModel.addSelectedItem(filteredList[position])
             }
         }
         searchView?.setOnQueryTextListener(object : OnQueryTextListener {
@@ -278,7 +330,7 @@ class AddProductActivity : AppCompatActivity() {
             }
             fun updateAdapter(text : String)
             {
-                filteredList = Repository.category.filter { it.contains(text, true) }
+                filteredList = viewModel.category.filter { it.contains(text, true) }
                 listView?.adapter = ArrayAdapter(applicationContext, android.R.layout.simple_list_item_1, filteredList)
             }
         })
@@ -328,6 +380,10 @@ class AddProductActivity : AppCompatActivity() {
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        viewModel.validate()
+    }
     override fun onBackPressed() {
 //        super.onBackPressed()
         if (viewModel.isModified)

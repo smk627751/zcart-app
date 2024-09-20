@@ -115,7 +115,14 @@ class SignInActivity : AppCompatActivity() {
                 },
                 {
                     setProgress(false)
-                    passwordLayout.error = it.message
+                    if (it.message == "No Internet connection")
+                    {
+                        Utility.makeSnackBar(parent, "No Internet connection"){}
+                    }
+                    else
+                    {
+                        passwordLayout.error = it.message
+                    }
                 }
             )
         }

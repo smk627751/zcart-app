@@ -44,7 +44,6 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
-        val intent = intent
 //        Log.d("test","replacement ${intent?.getStringExtra("replacement")}")
         fragmentContainer = findViewById(R.id.fragment_container)
 //        for (i in 0 until 50) {
@@ -73,23 +72,6 @@ class HomeActivity : AppCompatActivity() {
         when(val view: View = findViewById(R.id.navigation)){
             is BottomNavigationView -> bottomNavigationView = view
             is NavigationRailView -> navigationRailView = view
-        }
-        if (intent?.getStringExtra("replacement") != null)
-        {
-            val view = if (viewModel.isLandscape.value!!) navigationRailView else bottomNavigationView
-            when(intent.getStringExtra("replacement"))
-            {
-                "cart" -> {
-                    bottomNavigationView?.post {
-                        view?.selectedItemId = viewModel.cartId
-                    }
-                }
-                "orders" -> {
-                    bottomNavigationView?.post {
-                        view?.selectedItemId = viewModel.ordersId
-                    }
-                }
-            }
         }
         viewModel.notifications.observe(this) { notifications ->
             setBadge(notifications,viewModel.isLandscape.value!!)
@@ -315,6 +297,28 @@ class HomeActivity : AppCompatActivity() {
             addToBackStack(null)
             replace(R.id.fragment_container, fragment)
             commit()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == 1)
+        { val view = if (viewModel.isLandscape.value!!) navigationRailView else bottomNavigationView
+            if (data != null) {
+                when(data.getStringExtra("replacement")) {
+                    "cart" -> {
+                        bottomNavigationView?.post {
+                            view?.selectedItemId = viewModel.cartId
+                        }
+                    }
+
+                    "orders" -> {
+                        bottomNavigationView?.post {
+                            view?.selectedItemId = viewModel.ordersId
+                        }
+                    }
+                }
+            }
         }
     }
     override fun onBackPressed() {

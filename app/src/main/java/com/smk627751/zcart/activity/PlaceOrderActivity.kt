@@ -42,6 +42,7 @@ class PlaceOrderActivity : AppCompatActivity() {
     lateinit var totalPrice : TextView
     lateinit var placeOrderButton : Button
     lateinit var progress : ProgressBar
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -93,11 +94,14 @@ class PlaceOrderActivity : AppCompatActivity() {
             viewModel.placeOrder(adapter!!.getProducts(),adapter!!.itemCount,adapter!!.getQuantities(),totalPrice.text.toString(),username.text.toString(),deliveryAddress.text.toString(),"${ccp.selectedCountryCodeWithPlus}${phone.text}"){
                 Utility.makeToast(this, "Order Placed Successfully")
                 setProgress(false)
-                Intent(this, HomeActivity::class.java).also {
-                    it.putExtra("replacement","orders")
-                    it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(it)
-                }
+//                Intent(this, HomeActivity::class.java).also {
+//                    it.putExtra("replacement","orders")
+//                    it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+//                    startActivity(it)
+//                }
+                setResult(1,Intent().apply {
+                    putExtra("replacement","orders")
+                })
                 finish()
             }
         }
