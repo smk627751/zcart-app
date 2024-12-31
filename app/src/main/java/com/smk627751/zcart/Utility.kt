@@ -46,7 +46,7 @@ object Utility {
         {
             numberStr = numberStr.replace(".0","")
         }
-        if (number <= 100) return "₹${numberStr}"
+        if (number <= 999) return "₹${numberStr}"
 //        if("₹${model.price}".endsWith(".0")) "₹${model.price}".replace(".0","") else "₹${model.price}"
 //        val regex = Regex("(\\d+)(\\d{3})(\\d{2})?")
 //        regex.matchEntire(numberStr)

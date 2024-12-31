@@ -32,8 +32,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- <activity -->
+            android:screenOrientation="fullSensor"/> <!-- <activity -->
         <!-- android:name=".activity.OTPActivity" -->
         <!-- android:exported="false" -->
         <!-- android:launchMode="singleTask" /> -->

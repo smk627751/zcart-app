@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.ZCart" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.ZCart" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">#000000</item>
+        <item name="enableEdgeToEdge">true</item>
         <item name="colorOnPrimary">#ffffff</item>
         <item name="android:navigationBarColor">@color/bottom_navigation_color</item>
         <item name="android:windowContentTransitions">true</item>
