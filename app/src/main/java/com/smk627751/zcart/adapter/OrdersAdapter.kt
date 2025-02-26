@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
@@ -22,8 +24,9 @@ import com.smk627751.zcart.Utility
 class OrdersAdapter(options: FirestoreRecyclerOptions<Order>) : FirestoreRecyclerAdapter<Order, OrdersAdapter.ViewHolder>(options){
     var callBack : (msg : String) -> Unit = {}
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val orderImages = itemView.findViewById<LinearLayout>(R.id.order_images)
         val orderImage = itemView.findViewById<ShapeableImageView>(R.id.order_image)
-        val orderId = itemView.findViewById<TextView>(R.id.order_id)
+//        val orderId = itemView.findViewById<TextView>(R.id.order_id)
         val date = itemView.findViewById<TextView>(R.id.date)
 //        val quantity = itemView.findViewById<TextView>(R.id.quantity)
         val totalPrice = itemView.findViewById<TextView>(R.id.total_price)
@@ -36,7 +39,8 @@ class OrdersAdapter(options: FirestoreRecyclerOptions<Order>) : FirestoreRecycle
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Order) {
-        holder.orderId.text = model.id
+//        holder.orderId.text = model.id
+        holder.orderImages.removeAllViews()
         holder.date.text = Utility.formatTime(model.timestamp)
 //        holder.quantity.text = model.quantity.toString()
         holder.totalPrice.text = Utility.formatNumberIndianSystem(model.totalPrice)
@@ -50,23 +54,27 @@ class OrdersAdapter(options: FirestoreRecyclerOptions<Order>) : FirestoreRecycle
         Repository.getProducts(model.products){
             if (it.isNotEmpty())
             {
-                if (it.size == 1)
-                {
-                    Glide.with(holder.itemView.context)
-                        .load(it[0].image)
-                        .into(holder.orderImage)
-                }
-                else
-                {
-                    val first = holder.itemView.findViewById<ShapeableImageView>(R.id.order_image1)
-                    first.isVisible = true
-                    Glide.with(holder.itemView.context)
-                        .load(it[0].image)
-                        .into(first)
-                    Glide.with(holder.itemView.context)
-                        .load(it[1].image)
-                        .into(holder.orderImage)
-                }
+//                Glide.with(holder.itemView.context)
+//                    .load(it[0].image)
+//                    .into(holder.orderImage)
+//                if (it.size > 1)
+//                {
+                    it.forEach {
+                        val orderImageView = LayoutInflater.from(holder.itemView.context).inflate(R.layout.order_image,holder.orderImages,false)
+                        holder.orderImages.addView(orderImageView)
+                        Glide.with(holder.itemView.context)
+                            .load(it.image)
+                            .into(orderImageView as ShapeableImageView)
+                    }
+//                    val first = holder.itemView.findViewById<ShapeableImageView>(R.id.order_image)
+//                    first.isVisible = true
+//                    Glide.with(holder.itemView.context)
+//                        .load(it[0].image)
+//                        .into(first)
+//                    Glide.with(holder.itemView.context)
+//                        .load(it[1].image)
+//                        .into(holder.orderImage)
+//                }
             }
         }
     }

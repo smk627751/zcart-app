@@ -18,86 +18,43 @@
             android:orientation="horizontal"
             android:layout_margin="8dp"
             android:gravity="center_vertical">
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/order_image"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:strokeWidth="1dp"
-                    android:padding="2dp"
-                    app:shapeAppearanceOverlay="@style/roundedRectangleImageView"
-                    android:src="@color/gray"/>
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/order_image1"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    app:shapeAppearanceOverlay="@style/roundedRectangleImageView"
-                    android:src="@color/black"
-                    app:strokeWidth="1dp"
-                    android:padding="2dp"
-                    android:visibility="gone"/>
-            </FrameLayout>
             <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/order_images"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.2"
-                        android:text="ID"
-                        style="?attr/textAppearanceTitleSmall"/>
-                    <TextView
-                        android:id="@+id/order_id"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/order_id"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        style="?attr/textAppearanceSubtitle1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.2"
-                        android:text="Price"
-                        style="?attr/textAppearanceTitleSmall" />
-                    <TextView
-                        android:id="@+id/total_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        style="?attr/textAppearanceSubtitle1" />
-                </LinearLayout>
+                android:orientation="horizontal">
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="8dp"
-            android:gravity="center">
+            android:orientation="vertical"
+            android:layout_margin="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/order_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Order cancelled"
+                    style="?attr/textAppearanceHeadline6"/>
+                <TextView
+                    android:id="@+id/total_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    style="?attr/textAppearanceHeadline6" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/date"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="01/01/001"
                 style="?attr/textAppearanceSubtitle1"
                 android:textColor="?attr/colorAccent"/>
@@ -107,19 +64,19 @@
 <!--                android:layout_height="wrap_content"-->
 <!--                android:text="View Details"-->
 <!--                style="@style/Widget.Material3.Button"/>-->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end">
-                <TextView
-                    android:id="@+id/order_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Order cancelled"
-                    android:textAlignment="textEnd"
-                    style="?attr/textAppearanceSubtitle2"/>
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="end">-->
+<!--                <TextView-->
+<!--                    android:id="@+id/order_status"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Order cancelled"-->
+<!--                    android:textAlignment="textEnd"-->
+<!--                    style="?attr/textAppearanceSubtitle2"/>-->
+<!--            </LinearLayout>-->
             <!-- Ensure this color meets contrast ratio -->
         </LinearLayout>
     </LinearLayout>

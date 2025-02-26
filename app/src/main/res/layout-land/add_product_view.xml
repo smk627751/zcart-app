@@ -93,6 +93,7 @@
                         style="?attr/textAppearanceTitleMedium"
                         android:layout_marginHorizontal="16dp"/>
                     <FrameLayout
+                        android:id="@+id/category_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="50dp"

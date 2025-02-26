@@ -56,8 +56,8 @@ class AddProductActivity : AppCompatActivity() {
     private lateinit var productName: EditText
     private lateinit var nameError: TextView
     private lateinit var chipGroup: ChipGroup
-    private var categoryLayout: LinearLayout? = null
-    private lateinit var category : LinearLayout
+    private var categoryLayout: ViewGroup? = null
+    private lateinit var category : ViewGroup
     private lateinit var selectCategory: ImageView
     private lateinit var categoryError: TextView
     private lateinit var productPrice: EditText
